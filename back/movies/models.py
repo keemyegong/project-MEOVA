@@ -32,6 +32,8 @@ class Movie(models.Model):
     runtime=models.IntegerField()
     adult=models.BooleanField()
     origin_country=models.CharField(max_length=50)
+    release_date=models.DateField()
+    popularity=models.DecimalField(max_digits=10,decimal_places=3)
     genres=models.ManyToManyField(Genre, related_name='movies')
     keywords=models.ManyToManyField(Keyword, related_name='movies')
     actors=models.ManyToManyField(Actor,related_name='movies',through='Credit')

@@ -7,5 +7,4 @@ urlpatterns = [
     path('movies/recommended/',views.recommended),
     path('movies/release/',views.release),
     path('movies/<int:movie_pk>/',views.detail),
-    path('movies/<int:movie_pk>/',views.detail),
 ]
