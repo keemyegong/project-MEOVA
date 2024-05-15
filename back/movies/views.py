@@ -4,12 +4,10 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie
+from .models import Movie, Review
 from .serializers import MovieListSerializer,MovieSerializer
 # Create your views here.
-
 
 @api_view(['GET'])
 def search(request):
