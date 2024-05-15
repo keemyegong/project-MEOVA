@@ -12,8 +12,15 @@ class Actor(models.Model):
     gender=models.IntegerField()
 
 class Genre(models.Model):
-    liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_genres')
-    category=models.CharField(max_length=50)
+    name=models.CharField(max_length=50)
+    
+class Keyword(models.Model):
+    name=models.CharField(max_length=50)
+
+class WatchProviders(models.Model):
+    logo_path=models.CharField(max_length=50)
+    name=models.CharField(max_length=50)
+    display_priority=models.IntegerField()
     
 class Movie(models.Model):
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_movies')
@@ -26,6 +33,7 @@ class Movie(models.Model):
     adult=models.BooleanField()
     origin_country=models.CharField(max_length=50)
     genres=models.ManyToManyField(Genre, related_name='movies')
+    keywords=models.ManyToManyField(Keyword, related_name='movies')
     actors=models.ManyToManyField(Actor,related_name='movies',through='Credit')
 
 class Credit(models.Model):
@@ -59,3 +67,5 @@ class TagComment(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     content=models.CharField(max_length=200)
+    created_at=models.DateTimeField(auto_now_add=True)
+
