@@ -12,6 +12,7 @@ class CustomRegisterSerializer(RegisterSerializer):
   allow_blank=True,
   max_length=255
   )
+  
   # 해당 필드도 저장 시 함께 사용하도록 설정합니다.
   def get_cleaned_data(self):
     return {
@@ -19,8 +20,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     'password1': self.validated_data.get('password1', ''),
     # nickname 필드 추가
     'nickname': self.validated_data.get('nickname', ''),
-    # followings 필드 추가
-    'followings': self.validated_data.get('followings', ''),
+    'email': self.validated_data.get('email', ''),
     }
 
 # 상세정보 페이지용 serializer
