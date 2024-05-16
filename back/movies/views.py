@@ -6,7 +6,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
 from .models import Movie, Review,Credit
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer
 from django.conf import settings
 api_key = settings.TMDB_API_KEY
 # Create your views here.
@@ -15,7 +15,7 @@ import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    url = "https://api.themoviedb.org/3/movie/now_playing?language=ko&page=1"
+    url = "https://api.themoviedb.org/3/movie/popular?language=ko&page=1"
     headers = {
     "accept": "application/json",
     "Authorization": f"Bearer {api_key}"}
@@ -28,6 +28,8 @@ def get_movie(request):
         credit_res = requests.get(credit_url,headers=headers).json()
         keyword_url = f"https://api.themoviedb.org/3/movie/{id}/keywords"
         keyword_res = requests.get(keyword_url,headers=headers).json()
+        watchprovider_url = f"https://api.themoviedb.org/3/movie/{id}/watch/providers"
+        watchprovider_res = requests.get(watchprovider_url,headers=headers).json()
         
         title = movie.get('title')
         overview=movie.get('overview')
@@ -92,6 +94,27 @@ def get_movie(request):
                     keyword_instance = serializer.save()
                     movie_instance.keywords.add(keyword_instance)
                     
+            results = watchprovider_res.get('results')
+            if results:
+                # 'KR' 키가 존재하는지 확인
+                kr_watchprovider = results.get('KR')
+                if kr_watchprovider:
+                    # 'flatrate' 키가 존재하고 리스트인지 확인
+                    flatrate = kr_watchprovider.get('flatrate')
+                    if flatrate and isinstance(flatrate, list):
+                        for watchprovider in flatrate:
+                            # watchprovider를 처리하는 기존 로직
+                            watchprovider_data={
+                                'name':watchprovider.get('provider_name'),
+                                'display_priority':watchprovider.get('display_priority'),
+                                'logo_path':watchprovider.get('logo_path'),
+                                'id':watchprovider.get('provider_id'),
+                            }
+                            
+                            serializer = WatchProviderSerializer(data=watchprovider_data)
+                            if serializer.is_valid():
+                                watchprovider_instance = serializer.save()
+                                movie_instance.watchproviders.add(watchprovider_instance)
         
     return Response(response)
 

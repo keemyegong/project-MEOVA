@@ -22,7 +22,7 @@ class Keyword(models.Model):
     id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     name=models.CharField(max_length=50)
 
-class WatchProviders(models.Model):
+class WatchProvider(models.Model):
     id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     logo_path=models.CharField(max_length=50)
     name=models.CharField(max_length=50)
@@ -44,7 +44,8 @@ class Movie(models.Model):
     genres=models.ManyToManyField(Genre, related_name='movies')
     keywords=models.ManyToManyField(Keyword, related_name='movies')
     actors=models.ManyToManyField(Actor,related_name='movies',through='Credit')
-
+    watchproviders=models.ManyToManyField(WatchProvider,related_name='movies')
+    
 class Credit(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     actor=models.ForeignKey(Actor,on_delete=models.CASCADE)
