@@ -16,23 +16,25 @@
 <aside>
     🎬 방향성
 
-    최소 시간 최소 비용으로 관람할 영화를 손쉽게 추천받을 수 있는, 검색 기능에 중점을 둔 웹사이트
+    최소 시간 최소 비용으로 관람할 영화를 손쉽게 추천받을 수 있는,
+    검색 기능에 중점을 둔 웹사이트
 
-<img  src="README/Untitled.png"/>
+  <img  src="README/Untitled.png"/>
 
 </aside>
 
 <aside>
-    <img src="https://www.notion.so/icons/gear_gray.svg" alt="https://www.notion.so/icons/gear_gray.svg" width="40px" /> 기본 기능
+    <img src="https://www.notion.so/icons/gear_gray.svg" alt="https://www.notion.so/icons/gear_gray.svg" width="30px" /> 기본 기능
 
     - 영화 추천
     - 영화 상세 정보 조회
     - 평점 및 리뷰 공유
     - 커뮤니티 기능
+
 </aside>
 
 <aside>
-<img src="https://www.notion.so/icons/gear_gray.svg" alt="https://www.notion.so/icons/gear_gray.svg" width="40px" /> **차별화 기능**
+  <img src="https://www.notion.so/icons/gear_gray.svg" alt="https://www.notion.so/icons/gear_gray.svg" width="30px" /> 차별화 기능
 
 - 태그 검색 기능
   ![Untitled](README/Untitled%201.png)
@@ -94,3 +96,5 @@
   ![Untitled](README/Untitled%2015.png)
 
 ## 8. 화면 정의서
+
+- [figma](https://www.figma.com/proto/A5Q4TMCcsThwYGinL1q1aA/MOVIE?page-id=0%3A1&node-id=1-233&viewport=1091%2C-34%2C0.09&t=xA1Tlm1Y1lJSASJD-1&scaling=min-zoom&starting-point-node-id=1%3A233&show-proto-sidebar=1)
