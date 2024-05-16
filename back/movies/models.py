@@ -24,7 +24,7 @@ class WatchProviders(models.Model):
     
 class Movie(models.Model):
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_movies')
-    director=models.ForeignKey(Director,on_delete=models.SET_NULL)
+    director=models.ForeignKey(Director,on_delete=models.CASCADE)
     title=models.CharField(max_length=100)
     overview=models.TextField()
     poster_path=models.CharField(max_length=50)
@@ -39,13 +39,13 @@ class Movie(models.Model):
     actors=models.ManyToManyField(Actor,related_name='movies',through='Credit')
 
 class Credit(models.Model):
-    movie=models.ForeignKey(Movie,on_delete=models.SET_NULL)
-    actor=models.ForeignKey(Actor,on_delete=models.SET_NULL)
+    movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
+    actor=models.ForeignKey(Actor,on_delete=models.CASCADE)
     character=models.CharField(max_length=100)
     
 class SelectedList(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    movies=models.ManyToManyField(Movie,related_name='selected-lists')
+    movies=models.ManyToManyField(Movie,related_name='selected_lists')
     title=models.CharField(max_length=100)
     overview=models.TextField()
     

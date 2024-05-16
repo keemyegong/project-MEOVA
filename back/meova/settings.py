@@ -61,6 +61,16 @@ REST_FRAMEWORK = {
     ],
 }
 
+REST_AUTH = {
+  'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    #  회원 가입 시 우리가 구현한 serializer 를 호출하도록 설정
+  'USER_DETAILS_SERIALIZER': 'accounts.serializers.CustomUserDetailsSerializer',
+    #  상세정보 출력 시 우리가 구현한 serializer 를 호출하도록 설정
+} 
+
+ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'
+# 회원 가입 시 사용하는 allauth.account.adapter.DefaultAccountAdapter 를 우리가 구현한 adapter 로 설정
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -115,7 +125,7 @@ DATABASES = {
         'NAME': 'meova-database',
         'USER': 'root',
         'PASSWORD': '04090620meova',
-        'HOST': 'localhost', # MySQL 호스트
+        'HOST': '127.0.0.1', # MySQL 호스트
         'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
 }
