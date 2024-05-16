@@ -2,38 +2,45 @@ from django.db import models
 from django.conf import settings
 # Create your models here.
 class Director(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_directors')
     name=models.CharField(max_length=50)
 
 class Actor(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_actors')
     name=models.CharField(max_length=50)
     profile_path=models.CharField(max_length=50)
     gender=models.IntegerField()
 
+
 class Genre(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     name=models.CharField(max_length=50)
     
 class Keyword(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     name=models.CharField(max_length=50)
 
 class WatchProviders(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     logo_path=models.CharField(max_length=50)
     name=models.CharField(max_length=50)
     display_priority=models.IntegerField()
     
 class Movie(models.Model):
+    id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_movies')
-    director=models.ForeignKey(Director,on_delete=models.CASCADE)
+    directors=models.ManyToManyField(Director,related_name='movies')
     title=models.CharField(max_length=100)
     overview=models.TextField()
     poster_path=models.CharField(max_length=50)
-    vote_average=models.DecimalField(max_digits=4,decimal_places=3)
+    vote_average=models.DecimalField(max_digits=5,decimal_places=4)
     runtime=models.IntegerField()
     adult=models.BooleanField()
     origin_country=models.CharField(max_length=50)
     release_date=models.DateField()
-    popularity=models.DecimalField(max_digits=10,decimal_places=3)
+    popularity=models.DecimalField(max_digits=10,decimal_places=4)
     genres=models.ManyToManyField(Genre, related_name='movies')
     keywords=models.ManyToManyField(Keyword, related_name='movies')
     actors=models.ManyToManyField(Actor,related_name='movies',through='Credit')
@@ -42,6 +49,7 @@ class Credit(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     actor=models.ForeignKey(Actor,on_delete=models.CASCADE)
     character=models.CharField(max_length=100)
+    order=models.IntegerField()
     
 class SelectedList(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

@@ -15,6 +15,8 @@ urlpatterns = [
     # path('accounts/<int:user_pk>/liked-reviews/', views.user_liked_reviews), # 유저 좋아요 리뷰
   
     # movie
+    path('',views.get_movie),
+    path('genre/',views.get_genre),
     path('meova/search/',views.search), # 영화 검색
     path('movies/popular/',views.popular), # 인기 영화 조회
     path('movies/recommended/',views.recommended), # 추천 영화 조회
