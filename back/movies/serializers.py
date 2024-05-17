@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Movie,Genre,Keyword,Actor,Director,WatchProvider
+from .models import Movie, Director, Genre,Keyword,Actor,Director,WatchProvider,Credit
 
 class GenreNameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,17 +11,35 @@ class KeywordNameSerializer(serializers.ModelSerializer):
         model=Keyword
         fields=('name',)
 
+class ActorNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ('name', 'profile_path',)
+
+class DirectorNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Director
+        fields = ('name',)
+
+class CreditSerializer(serializers.ModelSerializer):
+    actor = ActorNameSerializer(read_only=True)
+    class Meta:
+        model = Credit
+        fields = ('actor', 'character',)
+        
 class MovieListSerializer(serializers.ModelSerializer):
-    genres=GenreNameSerializer(read_only=True,many=True)
-    keywords=KeywordNameSerializer(read_only=True,many=True)
+    genres = GenreNameSerializer(read_only=True,many=True)
+    keywords = KeywordNameSerializer(read_only=True,many=True)
     class Meta:
         model=Movie
         exclude=('actors','release_date','popularity',)
         
-
 class MovieSerializer(serializers.ModelSerializer):
-    genres=GenreNameSerializer(read_only=True,many=True)
+    directors = DirectorNameSerializer(read_only=True, many=True)
+    genres = GenreNameSerializer(read_only=True,many=True)
     keywords=KeywordNameSerializer(read_only=True,many=True)
+    credits = CreditSerializer(source='credit_set', many=True, read_only=True)
+    # actors = ActorNameSerializer(read_only=True, many=True)
     class Meta:
         model=Movie
         fields='__all__'
