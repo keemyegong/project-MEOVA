@@ -1,13 +1,39 @@
 <template>
   <div>
-    <form @submit.prevent="signup">
-      <label for="username">아이디 : </label>
-      <input type="text" id="username" v-model="username" />
-      <label for="password1">비밀번호 : </label>
-      <input type="password" id="password1" v-model="password1" />
-      <label for="password2">비밀번호 확인 : </label>
-      <input type="password" id="password2" v-model="password2" />
-      <input type="submit" value="회원가입" />
+    <form class="row g-3 mt-5" @submit.prevent="signup">
+      <h1 class="col-md-6 offset-3 mb-3"><b>회원가입</b></h1>
+      <div class="col-md-6 offset-3">
+        <label class="form-label" for="username">아이디</label>
+
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          v-model="username"
+        />
+      </div>
+      <div class="col-md-6 offset-3">
+        <label for="password1" class="form-label">비밀번호</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password1"
+          v-model="password1"
+        />
+      </div>
+      <div class="col-md-6 offset-3">
+        <label for="password1" class="form-label">비밀번호 확인</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password2"
+          v-model="password2"
+        />
+      </div>
+
+      <div class="col-md-6 offset-3">
+        <button type="submit" class="btn btn-dark">로그인</button>
+      </div>
     </form>
   </div>
 </template>

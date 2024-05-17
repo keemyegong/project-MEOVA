@@ -3,9 +3,15 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 from allauth.account.adapter import DefaultAccountAdapter
 
+def username(user, file):
+    string_username = str(user).split()[0]
+    return f"profiles/{string_username}/{file}"
+
 class User(AbstractUser):
     nickname=models.CharField(max_length=100)
     followings=models.ManyToManyField('self',related_name='followers',symmetrical=False)
+    bio=models.TextField()
+    profile_photo=models.ImageField(blank=True,upload_to=username)
     
 class CustomAccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
@@ -20,6 +26,8 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         # nickname 필드를 추가
         nickname = data.get("nickname")
         followings=data.get('followings')
+        bio=data.get('bio')
+        profile_photo=data.get('profile_photo')
         user_email(user, email)
         user_username(user, username)
         if first_name:
@@ -28,6 +36,10 @@ class CustomAccountAdapter(DefaultAccountAdapter):
             user_field(user, "last_name", last_name)
         if nickname:
             user_field(user, "nickname", nickname)
+        if bio:
+            user_field(user, "bio", bio)
+        if profile_photo:
+            user_field(user, "profile_photo", profile_photo)
         if followings:
             user_field(user, "followings", followings)
         if "password1" in data:
