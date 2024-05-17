@@ -20,6 +20,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     'password1': self.validated_data.get('password1', ''),
     # nickname 필드 추가
     'nickname': self.validated_data.get('nickname', ''),
+    'bio': self.validated_data.get('bio', ''),
+    'profile_photo': self.validated_data.get('profile_photo', ''),
     'email': self.validated_data.get('email', ''),
     }
 
@@ -41,8 +43,27 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
       extra_fields.append('last_name')
     if hasattr(UserModel, 'nickname'):
       extra_fields.append('nickname') 
+    if hasattr(UserModel, 'bio'):
+      extra_fields.append('bio') 
+    if hasattr(UserModel, 'profile_photo'):
+      extra_fields.append('profile_photo') 
     if hasattr(UserModel, 'followings'):
       extra_fields.append('followings') 
     model = UserModel
     fields = ('pk', *extra_fields)
     read_only_fields = ('email',)
+
+class ProfileSerializer(serializers.ModelSerializer):
+  # profile_photo = serializers.SerializerMethodField()
+
+  class Meta:
+      model = UserModel
+      fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings')
+
+  # def get_profile_photo(self, obj):
+  #     request = self.context.get('request')
+  #     print(request)
+      
+  #     return request.build_absolute_uri(obj.profile_photo.url)
+
+  

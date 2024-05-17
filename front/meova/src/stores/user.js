@@ -64,6 +64,7 @@ export const useUserStore = defineStore(
       })
         .then((res) => {
           token.value = null;
+          router.push({ name: "main" });
         })
         .catch((error) => {
           console.log(error);
@@ -110,6 +111,23 @@ export const useUserStore = defineStore(
           console.log(error);
         });
     };
+    const profile_info = ref({});
+    const profile = function (username) {
+      axios({
+        method: "get",
+        url: `${BASE_URL}/profile/${username}/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          profile_info.value = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     return {
       token,
       isLogin,
@@ -119,6 +137,8 @@ export const useUserStore = defineStore(
       settings,
       userinfo,
       update,
+      profile,
+      profile_info,
     };
   },
   { persist: true }

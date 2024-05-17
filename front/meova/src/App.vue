@@ -49,6 +49,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
 const store = useUserStore();
+
 </script>
 
 <style scoped></style>

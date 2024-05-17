@@ -17,6 +17,7 @@ const props = defineProps({
 })
 
 const store = useMovieStore()
+
 const router = useRouter()
 const goMovieDetail = function () {
     console.log(props.movie.id)
