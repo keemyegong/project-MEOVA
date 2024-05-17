@@ -13,7 +13,6 @@ class Actor(models.Model):
     profile_path=models.CharField(max_length=50)
     gender=models.IntegerField()
 
-
 class Genre(models.Model):
     id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     name=models.CharField(max_length=50)

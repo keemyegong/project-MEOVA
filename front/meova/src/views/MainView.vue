@@ -1,9 +1,14 @@
+
 <template>
   <div>
-    <h1>Main</h1>
+    <h1>MAIN</h1>
+    <MovieList />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import MovieList from '@/components/MovieList.vue';
+</script>
 
-<style scoped></style>
+<style scoped>
+</style>

@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review,Credit
+from .models import Movie, Review, Credit, Actor
 from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer
 from django.conf import settings
 api_key = settings.TMDB_API_KEY
@@ -149,10 +149,6 @@ def get_genre(request):
 
     return Response(response)
 
-def get_people(request):
-    movies = Movie.objects.all()
-    
-
 
 @api_view(['GET'])
 def search(request):
@@ -187,9 +183,15 @@ def release(request):
     
     
 @api_view(['GET'])
-def detail(request,movie_pk):
+def detail(request, movie_pk):
     if request.method=="GET":
         movie=get_object_or_404(Movie,pk=movie_pk)
         serializer=MovieSerializer(movie)
         return Response(serializer.data,status=status.HTTP_200_OK)
-    
+
+@api_view(['GET'])
+def actor_detail(request, actor_pk):
+    if request.method == 'GET':
+        actor = get_object_or_404(Actor, pk=actor_pk)
+        serializer = ActorSerializer(actor, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
