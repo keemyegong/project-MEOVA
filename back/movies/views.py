@@ -193,5 +193,5 @@ def detail(request, movie_pk):
 def actor_detail(request, actor_pk):
     if request.method == 'GET':
         actor = get_object_or_404(Actor, pk=actor_pk)
-        serializer = ActorSerializer(actor, many=True)
+        serializer = ActorSerializer(actor)
         return Response(serializer.data, status=status.HTTP_200_OK)
