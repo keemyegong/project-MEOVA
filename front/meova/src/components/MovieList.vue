@@ -1,41 +1,33 @@
 <template>
-  <div>
-    <h2>Movie List</h2>
-    <h3>Recommend Movies</h3>
-    <p>곧 추가될 예정이에요!</p>
-    <hr />
-    <h3 @click="goPopularMovies">Popular Movies</h3>
-    <MovieListItem
-      v-for="movie in store.popular_movies"
-      :key="movie.id"
-      :movie="movie"
-    />
-    <hr />
-    <h3 @click="goReleaseMovies">Release Movies</h3>
-    <MovieListItem
-      v-for="movie in store.release_movies"
-      :key="movie.id"
-      :movie="movie"
-    />
-  </div>
+    <div>
+        <h3>Recommend Movies</h3>
+        <p>곧 추가될 예정이에요!</p>
+        <hr>
+        <RouterLink :to="{ name: 'PopularMovieView' }">
+            <h3>Popular Movies</h3>
+        </RouterLink>
+        <MovieListItem
+            v-for="movie in store.popular_movies"
+            :key="movie.id"
+            :movie="movie"
+        />
+        <hr>
+        <RouterLink :to="{ name: 'ReleaseMovieView' }">
+            <h3>Release Movies</h3>
+        </RouterLink>
+        <MovieListItem
+            v-for="movie in store.release_movies"
+            :key="movie.id"
+            :movie="movie"
+        />
+    </div>
 </template>
 
 <script setup>
-import { useMovieStore } from "@/stores/movie";
-import MovieListItem from "@/components/MovieListItem.vue";
-import { useRouter } from "vue-router";
-import { onMounted } from "vue";
-const store = useMovieStore();
-onMounted(() => {
-  store.getPopularMovies();
-});
-const router = useRouter();
+import { useMovieStore } from '@/stores/movie'
+import MovieListItem from '@/components/MovieListItem.vue'
+import { useRouter, RouterLink } from 'vue-router'
 
-const goPopularMovies = function () {
-  router.push({ name: "PopularMovieView" });
-};
+const store = useMovieStore()
 
-const goReleaseMovies = function () {
-  router.push({ name: "ReleaseMovieView" });
-};
 </script>

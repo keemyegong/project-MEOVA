@@ -14,7 +14,7 @@ class KeywordNameSerializer(serializers.ModelSerializer):
 class ActorNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
-        fields = ('name', 'profile_path',)
+        fields = ('id', 'name', 'profile_path',)
 
 class DirectorNameSerializer(serializers.ModelSerializer):
     class Meta:
