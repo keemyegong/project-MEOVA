@@ -33,7 +33,12 @@ def get_movie(request):
         
         title = movie.get('title')
         overview=movie.get('overview')
-        overview = overview if overview else 'none'
+        if overview:
+            overview = overview
+        else:
+            en_url = f"https://api.themoviedb.org/3/movie/{id}?language=en-US"
+            en_res = requests.get(en_url,headers=headers).json()
+            overview=en_res.get('overview')
         poster_path=movie.get('poster_path')
         vote_average=movie.get('vote_average')
         runtime=movie_res.get('runtime')
