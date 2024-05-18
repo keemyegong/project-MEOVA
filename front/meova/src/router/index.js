@@ -7,6 +7,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import PopularMovieView from "@/views/PopularMovieView.vue";
 import ReleaseMovieView from "@/views/ReleaseMovieView.vue";
 import MovieDetailView from "@/views/MovieDetailView.vue";
+import ReviewCreateView from "@/views/ReviewCreateView.vue";
 import ActorDetailView from "@/views/ActorDetailView.vue";
 import DirectorDetailView from "@/views/DirectorDetailView.vue";
 
@@ -52,6 +53,11 @@ const router = createRouter({
       path: "/movies/:id",
       name: "MovieDetailView",
       component: MovieDetailView,
+    },
+    {
+      path: "/movies/:id/review/",
+      name: "CreateReview",
+      component: ReviewCreateView,
     },
     {
       path: "/actors/:id",
