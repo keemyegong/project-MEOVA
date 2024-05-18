@@ -47,7 +47,7 @@ export const useUserStore = defineStore(
         .then((res) => {
           console.log(res.data.key);
           token.value = res.data.key;
-          settings()
+          settings();
           router.push({ name: "main" });
         })
         .catch((error) => {
@@ -109,6 +109,10 @@ export const useUserStore = defineStore(
         .then((res) => {
           console.log(res);
           userinfo.value = res.data;
+          router.push({
+            name: "profile",
+            params: { username: res.data.username },
+          });
         })
         .catch((error) => {
           console.log(error);
