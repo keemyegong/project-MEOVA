@@ -44,7 +44,7 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
-    comments = ReviewCommentSerializer(read_only=True, many=True)
+    reviewcomment_set = ReviewCommentSerializer(read_only=True, many=True)
     class Meta:
         model=Review
         fields='__all__'

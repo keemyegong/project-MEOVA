@@ -41,12 +41,14 @@
 <script setup>
 import { useReviewStore } from "@/stores/review";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const vote = ref(5);
 const title = ref("");
 const content = ref("");
 const store = useReviewStore();
 const route = useRoute();
+const router = useRouter()
+const movieId = Number(route.params['id'])
 const createReview = function () {
   const review = {
     vote: vote.value,

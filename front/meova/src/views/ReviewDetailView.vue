@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div v-if="review">
     <h1>{{ review.title }}</h1>
     <h2>평점 {{ review.vote }}</h2>
     <span v-if="review.nickname">
@@ -10,10 +10,21 @@
       작성자 | {{ review.username }}
     </span>
     <p>{{ review.content }}</p>
+    <button @click="deleteReview(review.id)">삭제</button>
 
     <hr>
 
-    <div v-for="comment in review.comments">
+    <form @submit.prevent="createComment" ref="form">
+      <input
+        type="text"
+        placeholder="댓글을 남겨 주세요!"
+        id="content"
+        v-model="content"
+      />
+      <input type="submit" value="입력" />
+    </form>
+
+    <div v-for="comment in review.reviewcomment_set">
       <span>{{ comment.content }}</span>
       <span v-if="comment.nickname">
       | {{ comment.nickname }}
@@ -27,24 +38,27 @@
 
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useMovieStore } from '@/stores/movie'
 import { useReviewStore } from '@/stores/review'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
 
 const userStore = useUserStore()
 const movieStore = useMovieStore()
 const reviewStore = useReviewStore()
 
 const route = useRoute()
+const router = useRouter()
 const movieId = Number(route.params['movieId'])
 const reviewId = Number(route.params['reviewId'])
-
+const form = ref(null)
 const movie = ref(null)
 const review = ref(null)
+const content = ref(null)
 
-axios({
+const fetchReview = function () {
+  axios({
   method: 'get',
   url: `${movieStore.API_URL}/api/v1/reviews/${reviewId}/`,
     headers: {
@@ -58,21 +72,38 @@ axios({
 .catch((error) => {
   console.log(error)
 })
+}
 
-// const deleteReview = (reviewId) => {
-//   axios({
-//   method: 'delete',
-//   url: `${movieStore.API_URL}/api/v1/movies/${movieId}/reviews/${reviewId}/`,
-//   headers: {
-//       'Authorization': `Token ${userStore.token}`
-//   }
-// })
-//   .then(() => {
-//   })
-//   .catch((error) => {
-//       console.log(error)
-//   })
-// }
+onMounted(fetchReview)
+
+const createComment = function () {
+  const review = {
+    content: content.value,
+    id: reviewId,
+  }
+  reviewStore.createComment(review)
+  form.value.reset()
+  content.value = ""
+  fetchReview()
+  }
+
+const deleteReview = (reviewId) => {
+  axios({
+  method: 'delete',
+  url: `${movieStore.API_URL}/api/v1/reviews/${reviewId}/`,
+  headers: {
+      'Authorization': `Token ${userStore.token}`
+  }
+})
+  .then(() => {
+    router.push({
+      name: 'MovieDetailView', params: {id : movieId}
+    })
+  })
+  .catch((error) => {
+      console.log(error)
+  })
+}
 </script>
 
 <style scoped>
