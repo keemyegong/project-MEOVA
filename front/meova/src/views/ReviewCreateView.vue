@@ -42,34 +42,19 @@
 import { useReviewStore } from "@/stores/review";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import axios from "axios";
-import { useUserStore } from "@/stores/user";
 const vote = ref(5);
 const title = ref("");
 const content = ref("");
 const store = useReviewStore();
-const user = useUserStore();
 const route = useRoute();
 const createReview = function () {
-  axios({
-    method: "post",
-    url: `http://127.0.0.1:8000/api/v1/movies/${route.params.id}/reviews/`,
-    data: {
-      vote: vote.value,
-      title: title.value,
-      content: content.value,
-    },
-    headers: {
-      Authorization: `Token ${user.token}`,
-    },
-  })
-    .then((res) => {
-      console.log("성공");
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const review = {
+    vote: vote.value,
+    title: title.value,
+    content: content.value,
+    id: route.params.id,
+  };
+  store.createReview(review);
 };
 </script>
 
