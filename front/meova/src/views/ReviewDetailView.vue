@@ -2,6 +2,13 @@
 <template>
   <div v-if="review">
     <h1>{{ review.title }}</h1>
+    <div>
+      <img
+        :src="'https://image.tmdb.org/t/p/original/' + review.movie.poster_path"
+        alt="movie-poster"
+        class="poster-image"
+      />
+    </div>
     <h2>평점 {{ review.vote }}</h2>
     <span v-if="review.nickname">
       작성자 | {{ review.nickname }}
@@ -11,7 +18,6 @@
     </span>
     <p>{{ review.content }}</p>
     <button @click="deleteReview(review.id)">삭제</button>
-
     <hr>
 
     <form @submit.prevent="createComment" ref="form">
@@ -24,14 +30,15 @@
       <input type="submit" value="입력" />
     </form>
 
-    <div v-for="comment in review.reviewcomment_set">
+    <div v-for="comment in review.reviewcomment_set" :key="comment.id">
       <span>{{ comment.content }}</span>
       <span v-if="comment.nickname">
       | {{ comment.nickname }}
       </span>
       <span v-else>
       | {{ comment.username }}
-    </span>
+      </span>
+      <button @click="deleteComment(comment.id)">삭제</button>
     </div>
   </div>
 </template>
@@ -104,7 +111,26 @@ const deleteReview = (reviewId) => {
       console.log(error)
   })
 }
+
+const deleteComment = (commentId) => {
+    axios({
+    method: 'delete',
+    url: `${movieStore.API_URL}/api/v1/comments/${commentId}/`,
+    headers: {
+        'Authorization': `Token ${userStore.token}`
+    }
+})
+    .then(() => {
+        review.value.reviewcomment_set = review.value.reviewcomment_set.filter(comment => comment.id !== commentId)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
 </script>
 
 <style scoped>
+.poster-image {
+  width: 200px;
+}
 </style>
