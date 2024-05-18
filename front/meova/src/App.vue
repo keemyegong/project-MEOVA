@@ -1,4 +1,3 @@
-
 <template>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -24,6 +23,16 @@
               >Settings</RouterLink
             >
           </li>
+          <li class="nav-item">
+            <RouterLink
+              :to="{
+                name: 'profile',
+                params: { username: store.userinfo.username },
+              }"
+              class="nav-link"
+              >My profile</RouterLink
+            >
+          </li>
         </ul>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-else>
           <li class="nav-item">
@@ -40,7 +49,7 @@
       </div>
     </div>
   </nav>
-  <div >
+  <div>
     <RouterView />
   </div>
 </template>
@@ -49,7 +58,6 @@
 import { RouterLink, RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
 const store = useUserStore();
-
 </script>
 
 <style scoped></style>
