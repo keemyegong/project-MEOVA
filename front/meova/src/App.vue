@@ -23,7 +23,7 @@
               >Settings</RouterLink
             >
           </li>
-          <li class="nav-item">
+          <li v-if="store.userinfo" class="nav-item">
             <RouterLink
               :to="{
                 name: 'profile',

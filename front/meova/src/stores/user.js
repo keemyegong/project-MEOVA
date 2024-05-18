@@ -15,6 +15,25 @@ export const useUserStore = defineStore(
         return true;
       }
     });
+
+    const userinfo = ref({});
+    const settings = function () {
+      axios({
+        method: "get",
+        url: `${BASE_URL}/user/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          userinfo.value = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     const login = function (payload) {
       const { username, password } = payload;
       axios({
@@ -28,6 +47,7 @@ export const useUserStore = defineStore(
         .then((res) => {
           console.log(res.data.key);
           token.value = res.data.key;
+          settings()
           router.push({ name: "main" });
         })
         .catch((error) => {
@@ -65,23 +85,6 @@ export const useUserStore = defineStore(
         .then((res) => {
           token.value = null;
           router.push({ name: "main" });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    const userinfo = ref({});
-    const settings = function () {
-      axios({
-        method: "get",
-        url: `${BASE_URL}/user/`,
-        headers: {
-          Authorization: `Token ${token.value}`,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          userinfo.value = res.data;
         })
         .catch((error) => {
           console.log(error);
