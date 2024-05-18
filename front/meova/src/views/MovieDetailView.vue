@@ -31,18 +31,20 @@
         <hr>
         <b>출연진</b>
         <div v-for="credit in movie.credits">
-            <img :src="'https://image.tmdb.org/t/p/original/' + credit.actor.profile_path" alt="movie-poster" class="movie-image">
-            <p>캐릭터 | {{ credit.character }}</p>
-            <p>배우 | {{ credit.actor.name }}</p>
+            <RouterLink :to="{ name: 'ActorDetailView', params: { id: credit.actor.id } }">
+                <img :src="'https://image.tmdb.org/t/p/original/' + credit.actor.profile_path" alt="movie-poster" class="movie-image">
+                <p>캐릭터 | {{ credit.character }}</p>
+                <p>배우 | {{ credit.actor.name }}</p>
+            </RouterLink>
         </div>
     </div>
 </template>
-  
+
 <script setup>
-import { useMovieStore } from '@/stores/movie'
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useMovieStore } from '@/stores/movie'
+import { useRoute, RouterLink } from 'vue-router'
 
 const store = useMovieStore()
 const route = useRoute()

@@ -28,6 +28,5 @@ urlpatterns = [
     path('movies/<int:movie_pk>/<int:review_pk>/<int:comment_pk>/', views.comment_detail), # 리뷰 코멘트 삭제
     # path('movies/<int:movie_pk>/tag-comments/', views.tag_comments), # 태그 코멘트 조회, 생성
     # path('movies/<int:movie_pk>/tag-comments/<int:tag_comment_pk>/', views.tag_comment_detail), # 태그 코멘트 삭제
-    path('movies/actors/<int:actor_pk>/', views.actor_detail), # 영화 배우 상세 정보 조회
     # path('movies/directors/<int:director_pk>/', views.directors), # 영화 감독 상세 정보 조회
 ]
