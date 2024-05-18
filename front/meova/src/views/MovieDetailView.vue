@@ -35,41 +35,56 @@
             <p>아직 태그코멘트가 없어요!</p>
         </template>
 
-        <form>
-            <input type="text">
-            <input type="submit">
-        </form>
+    <form>
+      <input type="text" />
+      <input type="submit" />
+    </form>
+    <button>
+      <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
+        리뷰 생성
+      </RouterLink>
+    </button>
 
-        <template v-if="watchprovider in movie.watchproviders">
-            <b>Provider</b>
-            <div v-for="watchprovider in movie.watchproviders">
-                {{ watchprovider }}
-            </div>
-        </template>
-        <hr>
-        <b>감독</b>
-        <div v-for="director in movie.directors">
-            <RouterLink :to="{ name: 'DirectorDetailView', params: { id: director.id } }">
-                <p>{{ director.name }}</p>
-            </RouterLink>
-        </div>
-        <hr>
-        <b>출연진</b>
-        <div v-for="credit in movie.credits">
-            <RouterLink :to="{ name: 'ActorDetailView', params: { id: credit.actor.id } }">
-                <img :src="'https://image.tmdb.org/t/p/original/' + credit.actor.profile_path" alt="actor-profile" class="profile-image">
-                <p>캐릭터 | {{ credit.character }}</p>
-                <p>배우 | {{ credit.actor.name }}</p>
-            </RouterLink>
-        </div>
+    <template v-if="watchprovider in movie.watchproviders">
+      <b>Provider</b>
+      <div v-for="watchprovider in movie.watchproviders">
+        {{ watchprovider }}
+      </div>
+    </template>
+    <hr />
+    <b>감독</b>
+    <div v-for="director in movie.directors">
+      <RouterLink
+        :to="{ name: 'DirectorDetailView', params: { id: director.id } }"
+      >
+        <p>{{ director.name }}</p>
+      </RouterLink>
     </div>
+    <hr />
+    <b>출연진</b>
+    <div v-for="credit in movie.credits">
+      <RouterLink
+        :to="{ name: 'ActorDetailView', params: { id: credit.actor.id } }"
+      >
+        <img
+          :src="
+            'https://image.tmdb.org/t/p/original/' + credit.actor.profile_path
+          "
+          alt="actor-profile"
+          class="profile-image"
+        />
+        <p>캐릭터 | {{ credit.character }}</p>
+        <p>배우 | {{ credit.actor.name }}</p>
+      </RouterLink>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref } from 'vue'
-import { useMovieStore } from '@/stores/movie'
-import { useRoute, RouterLink } from 'vue-router'
+import axios from "axios";
+import { ref } from "vue";
+import { useMovieStore } from "@/stores/movie";
+import { useRoute, RouterLink } from "vue-router";
 
 const store = useMovieStore()
 const route = useRoute()
