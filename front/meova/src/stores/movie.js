@@ -8,6 +8,7 @@ export const useMovieStore = defineStore('movie', () => {
   const recommend_movies = ref([])
   const popular_movies = ref([])
   const release_movies = ref([])
+  const tag_comments = ref([])
 
   const getRecommendMovies = function () {
     console.log('추천알고리즘이없어요!')
@@ -41,6 +42,9 @@ export const useMovieStore = defineStore('movie', () => {
     })
   }
 
+  const createTagcomment = function () {
+
+  }
   return { API_URL,
     getRecommendMovies, getPopularMovies, getReleaseMovies,
     recommend_movies, popular_movies, release_movies, }

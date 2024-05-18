@@ -8,6 +8,7 @@ import PopularMovieView from "@/views/PopularMovieView.vue";
 import ReleaseMovieView from "@/views/ReleaseMovieView.vue";
 import MovieDetailView from "@/views/MovieDetailView.vue";
 import ActorDetailView from "@/views/ActorDetailView.vue";
+import DirectorDetailView from "@/views/DirectorDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: "/actors/:id",
       name: "ActorDetailView",
       component: ActorDetailView,
+    },
+    {
+      path: "/directors/:id",
+      name: "DirectorDetailView",
+      component: DirectorDetailView,
     },
   ],
 });
