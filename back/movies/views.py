@@ -190,7 +190,7 @@ def review_detail(request, review_pk):
             return Response(serializer.data)
     elif request.method=='GET':
         serializer=ReviewSerializer(review)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method=='DELETE'and review.user==request.user:
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

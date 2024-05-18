@@ -77,6 +77,8 @@
         <p>배우 | {{ credit.actor.name }}</p>
       </RouterLink>
     </div>
+    <hr>
+    
   </div>
 </template>
 
