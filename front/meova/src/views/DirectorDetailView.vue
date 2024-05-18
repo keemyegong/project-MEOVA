@@ -1,10 +1,10 @@
 
 <template>
     <div>
-        <h1>{{ actor.name }}</h1>
-        <img :src="'https://image.tmdb.org/t/p/original/' + actor.profile_path" alt="actor-profile" class="profile-image">
-        <h3>출연 영화</h3>
-        <div v-for="movie in actor.movies">
+        <h1>{{ director.name }}</h1>
+        <hr>
+        <h3>감독 영화</h3>
+        <div v-for="movie in director.movies">
         <RouterLink :to="{ name: 'MovieDetailView', params: { id: movie.id } }">
             <p>{{ movie.title }}</p>
             <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="movie-poster" class="movie-image">
@@ -22,17 +22,17 @@ import { useRoute, RouterLink } from 'vue-router'
 
 const store = useMovieStore()
 const route = useRoute()
-const actor = ref(null)
+const director = ref(null)
 
-const actorId = route.params['id']
+const directorId = route.params['id']
 
 axios({
     method: 'get',
-    url: `${store.API_URL}/api/v1/actors/${actorId}/`
+    url: `${store.API_URL}/api/v1/directors/${directorId}/`
 })
 .then((response) => {
     console.log(response)
-    actor.value = response.data
+    director.value = response.data
 })
 .catch((error) => {
     console.log(error)
@@ -41,9 +41,6 @@ axios({
 
 <style scoped>
 .movie-image {
-  width: 200px;
-}
-.profile-image {
   width: 200px;
 }
 </style>

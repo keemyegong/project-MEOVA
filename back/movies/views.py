@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review, Credit, Actor
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer
+from .models import Movie, Review, Credit, Actor, Director
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,TagCommentSerializer
 from django.conf import settings
 api_key = settings.TMDB_API_KEY
 # Create your views here.
@@ -195,3 +195,19 @@ def actor_detail(request, actor_pk):
         actor = get_object_or_404(Actor, pk=actor_pk)
         serializer = ActorSerializer(actor)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def director_detail(request, director_pk):
+    if request.method == 'GET':
+        director = get_object_or_404(Director, pk=director_pk)
+        serializer = DirectorSerializer(director)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tag_comments(request, movie_pk):
+    movie = Movie.objects.get(pk=movie_pk)
+    serializer = TagCommentSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(movie=movie, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
