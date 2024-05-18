@@ -17,8 +17,9 @@
         <div v-for="keyword in movie.keywords">
             <p>{{ keyword.name }}</p>
         </div>
-        <b>태그 코멘트</b>
-
+        <RouterLink :to="{ name: 'TagCommentDetailView', params: { id: movie.id } }">
+            <b>태그 코멘트</b>
+        </RouterLink>
         <template v-if="movie.tagcomment_set">
             <div v-for="tagcomment in movie.tagcomment_set" :key="tagcomment.id">
                 {{ tagcomment.content }}
@@ -73,8 +74,8 @@ import { useRoute, RouterLink } from 'vue-router'
 const store = useMovieStore()
 const route = useRoute()
 const movie = ref(null)
+const movieId = Number(route.params['id'])
 
-    const movieId = Number(route.params['id'])
     console.log(store.API_URL)
     axios({
         method: 'get',

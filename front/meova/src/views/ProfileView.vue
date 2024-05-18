@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="profile">
+    <section v-if="store.profile_info" class="profile">
       <img :src="store.profile_info.profile_photo" class="profile_img" alt="" />
       <h1 v-if="store.profile_info.nickname">
         {{ store.profile_info.nickname }}
@@ -24,9 +24,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const store = useUserStore();
 
-onMounted(() => {
-  store.profile(route.params.username);
-});
+store.profile(route.params.username);
 const follower_count = computed(() => {
   return store.profile_info.followers.length;
 });
