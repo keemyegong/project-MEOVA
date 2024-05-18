@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Movie, Director, Genre,Keyword,Actor,Director,WatchProvider,Credit, TagComment
+from .models import Movie, Director, Genre,Keyword,Actor,Director,WatchProvider,Credit,Review,ReviewComment, TagComment
 
 class MovieCardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,3 +88,15 @@ class DirectorSerializer(serializers.ModelSerializer):
         model=Director
         fields='__all__'
         read_only_fields=('liked_users',)
+        
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Review
+        fields='__all__'
+        read_only_fields=('user','movie','liked_users',)
+        
+class ReviewCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ReviewComment
+        fields='__all__'
+        read_only_fields=('user','review',)

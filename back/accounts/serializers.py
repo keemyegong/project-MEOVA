@@ -54,16 +54,13 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     read_only_fields = ('email',)
 
 class ProfileSerializer(serializers.ModelSerializer):
-  # profile_photo = serializers.SerializerMethodField()
 
+  followers = serializers.SerializerMethodField()
   class Meta:
       model = UserModel
-      fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings')
+      fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings','followers',)
 
-  # def get_profile_photo(self, obj):
-  #     request = self.context.get('request')
-  #     print(request)
-      
-  #     return request.build_absolute_uri(obj.profile_photo.url)
-
+  def get_followers(self, obj):
+        followers = obj.followers.all() 
+        return ProfileSerializer(followers, many=True).data
   

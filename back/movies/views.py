@@ -5,9 +5,10 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review, Credit, Actor, Director
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,TagCommentSerializer
+from .models import Movie, Review, Credit, Actor, ReviewComment, Director
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer
 from django.conf import settings
+
 api_key = settings.TMDB_API_KEY
 # Create your views here.
 
@@ -124,33 +125,6 @@ def get_movie(request):
     return Response(response)
 
 @api_view(['GET'])
-def get_genre(request):
-    url = "https://api.themoviedb.org/3/genre/movie/list?language=ko"
-    headers = {
-    "accept": "application/json",
-    "Authorization": f"Bearer {api_key}"}
-    response = requests.get(url,headers=headers).json()
-    
-    for genre in response.get('genres'):
-        # 원하는 데이터 추출하기
-        pk = genre.get('id')
-        name = genre.get('name')
-
-        save_data = {
-            'id': pk,
-            'name': name,
-        }
-
-        serializer = GenreSerializer(data=save_data)
-        # 유효성 검증
-        if serializer.is_valid(raise_exception=True):
-            # 유효하다면, 저장
-            serializer.save()
-
-    return Response(response)
-
-
-@api_view(['GET'])
 def search(request):
     if request.method=='GET':
         query=request.GET.get('q')
@@ -195,6 +169,52 @@ def actor_detail(request, actor_pk):
         actor = get_object_or_404(Actor, pk=actor_pk)
         serializer = ActorSerializer(actor)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def reviews(request,movie_pk):
+    movie=get_object_or_404(Movie,pk=movie_pk)
+    if request.method=='POST':
+        serializer=ReviewSerializer(data=request.POST)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user,movie=movie)
+            return Response(serializer.data)
+
+@api_view(['GET','PUT','DELETE'])
+@permission_classes([IsAuthenticated])  
+def review_detail(request,movie_pk,review_pk):
+    review=get_object_or_404(Review,pk=review_pk)
+    if request.method=='PUT':
+        serializer=ReviewSerializer(review,data=request.data,partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+    elif request.method=='GET':
+        serializer=ReviewSerializer(review)
+        return Response(serializer.data)
+    elif request.method=='DELETE'and review.user==request.user:
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def comments(request,movie_pk,review_pk):
+    movie=get_object_or_404(Movie,pk=movie_pk)
+    review=get_object_or_404(Review,pk=review_pk)
+    if request.method=='POST':
+        serializer=ReviewCommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user,review=review)
+            return Response(serializer.data)
+        
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def comment_detail(request,movie_pk,review_pk,comment_pk):
+    comment=get_object_or_404(ReviewComment,pk=comment_pk)
+    if request.method=='DELETE' and comment.user==request.user:
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def director_detail(request, director_pk):
