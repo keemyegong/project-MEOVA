@@ -1,7 +1,19 @@
 <template>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <RouterLink :to="{ name: 'main' }" class="navbar-brand">Main</RouterLink>
+      <RouterLink
+        style="width: 20%"
+        :to="{ name: 'main' }"
+        class="logo navbar-brand"
+      >
+        <img
+          v-if="!movie.isMain"
+          width="100%"
+          class="col-12"
+          :src="movie.API_URL + '/static/main_logo.gif'"
+          alt="logo"
+        />
+      </RouterLink>
       <button
         class="navbar-toggler"
         type="button"
@@ -57,7 +69,9 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
+import { useMovieStore } from "./stores/movie";
 const store = useUserStore();
+const movie = useMovieStore();
 </script>
 
 <style scoped></style>
