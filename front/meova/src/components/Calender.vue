@@ -1,6 +1,9 @@
 <template>
   <div id="calendar-container">
     <h1>{{ nowM + 1 }}월</h1>
+    <p v-for="movie in movies">
+      {{ Date(movie.created_at) }}
+    </p>
     <table>
       <thead>
         <tr>
@@ -21,6 +24,7 @@
             :class="{ today: isToday(day.date) }"
           >
             <img src="" alt="" />
+            {{ day }}
             {{ day.display }}
           </td>
         </tr>
@@ -31,19 +35,26 @@
 
 <script>
 import { ref, onMounted } from "vue";
-// onMounted(() => {
-//   axios({
-//     method: "get",
-//     url: "http://127.0.0.1:8000/api/v1/1/reviews/",
-//   }).then((res) => {
-//     console.log(res);
-//   });
-// });
+import axios from "axios";
+import { useUserStore } from "@/stores/user";
+
 export default {
   name: "CalendarComponent",
   setup() {
     const calendarRows = ref([]);
     const nowM = ref(new Date().getMonth());
+    const store = useUserStore();
+    const movies = ref([]);
+    const fetchMovieReviews = async (userid) => {
+      axios({
+        method: "get",
+        url: `http://127.0.0.1:8000/api/v1/${userid}/reviews/`,
+        headers: { Authorization: `Token ${store.token}` },
+      }).then((res) => {
+        console.log(res);
+        movies.value = res.data;
+      });
+    };
 
     const printCalendar = (y, m) => {
       const date = new Date();
@@ -73,7 +84,24 @@ export default {
           if ((i === 0 && k < theDay) || dNum > lastDate) {
             week.push({ date: null, display: " " });
           } else {
-            week.push({ date: new Date(y, m, dNum), display: dNum });
+            const poster = ref([]);
+            console.log(movies.value);
+            for (const movie of movies.value) {
+              if (
+                Date(movie.created_at).getFullYear() === y &&
+                Date(movie.created_at).getMonth() === m &&
+                Date(movie.created_at).getDate() === dNum
+              ) {
+                poster.value.push(
+                  `http://image.tmdb.org/t/p/w500${movie.movie.poster_path}`
+                );
+              }
+            }
+            week.push({
+              date: new Date(y, m, dNum),
+              display: dNum,
+              poster: poster.value,
+            });
             dNum++;
           }
         }
@@ -94,12 +122,14 @@ export default {
 
     onMounted(() => {
       printCalendar();
+      fetchMovieReviews(1); // 예시로 userid 1을 사용
     });
 
     return {
       calendarRows,
       isToday,
       nowM,
+      movies,
     };
   },
 };
