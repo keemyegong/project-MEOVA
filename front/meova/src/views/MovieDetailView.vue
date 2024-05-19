@@ -55,16 +55,14 @@
     <div class="poster-review col-6">
       <div class="rol">
         <img
-          style="border-radius: 1%"
           :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
           alt="movie-poster"
           class="movie-image col-12"
         />
-        <button
-          class="mt-3 col-12 btn btn-warning"
-          @click="createReview(movie.id)"
-        >
-          리뷰 생성
+        <button class="mt-3 col-12 btn btn-warning">
+          <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
+            리뷰 생성
+          </RouterLink>
         </button>
       </div>
     </div>
@@ -125,7 +123,7 @@
 import axios from "axios";
 import { onMounted, onUpdated, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
-import { useRoute, RouterLink, useRouter } from "vue-router";
+import { useRoute, RouterLink } from "vue-router";
 import { useReviewStore } from "@/stores/review";
 
 const store = useMovieStore();
@@ -156,10 +154,8 @@ const createTag = function () {
       console.log(error);
     });
 };
-const router = useRouter();
-const createReview = function (id) {
-  router.push({ name: "CreateReview", params: { id: id } });
-};
+onUpdated(() => {});
+console.log(store.API_URL);
 onMounted(() => {
   axios({
     method: "get",
@@ -194,9 +190,6 @@ onMounted(() => {
   overflow: auto;
   display: flex;
 }
-.cast::-webkit-scrollbar {
-  display: none;
-}
 .review {
   display: flex;
 }
@@ -218,23 +211,20 @@ onMounted(() => {
   overflow: auto; /* 세로 스크롤 설정 */
   top: auto;
 }
-.tag-comment::-webkit-scrollbar {
-  display: none;
-}
 .country {
-  background-color: #eed3d9;
+  background-color: #CCD3CA;
   color: white;
 }
 .withwho {
-  background-color: #ccd3ca;
+  background-color: #B2C8DF;
   color: white;
 }
 .runtime {
-  background-color: #ead7c7;
+  background-color: #eed3d9;
   color: white;
 }
 .genre {
-  background-color: #b5c0d0;
+  background-color: #F4D19B; 
   color: white;
 }
 </style>

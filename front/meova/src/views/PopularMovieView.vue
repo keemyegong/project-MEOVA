@@ -33,11 +33,6 @@
             </div>
         </div>
     </div>
-    <!--   <RouterLink :to="{ name: 'MovieDetailView', params: { id: movie.id } }">
-                    <p>{{ movie.title }}</p>
-                    <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="movie-poster" class="movie-image">
-                </RouterLink>
-                <p>{{ movie.overview }}</p> -->
 </template>
 
 <script setup>
@@ -55,7 +50,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
 .movie-card {
     padding-bottom: 50px;
 }
@@ -68,9 +62,11 @@ onMounted(() => {
     height:95%;
 }
 .movie-category-title {
-    margin-top: 10px;
-    margin-bottom: 40px;
-    font-size: 60px;
+    margin-top: 0px;
+    margin-bottom: 50px;
+
+    text-align: center;
+    font-size: 50px;
     font-family: "Caprasimo", serif;
     font-weight: 400;
     font-style: normal;
