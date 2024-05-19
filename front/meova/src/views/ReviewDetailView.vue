@@ -137,4 +137,6 @@ const deleteComment = (commentId) => {
 .poster-image {
   width: 200px;
 }
+
+
 </style>

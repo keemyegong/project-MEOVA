@@ -32,7 +32,7 @@
       </div>
 
       <div class="col-md-6 offset-3">
-        <button type="submit" class="btn btn-dark">로그인</button>
+        <button type="submit" class="btn btn-dark">회원가입</button>
       </div>
     </form>
   </div>

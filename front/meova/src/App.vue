@@ -16,11 +16,11 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="store.isLogin">
           <li class="nav-item">
-            <div class="nav-link" @click="store.logout">logout</div>
+            <div class="nav-link" @click="store.logout">로그아웃</div>
           </li>
           <li class="nav-item">
             <RouterLink :to="{ name: 'settings' }" class="nav-link"
-              >Settings</RouterLink
+              >설정</RouterLink
             >
           </li>
           <li v-if="store.userinfo" class="nav-item">
@@ -30,19 +30,19 @@
                 params: { username: store.userinfo.username },
               }"
               class="nav-link"
-              >My profile</RouterLink
+              >프로필</RouterLink
             >
           </li>
         </ul>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-else>
           <li class="nav-item">
             <RouterLink :to="{ name: 'login' }" class="nav-link"
-              >Login</RouterLink
+              >로그인</RouterLink
             >
           </li>
           <li class="nav-item">
             <RouterLink :to="{ name: 'signup' }" class="nav-link"
-              >Signup</RouterLink
+              >회원가입</RouterLink
             >
           </li>
         </ul>
