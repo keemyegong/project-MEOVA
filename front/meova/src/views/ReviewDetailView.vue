@@ -2,12 +2,16 @@
 <template>
   <div v-if="review">
     <h1>{{ review.title }}</h1>
-    <div>
+      <div v-if="review.movie">
+      <RouterLink
+        :to="{ name: 'MovieDetailView', params: { id: review.movie.id } }"
+      >
       <img
         :src="'https://image.tmdb.org/t/p/original/' + review.movie.poster_path"
         alt="movie-poster"
         class="poster-image"
       />
+    </RouterLink>
     </div>
     <h2>평점 {{ review.vote }}</h2>
     <span v-if="review.nickname">
