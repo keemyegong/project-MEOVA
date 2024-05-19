@@ -179,6 +179,14 @@ def reviews(request,movie_pk):
             serializer.save(user=request.user,movie=movie)
             return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])   
+def reviewlist(request,user_pk):
+    reviews=Review.objects.filter(user=user_pk)
+    if request.method=='GET':
+        serializer=ReviewSerializer(reviews,many=True)
+        return Response(serializer.data)
+
 @api_view(['GET','PUT','DELETE'])
 @permission_classes([IsAuthenticated])  
 def review_detail(request, review_pk):

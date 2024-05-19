@@ -10,17 +10,18 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script setup>
-import { useRouter, RouterLink } from 'vue-router'
-import { useMovieStore } from '@/stores/movie'
+import { useRouter, RouterLink } from "vue-router";
+import { useMovieStore } from "@/stores/movie";
 
 const props = defineProps({
-    movie: Object
-})
+  movie: Object,
+});
 
-const store = useMovieStore()
+const store = useMovieStore();
 </script>
 
 <style scoped>

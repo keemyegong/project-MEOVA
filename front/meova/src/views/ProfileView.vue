@@ -14,10 +14,12 @@
         <b>{{ following_count }}</b>
       </button>
     </section>
+    <Calendar :userid="store.profile_info.pk" />
   </div>
 </template>
 
 <script setup>
+import Calendar from "@/components/Calender.vue";
 import { useUserStore } from "@/stores/user";
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";

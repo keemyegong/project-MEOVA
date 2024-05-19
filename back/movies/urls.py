@@ -23,6 +23,7 @@ urlpatterns = [
     path('movies/<int:movie_pk>/',views.detail), # 영화 상세 정보 조회
     path('movies/<int:movie_pk>/reviews/', views.reviews), # 리뷰 생성
     path('reviews/<int:review_pk>/', views.review_detail), # 리뷰 상세 정보 조회, 수정, 삭제
+    path('<int:user_pk>/reviews/', views.reviewlist), # 리뷰 상세 정보 조회, 수정, 삭제
     path('reviews/<int:review_pk>/comments/', views.comments), # 리뷰 코멘트 생성
     path('comments/<int:comment_pk>/', views.comment_detail), # 리뷰 코멘트 삭제
     path('actors/<int:actor_pk>/', views.actor_detail), # 영화 배우 상세 정보 조회
