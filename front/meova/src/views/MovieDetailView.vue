@@ -1,15 +1,16 @@
 <template>
-  <div v-if="movie" class="row">
+  <div v-if="movie" class="row movie-detail-box">
     <div class="movie-info col-6">
-      <h1 class="mb-3">
+      <div class="movie-title">
         <b>{{ movie.title }}</b>
-      </h1>
-      <p class="overview">{{ movie.overview }}</p>
+      </div>
+      <div class="movie-overview">
+        <p class="overview">
+          {{ movie.overview }}
+        </p>
+      </div>
       <button class="btn runtime">{{ movie.runtime }}분</button>
       <button class="btn country">{{ movie.origin_country }}</button>
-
-      <button class="btn btn-light">{{ movie.release_date }}</button>
-
       <button class="btn genre" v-for="genre in movie.genres">
         {{ genre.name }}
       </button>
@@ -19,27 +20,31 @@
       </button>
       <div class="tag-comment">
         <RouterLink
-          :to="{ name: 'TagCommentDetailView', params: { id: movie.id } }"
+          class="nav-link" :to="{ name: 'TagCommentDetailView', params: { id: movie.id } }"
         >
-          <b>태그 코멘트</b>
+          <div class="detail-category-title">
+            <p>태그 코멘트</p>
+          </div>
         </RouterLink>
         <template v-if="movie.tagcomment_set">
           <div
             v-for="tagcomment in movie.tagcomment_set.slice().reverse()"
             :key="tagcomment.id"
+            class="tag-comment-content"
           >
+          <i class="bi bi-chat-dots-fill me-2"></i>
             {{ tagcomment.content }}
-            <span v-if="tagcomment.nickname">
+            <span v-if="tagcomment.nickname" class="tag-comment-user">
               | {{ tagcomment.nickname }}
             </span>
-            <span v-else> | {{ tagcomment.username }} </span>
+            <span v-else class="tag-comment-user"> | {{ tagcomment.username }} </span>
           </div>
         </template>
         <template v-else>
           <p>아직 태그코멘트가 없어요!</p>
         </template>
       </div>
-      <form @submit.prevent="createTag" class="row" ref="form">
+      <form @submit.prevent="createTag" class="tag-comment-input row" ref="form">
         <div class="col-9">
           <input
             type="text"
@@ -49,9 +54,12 @@
             v-model="content"
           />
         </div>
-        <input type="submit" class="btn btn-dark col-3" value="입력" />
+        <button type="submit" class="tag-comment-btn btn btn-dark col-3">
+          <i class="bi bi-pencil"></i>
+        </button>
       </form>
     </div>
+    
     <div class="poster-review col-6">
       <div class="rol">
         <img
@@ -59,11 +67,12 @@
           alt="movie-poster"
           class="movie-image col-12"
         />
-        <button class="mt-3 col-12 btn btn-warning">
+
           <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
-            리뷰 생성
+            <button class="review-btn mt-3 col-12 btn btn-warning">
+              리뷰 작성
+            </button>
           </RouterLink>
-        </button>
       </div>
     </div>
 
@@ -73,20 +82,23 @@
         {{ watchprovider }}
       </div>
     </template>
-    <hr />
-    <b>감독</b>
-    <div class="director" v-for="director in movie.directors">
-      <RouterLink
-        :to="{ name: 'DirectorDetailView', params: { id: director.id } }"
-      >
-        <p>{{ director.name }}</p>
-      </RouterLink>
+
+    <div class="director-box">
+      <p class="detail-category-title">감독</p>
+      <div class="director" v-for="director in movie.directors">
+        <RouterLink
+          class="nav-link" :to="{ name: 'DirectorDetailView', params: { id: director.id } }"
+        >
+          <p>{{ director.name }}</p>
+        </RouterLink>
+      </div>
     </div>
-    <hr />
-    <b>출연진</b>
+
+    <p class="detail-category-title">출연진</p>
     <template class="cast">
       <div v-for="credit in movie.credits">
         <RouterLink
+          class="nav-link"
           :to="{ name: 'ActorDetailView', params: { id: credit.actor.id } }"
         >
           <img
@@ -96,26 +108,35 @@
             alt="actor-profile"
             class="profile-image"
           />
-          <p>캐릭터 | {{ credit.character }}</p>
-          <p>배우 | {{ credit.actor.name }}</p>
+          <p class="character">{{ credit.character }}</p>
+          <p class="actor">{{ credit.actor.name }}</p>
         </RouterLink>
       </div>
     </template>
 
+    <p class="detail-category-title">리뷰</p>
     <template class="review">
       <div v-for="review in movie.review_set">
-        <p>hhhhh</p>
         <RouterLink
+          class="nav-link"
           :to="{
             name: 'ReviewDetailView',
             params: { movieId: movie.id, reviewId: review.id },
           }"
         >
-          <p>제목 | {{ review.title }}</p>
-          <p>내용 | {{ review.content }}</p>
-        </RouterLink>
+        <div class="review-item card">
+          <div class="card-body">
+            <h5 class="card-title">{{ review.title }}</h5>
+            <p class="card-text">{{ review.content }}</p>
+            <h6 class="card-subtitle mt-2 text-body-secondary">
+              {{ review.nickname ? review.nickname : review.username }}
+            </h6>
+          </div>
+        </div>
+      </RouterLink>
       </div>
     </template>
+
   </div>
 </template>
 
@@ -173,12 +194,27 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.movie-title {
+    font-size: 35px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
 .movie-image {
   width: 100%;
+  border-radius: 1%;
+}
+
+.movie-overview {
+  margin-bottom: 20px;
+}
+.poster-review {
+  padding-left: 50px;
+  padding-bottom: 50px;
 }
 .profile-image {
   width: 200px;
   height: 200px;
+  margin: 10px;
   object-fit: cover;
   border-radius: 100%;
 }
@@ -190,26 +226,48 @@ onMounted(() => {
   overflow: auto;
   display: flex;
 }
+.cast::-webkit-scrollbar {
+    display: none;
+}
 .review {
   display: flex;
+}
+
+.movie-detail-box {
+  margin-top: 50px;
 }
 
 .movie-info > button {
   margin-right: 3px;
   margin-bottom: 3px;
 }
-.overview {
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* 보여줄 줄 수 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.detail-category-title {
+  font-size: 20px;
+  font-weight: 700;
 }
 .tag-comment {
   width: 100%;
+  margin-top: 30px;
   max-height: 300px; /* 최대 높이 설정 */
   overflow: auto; /* 세로 스크롤 설정 */
   top: auto;
+}
+
+.tag-comment-content {
+  margin-left: 3px;
+  margin-bottom: 7px;
+}
+
+.tag-comment-user {
+  margin-left: 5px;
+  font-size: 13px;
+  color: lightslategray;
+}
+.tag-comment-input {
+  margin-top: 30px;
+}
+.tag-comment-btn {
+  width: 13%;
 }
 .country {
   background-color: #CCD3CA;
@@ -226,5 +284,41 @@ onMounted(() => {
 .genre {
   background-color: #F4D19B; 
   color: white;
+}
+
+.review-btn {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  height: 55px;
+}
+
+.director-box {
+  margin-bottom: 30px;
+}
+
+.character {
+  margin-top: 10px;
+  text-align: center;
+}
+.actor {
+  text-align: center;
+  color: lightslategray;
+}
+
+.review {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+}
+
+.review::-webkit-scrollbar {
+  display: none;
+}
+
+.review-item {
+  height: 200px;
+  width: 330px;
+  margin-right: 10px;
 }
 </style>

@@ -30,11 +30,6 @@
           <li class="nav-item">
             <div class="nav-link" @click="store.logout">로그아웃</div>
           </li>
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'settings' }" class="nav-link"
-              >설정</RouterLink
-            >
-          </li>
           <li v-if="store.userinfo" class="nav-item">
             <RouterLink
               :to="{
@@ -43,6 +38,11 @@
               }"
               class="nav-link"
               >프로필</RouterLink
+            >
+          </li>
+          <li class="nav-item">
+            <RouterLink :to="{ name: 'settings' }" class="nav-link"
+              ><i class="bi bi-gear-fill"></i></RouterLink
             >
           </li>
         </ul>
@@ -74,4 +74,5 @@ const store = useUserStore();
 const movie = useMovieStore();
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

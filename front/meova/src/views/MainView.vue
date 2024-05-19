@@ -13,17 +13,17 @@
               type="text"
               class="form-control form-control-lg"
               v-model="searchbar"
-              placeholder="검색어를 입력해주세요"
+              placeholder="영화 뭐 볼까?"
               @focus="displaySearch"
             />
           </div>
           <div class="col-2">
             <button
               type="submit"
-              style="width: 100%"
+              style="width: 80%"
               class="btn btn-lg btn-dark"
             >
-              검색
+            <i class="bi bi-search"></i>
             </button>
           </div>
           <div v-if="showFilters" class="col-9 offset-1">
@@ -149,5 +149,4 @@ onMounted(() => {
   background-color: #b5c0d0;
   color: white;
 }
-
 </style>
