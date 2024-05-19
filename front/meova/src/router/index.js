@@ -84,13 +84,20 @@ const router = createRouter({
   ],
 });
 import { useUserStore } from "@/stores/user";
+import { useMovieStore } from "@/stores/movie";
 router.beforeEach((to, from) => {
   const store = useUserStore();
+  const movie = useMovieStore();
   if ((to.name === "login" || to.name === "signup") && store.isLogin) {
     return { name: "main" };
   }
   if (to.name === "settings" && store.isLogin === false) {
     return { name: "login" };
+  }
+  if (to.name === "main") {
+    movie.isMain = true;
+  } else {
+    movie.isMain = false;
   }
 });
 
