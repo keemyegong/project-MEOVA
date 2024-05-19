@@ -1,14 +1,20 @@
 <template>
-    <div>
-        <div class="movie-item">
-            <RouterLink class="nav-link" :to="{ name: 'MovieDetailView', params: { id: movie.id } }">
-                <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="movie-poster" class="movie-image">
-                <p class="movie-title">{{ movie.title }}</p>
-            </RouterLink>
-            <div class="overview-box">
-                <p class="overview">{{ movie.overview }}</p>
-            </div>
-        </div>
+  <div>
+    <div class="movie-item">
+      <RouterLink
+        class="nav-link"
+        :to="{ name: 'MovieDetailView', params: { id: movie.id } }"
+      >
+        <img
+          :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
+          alt="movie-poster"
+          class="movie-image"
+        />
+        <p class="movie-title">{{ movie.title }}</p>
+      </RouterLink>
+      <div class="overview-box">
+        <p class="overview">{{ movie.overview }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -26,20 +32,20 @@ const store = useMovieStore();
 
 <style scoped>
 .movie-item {
-    width: 300px;
+  width: 300px;
 }
 .movie-title {
-    font-size: 25px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  font-size: 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .movie-image {
-    height: 340px;
-    width: 230px;
+  height: 340px;
+  width: 230px;
 }
 
 .overview-box {
-    width: 250px;
+  width: 250px;
 }
 .overview {
   display: -webkit-box;
