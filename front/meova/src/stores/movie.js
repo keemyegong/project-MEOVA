@@ -10,8 +10,25 @@ export const useMovieStore = defineStore(
     const recommend_movies = ref([]);
     const popular_movies = ref([]);
     const release_movies = ref([]);
-    const movie = ref(null);
+    const movies = ref([]);
 
+    const search = function (q) {
+      const { title, genre, keyword, runtime, country } = q;
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/meova/search/`,
+        params: {
+          title,
+          genre,
+          keyword,
+          runtime,
+          country,
+        },
+      }).then((res) => {
+        console.log(res);
+        movies.value = res.data;
+      });
+    };
     const getRecommendMovies = function () {
       console.log("추천알고리즘이없어요!");
     };
@@ -67,6 +84,8 @@ export const useMovieStore = defineStore(
       recommend_movies,
       popular_movies,
       release_movies,
+      search,
+      movies,
     };
   },
   { persist: true }

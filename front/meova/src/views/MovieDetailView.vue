@@ -9,13 +9,52 @@
           {{ movie.overview }}
         </p>
       </div>
-      <button class="btn runtime">{{ movie.runtime }}분</button>
-      <button class="btn country">{{ movie.origin_country }}</button>
-      <button class="btn genre" v-for="genre in movie.genres">
+      <button class="btn runtime" @click="searchByRuntime(movie.runtime)">
+        {{ movie.runtime }}분
+      </button>
+      <button
+        class="btn country"
+        @click="
+          search({
+            title: '',
+            genre: '',
+            keyword: '',
+            runtime: '',
+            country: movie.origin_country,
+          })
+        "
+      >
+        {{ movie.origin_country }}
+      </button>
+      <button
+        class="btn genre"
+        @click="
+          search({
+            title: '',
+            genre: genre.name,
+            keyword: '',
+            runtime: '',
+            country: '',
+          })
+        "
+        v-for="genre in movie.genres"
+      >
         {{ genre.name }}
       </button>
 
-      <button class="btn withwho" v-for="keyword in movie.keywords">
+      <button
+        class="btn withwho"
+        @click="
+          search({
+            title: '',
+            genre: '',
+            keyword: keyword.name,
+            runtime: '',
+            country: '',
+          })
+        "
+        v-for="keyword in movie.keywords"
+      >
         {{ keyword.name }}
       </button>
       <div class="tag-comment">
@@ -151,18 +190,29 @@
             params: { movieId: movie.id, reviewId: review.id },
           }"
         >
-        <div class="review-item">
-          <div class="card-body review-content">
-            <h5 class="card-title">{{ review.title }}</h5>
-            <p class="card-text">{{ review.content }}</p>
-            <div class="user-info">
-              <img :src="`http://127.0.0.1:8000${review.profile_photo}`" alt="user profile image" class="user-profile-img">
-              <span class="ms-2 card-subtitle mt-2 text-body-secondary">
-                {{ review.nickname ? review.nickname : review.username }}
-              </span>
+          <div class="review-item">
+            <div class="card-body review-content">
+              <h5 class="card-title">{{ review.title }}</h5>
+              <p class="card-text">{{ review.content }}</p>
+              <div class="user-info">
+                <img
+                  v-if="review.profile_photo"
+                  :src="`http://127.0.0.1:8000${review.profile_photo}`"
+                  alt="user profile image"
+                  class="user-profile-img"
+                />
+                <img
+                  class="user-profile-img"
+                  src="@/assets/default_profile.png"
+                  v-else
+                  alt=""
+                />
+                <span class="ms-2 card-subtitle mt-2 text-body-secondary">
+                  {{ review.nickname ? review.nickname : review.username }}
+                </span>
+              </div>
+            </div>
           </div>
-          </div>
-        </div>
         </RouterLink>
       </div>
     </template>
@@ -175,7 +225,7 @@ import { onMounted, onUpdated, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
 import { useReviewStore } from "@/stores/review";
 import { useUserStore } from "@/stores/user";
-import { useRoute, RouterLink } from "vue-router";
+import { useRoute, RouterLink, useRouter } from "vue-router";
 import TagCommentDetailModal from "@/components/TagCommentDetailModal.vue";
 const store = useMovieStore();
 const reviewstore = useReviewStore();
@@ -207,7 +257,30 @@ const createTag = function () {
       console.log(error);
     });
 };
-
+const router = useRouter();
+const search = function (q) {
+  store.search(q);
+  router.push({ name: "search", query: q });
+};
+const searchByRuntime = function (runtime) {
+  let runtimeQuery;
+  if (runtime <= 60) {
+    runtimeQuery = "under_1_hour";
+  } else if (runtime <= 120) {
+    runtimeQuery = "under_2_hours";
+  } else if (runtime <= 180) {
+    runtimeQuery = "under_3_hours";
+  } else {
+    runtimeQuery = "over_3_hours";
+  }
+  search({
+    title: "",
+    genre: "",
+    keyword: "",
+    runtime: runtimeQuery,
+    country: "",
+  });
+};
 onUpdated(() => {});
 console.log(store.API_URL);
 onMounted(() => {
@@ -356,7 +429,7 @@ onMounted(() => {
   padding: 10px;
   margin: 10px;
   border-radius: 10px 10px 10px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .review-content {
   padding: 10px;

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainView from "@/views/MainView.vue";
+import SearchView from "@/views/SearchView.vue";
 import LoginView from "@/views/LoginView.vue";
 import SignupView from "@/views/SignupView.vue";
 import SettingView from "@/views/SettingView.vue";
@@ -21,6 +22,16 @@ const router = createRouter({
       path: "/",
       name: "main",
       component: MainView,
+    },
+    {
+      path: "/search/",
+      name: "search",
+      component: SearchView,
+      props: (route) => ({
+        title: route.query.title,
+        genre: route.query.genre,
+        keyword: route.query.keyword
+      })
     },
     {
       path: "/login",
