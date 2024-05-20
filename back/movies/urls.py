@@ -21,6 +21,7 @@ urlpatterns = [
     path('movies/recommended/',views.recommended), # 추천 영화 조회
     path('movies/release/',views.release), # 최신 영화 조회
     path('movies/<int:movie_pk>/',views.detail), # 영화 상세 정보 조회
+    path('movies/<int:movie_pk>/like/',views.like_movie), # 영화 좋아요
     path('movies/<int:movie_pk>/reviews/', views.reviews), # 리뷰 생성
     path('reviews/<int:review_pk>/', views.review_detail), # 리뷰 상세 정보 조회, 수정, 삭제
     path('<int:user_pk>/reviews/', views.reviewlist), # 리뷰 상세 정보 조회, 수정, 삭제

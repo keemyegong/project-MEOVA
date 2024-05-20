@@ -28,8 +28,9 @@ export const useReviewStore = defineStore("review", () => {
         console.log("성공");
         console.log(res.data);
         router.push({
-          name: 'ReviewDetailView', params: {movieId: id, reviewId: res.data.id}
-        })
+          name: "ReviewDetailView",
+          params: { movieId: id, reviewId: res.data.id },
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -40,7 +41,7 @@ export const useReviewStore = defineStore("review", () => {
     const { id, vote, title, content } = review;
     axios({
       method: "put",
-      url: `${BASE_URL}/reviews/${id}/`,
+      url: `${API_URL}/reviews/${id}/`,
       data: {
         vote,
         title,
@@ -53,14 +54,14 @@ export const useReviewStore = defineStore("review", () => {
       .then((res) => {
         console.log("성공");
         router.push({
-          name: 'ReviewDetailView', params: {movieId: id, reviewId: id}
-        })
+          name: "ReviewDetailView",
+          params: { movieId: id, reviewId: id },
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
 
   const createTag = function (tag) {
     const { id, content } = tag;
@@ -103,6 +104,30 @@ export const useReviewStore = defineStore("review", () => {
         console.log(error);
       });
   };
-
-  return { createReview, updateReview, createTag, createComment };
+  const review = ref(null);
+  const userStore = useUserStore();
+  const fetchReview = function (reviewId) {
+    axios({
+      method: "get",
+      url: `${API_URL}/reviews/${reviewId}/`,
+      headers: {
+        Authorization: `Token ${userStore.token}`,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        review.value = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  return {
+    createReview,
+    updateReview,
+    createTag,
+    createComment,
+    fetchReview,
+    review,
+  };
 });

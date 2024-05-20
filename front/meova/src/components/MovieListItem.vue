@@ -12,22 +12,42 @@
         />
         <p class="movie-title">{{ movie.title }}</p>
       </RouterLink>
+      <button class="btn" @click="likeButton">
+        <i class="bi bi-heart-fill" v-if="isLiked"></i>
+        <i class="bi bi-heart" v-else></i>
+      </button>
       <div class="overview-box">
         <p class="overview">{{ movie.overview }}</p>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script setup>
-import { useRouter, RouterLink } from 'vue-router'
-import { useMovieStore } from '@/stores/movie'
-
+import { useRouter, RouterLink } from "vue-router";
+import { useMovieStore } from "@/stores/movie";
+import { useUserStore } from "@/stores/user";
+import axios from "axios";
+import { ref } from "vue";
+const user = useUserStore();
 const props = defineProps({
-    movie: Object
-})
-
-const store = useMovieStore()
+  movie: Object,
+});
+const isLiked = ref(props.movie.liked_users.includes(user.userinfo.pk));
+const likeButton = function () {
+  axios({
+    method: "post",
+    url: `${store.API_URL}/api/v1/movies/${props.movie.id}/like/`,
+    headers: { Authorization: `Token ${user.token}` },
+  })
+    .then((res) => {
+      isLiked.value = res.data.liked_users.includes(user.userinfo.pk);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+const store = useMovieStore();
 </script>
 
 <style scoped>
@@ -54,5 +74,7 @@ const store = useMovieStore()
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.bi-heart-fill {
+  color: red;
+}
 </style>

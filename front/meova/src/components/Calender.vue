@@ -1,9 +1,6 @@
 <template>
   <div id="calendar-container">
     <h1>{{ nowM + 1 }}월</h1>
-    <p v-for="movie in movies">
-      {{ Date(movie.created_at) }}
-    </p>
     <table>
       <thead>
         <tr>
@@ -23,8 +20,13 @@
             :key="day.date"
             :class="{ today: isToday(day.date) }"
           >
-            <img src="" alt="" />
-            {{ day }}
+            <img
+              class="posterimg"
+              v-for="poster in day.poster"
+              :key="poster"
+              :src="poster"
+              alt="poster"
+            />
             {{ day.display }}
           </td>
         </tr>
@@ -34,9 +36,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import { useReviewStore } from "@/stores/review";
+import { useRoute } from "vue-router";
 
 export default {
   name: "CalendarComponent",
@@ -44,16 +48,23 @@ export default {
     const calendarRows = ref([]);
     const nowM = ref(new Date().getMonth());
     const store = useUserStore();
+    const reviewStore = useReviewStore();
     const movies = ref([]);
+    const route = useRoute();
     const fetchMovieReviews = async (userid) => {
-      axios({
-        method: "get",
-        url: `http://127.0.0.1:8000/api/v1/${userid}/reviews/`,
-        headers: { Authorization: `Token ${store.token}` },
-      }).then((res) => {
-        console.log(res);
+      try {
+        const res = await axios.get(
+          `http://127.0.0.1:8000/api/v1/${userid}/reviews/`,
+          {
+            headers: { Authorization: `Token ${store.token}` },
+          }
+        );
         movies.value = res.data;
-      });
+        console.log(movies);
+        printCalendar(); // 데이터가 로드된 후에 캘린더를 출력합니다.
+      } catch (error) {
+        console.error("Error fetching movie reviews:", error);
+      }
     };
 
     const printCalendar = (y, m) => {
@@ -63,7 +74,7 @@ export default {
       const nowD = date.getDate();
 
       y = y !== undefined ? y : nowY;
-      m = m !== undefined ? m - 1 : nowM;
+      m = m !== undefined ? m : nowM;
 
       const theDate = new Date(y, m, 1);
       const theDay = theDate.getDay();
@@ -80,19 +91,19 @@ export default {
 
       for (let i = 0; i < row; i++) {
         const week = [];
-        for (let k = 1; k <= 7; k++) {
+        for (let k = 0; k < 7; k++) {
           if ((i === 0 && k < theDay) || dNum > lastDate) {
-            week.push({ date: null, display: " " });
+            week.push({ date: null, display: " ", poster: [] });
           } else {
-            const poster = ref([]);
-            console.log(movies.value);
+            const posters = [];
             for (const movie of movies.value) {
+              const movieDate = new Date(movie.created_at);
               if (
-                Date(movie.created_at).getFullYear() === y &&
-                Date(movie.created_at).getMonth() === m &&
-                Date(movie.created_at).getDate() === dNum
+                movieDate.getFullYear() === y &&
+                movieDate.getMonth() === m &&
+                movieDate.getDate() === dNum
               ) {
-                poster.value.push(
+                posters.push(
                   `http://image.tmdb.org/t/p/w500${movie.movie.poster_path}`
                 );
               }
@@ -100,7 +111,7 @@ export default {
             week.push({
               date: new Date(y, m, dNum),
               display: dNum,
-              poster: poster.value,
+              poster: posters,
             });
             dNum++;
           }
@@ -121,10 +132,15 @@ export default {
     };
 
     onMounted(() => {
-      printCalendar();
-      fetchMovieReviews(1); // 예시로 userid 1을 사용
+      console.log(store.profile_info.pk);
+      fetchMovieReviews(store.profile_info.pk); // 예시로 userid 1을 사용
     });
-
+    watch(
+      () => store.profile_info.pk,
+      (pk) => {
+        fetchMovieReviews(pk); // 사용자 ID가 변경될 때마다 데이터를 다시 가져옵니다.
+      }
+    );
     return {
       calendarRows,
       isToday,
@@ -172,5 +188,8 @@ td {
 
 h1 {
   margin-bottom: 20px;
+}
+.posterimg {
+  height: 100%;
 }
 </style>

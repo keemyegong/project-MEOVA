@@ -4,6 +4,7 @@ import LoginView from "@/views/LoginView.vue";
 import SignupView from "@/views/SignupView.vue";
 import SettingView from "@/views/SettingView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import ProfileFollowerListView from "@/views/ProfileFollowerListView.vue";
 import PopularMovieView from "@/views/PopularMovieView.vue";
 import ReleaseMovieView from "@/views/ReleaseMovieView.vue";
 import MovieDetailView from "@/views/MovieDetailView.vue";
@@ -41,6 +42,11 @@ const router = createRouter({
       path: "/profile/:username",
       name: "profile",
       component: ProfileView,
+    },
+    {
+      path: "/profile/followerlist",
+      name: "followerlist",
+      component: ProfileFollowerListView,
     },
     {
       path: "/movies/popular",

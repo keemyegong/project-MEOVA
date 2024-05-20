@@ -15,10 +15,25 @@ def profile_update(request):
             serializer.save()
             return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
 def profile(request,username):
+    person=get_object_or_404(get_user_model(),username=username)
     if request.method=='GET':
-        person=get_object_or_404(get_user_model(),username=username)
         serializer=ProfileSerializer(person,context={'request':request})
+        return Response(serializer.data)
+    elif request.method=='POST':
+        if request.user in person.followers.all():
+            person.followers.remove(request.user)
+        else:
+            person.followers.add(request.user)
+        serializer=ProfileSerializer(person,context={'request':request})
+        return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def followers(request):
+    followers=request.user.followers.all()
+    if request.method=='GET':
+        serializer=ProfileSerializer(followers,many=True)
         return Response(serializer.data)
