@@ -1,16 +1,15 @@
 
 <template>
-    <div>
-        <h1>{{ actor.name }}</h1>
-        <img :src="'https://image.tmdb.org/t/p/original/' + actor.profile_path" alt="actor-profile" class="profile-image">
-        <h3>출연 영화</h3>
-        <div v-for="movie in actor.movies">
-        <RouterLink :to="{ name: 'MovieDetailView', params: { id: movie.id } }">
-            <p>{{ movie.title }}</p>
-            <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="movie-poster" class="movie-image">
-            <p>{{ movie.overview }}</p>
-        </RouterLink>
+    <div class="actor-box">
+        <div class="movie-category-title">
+            {{ actor.name }}
         </div>
+        <img :src="'https://image.tmdb.org/t/p/original/' + actor.profile_path" alt="actor-profile" class="profile-image">
+        <SearchMovieListItem
+                v-for="movie in actor.movies"
+                :key="movie.id"
+                :movie="movie"
+            />
     </div>
 </template>
 
@@ -19,6 +18,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { useMovieStore } from '@/stores/movie'
 import { useRoute, RouterLink } from 'vue-router'
+import SearchMovieListItem from '@/components/SearchMovieListItem.vue'
 
 const store = useMovieStore()
 const route = useRoute()
@@ -40,10 +40,29 @@ axios({
 </script>
 
 <style scoped>
-.movie-image {
-  width: 200px;
+.actor-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 .profile-image {
-  width: 200px;
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+    margin-bottom: 100px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.movie-category-title {
+    margin-top: 0px;
+    margin-bottom: 50px;
+
+    text-align: center;
+    font-size: 50px;
+    font-family: "Bagel Fat One", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 </style>

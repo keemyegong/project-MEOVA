@@ -1,15 +1,15 @@
 
 <template>
     <div>
-        <h1>{{ director.name }}</h1>
-        <hr>
-        <h3>감독 영화</h3>
-        <div v-for="movie in director.movies">
-        <RouterLink :to="{ name: 'MovieDetailView', params: { id: movie.id } }">
-            <p>{{ movie.title }}</p>
-            <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="movie-poster" class="movie-image">
-            <p>{{ movie.overview }}</p>
-        </RouterLink>
+        <div class="movie-category-title">
+            {{ director.name }}
+        </div>
+        <div>
+            <SearchMovieListItem
+                v-for="movie in director.movies"
+                :key="movie.id"
+                :movie="movie"
+            />
         </div>
     </div>
 </template>
@@ -19,6 +19,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { useMovieStore } from '@/stores/movie'
 import { useRoute, RouterLink } from 'vue-router'
+import SearchMovieListItem from '@/components/SearchMovieListItem.vue'
 
 const store = useMovieStore()
 const route = useRoute()
@@ -40,7 +41,14 @@ axios({
 </script>
 
 <style scoped>
-.movie-image {
-  width: 200px;
+.movie-category-title {
+    margin-top: 0px;
+    margin-bottom: 50px;
+
+    text-align: center;
+    font-size: 50px;
+    font-family: "Bagel Fat One", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 </style>

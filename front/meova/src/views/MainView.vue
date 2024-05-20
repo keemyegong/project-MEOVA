@@ -69,11 +69,13 @@
       </div>
     </div>
     <MovieList />
+    <SearchMovieList />
   </div>
 </template>
 
 <script setup>
 import MovieList from "@/components/MovieList.vue";
+import SearchMovieList from "@/components/SearchMovieList.vue";
 import { onMounted, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
 

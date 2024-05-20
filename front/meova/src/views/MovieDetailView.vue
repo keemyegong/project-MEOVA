@@ -144,16 +144,20 @@
 import axios from "axios";
 import { onMounted, onUpdated, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
-import { useRoute, RouterLink } from "vue-router";
 import { useReviewStore } from "@/stores/review";
+import { useUserStore } from "@/stores/user";
+import { useRoute, RouterLink } from "vue-router";
 
 const store = useMovieStore();
 const reviewstore = useReviewStore();
+const userStore = useUserStore();
 const route = useRoute();
 const movie = ref(null);
 const movieId = Number(route.params["id"]);
 const content = ref("");
 const form = ref(null);
+
+
 const createTag = function () {
   const tag = {
     content: content.value,
@@ -175,6 +179,7 @@ const createTag = function () {
       console.log(error);
     });
 };
+
 onUpdated(() => {});
 console.log(store.API_URL);
 onMounted(() => {
@@ -320,5 +325,11 @@ onMounted(() => {
   height: 200px;
   width: 330px;
   margin-right: 10px;
+}
+
+.user-profile {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
 }
 </style>

@@ -96,14 +96,14 @@ class WatchProviderSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class ActorSerializer(serializers.ModelSerializer):
-    movies = MovieCardSerializer(read_only=True, many=True)
+    movies = MovieSerializer(read_only=True, many=True)
     class Meta:
         model=Actor
         fields='__all__'
         read_only_fields=('liked_users',)
 
 class DirectorSerializer(serializers.ModelSerializer):
-    movies = MovieCardSerializer(read_only=True, many=True)
+    movies = MovieSerializer(read_only=True, many=True)
     class Meta:
         model=Director
         fields='__all__'
