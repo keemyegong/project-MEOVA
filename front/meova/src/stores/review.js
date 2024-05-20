@@ -9,6 +9,7 @@ export const useReviewStore = defineStore("review", () => {
   const router = useRouter();
   const BASE_URL = "http://127.0.0.1:8000/api/v1/movies";
   const API_URL = "http://127.0.0.1:8000/api/v1";
+
   const createReview = function (review) {
     const { id, vote, title, content } = review;
     axios({
@@ -34,6 +35,33 @@ export const useReviewStore = defineStore("review", () => {
         console.log(error);
       });
   };
+
+  const updateReview = function (review) {
+    const { id, vote, title, content } = review;
+    axios({
+      method: "put",
+      url: `${BASE_URL}/reviews/${id}/`,
+      data: {
+        vote,
+        title,
+        content,
+      },
+      headers: {
+        Authorization: `Token ${user.token}`,
+      },
+    })
+      .then((res) => {
+        console.log("성공");
+        router.push({
+          name: 'ReviewDetailView', params: {movieId: id, reviewId: id}
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
   const createTag = function (tag) {
     const { id, content } = tag;
     axios({
@@ -76,5 +104,5 @@ export const useReviewStore = defineStore("review", () => {
       });
   };
 
-  return { createReview, createTag, createComment };
+  return { createReview, updateReview, createTag, createComment };
 });
