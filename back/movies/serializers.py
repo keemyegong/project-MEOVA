@@ -43,6 +43,7 @@ class ReviewCommentSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+    profile_photo = serializers.ImageField(source='user.profile_photo', read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
     reviewcomment_set = ReviewCommentSerializer(read_only=True, many=True)
     movie = MovieCardSerializer(read_only=True)

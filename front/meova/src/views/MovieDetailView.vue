@@ -151,14 +151,16 @@
             params: { movieId: movie.id, reviewId: review.id },
           }"
         >
-          <div class="review-item card">
-            <div class="card-body">
-              <h5 class="card-title">{{ review.title }}</h5>
-              <p class="card-text">{{ review.content }}</p>
-              <h6 class="card-subtitle mt-2 text-body-secondary">
+        <div class="review-item">
+          <div class="card-body review-content">
+            <h5 class="card-title">{{ review.title }}</h5>
+            <p class="card-text">{{ review.content }}</p>
+            <div class="user-info">
+              <img :src="`http://127.0.0.1:8000${review.profile_photo}`" alt="user profile image" class="user-profile-img">
+              <span class="ms-2 card-subtitle mt-2 text-body-secondary">
                 {{ review.nickname ? review.nickname : review.username }}
-              </h6>
-            </div>
+              </span>
+          </div>
           </div>
         </RouterLink>
       </div>
@@ -350,9 +352,19 @@ onMounted(() => {
   height: 200px;
   width: 330px;
   margin-right: 10px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
 }
-
-.user-profile {
+.review-content {
+  padding: 10px;
+}
+.user-info {
+  margin-top: 50px;
+  display: flex;
+}
+.user-profile-img {
   height: 50px;
   width: 50px;
   border-radius: 100%;
