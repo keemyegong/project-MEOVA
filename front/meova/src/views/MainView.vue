@@ -7,12 +7,12 @@
           :src="store.API_URL + '/static/main_logo.gif'"
           alt="logo"
         />
-        <form class="row g-2">
+        <form class="row g-2" @submit.prevent="search">
           <div class="col-9 offset-1">
             <input
               type="text"
               class="form-control form-control-lg"
-              v-model="searchbar"
+              v-model="searchbar.title"
               placeholder="영화 뭐 볼까?"
               @focus="displaySearch"
             />
@@ -23,45 +23,120 @@
               style="width: 80%"
               class="btn btn-lg btn-dark"
             >
-            <i class="bi bi-search"></i>
+              <i class="bi bi-search"></i>
             </button>
           </div>
           <div v-if="showFilters" class="col-9 offset-1">
             <section class="search-bar">
               <div class="search-bar-item">
-                <button>장르</button>
-                <button type="button" @click="addFilter('공포')">공포</button>
+                <button class="btn disabled">장르</button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter(genre, '공포')"
+                >
+                  공포
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter(genre, '로맨스')"
+                >
+                  로맨스
+                </button>
               </div>
               <div class="search-bar-item">
-                <button>러닝타임</button>
-                <button type="button" @click="addFilter('1시간이내')">
+                <button class="btn disabled">러닝타임</button>
+                <button
+                  type="button"
+                  class="btn runtime"
+                  @click="addFilter(runtime, 'under_1_hour')"
+                >
                   1시간이내
                 </button>
-                <button type="button" @click="addFilter('2시간이내')">
+                <button
+                  type="button"
+                  class="btn runtime"
+                  @click="addFilter(runtime, 'under_2_hours')"
+                >
                   2시간이내
                 </button>
-                <button type="button" @click="addFilter('3시간이내')">
+                <button
+                  type="button"
+                  class="btn runtime"
+                  @click="addFilter(runtime, 'under_3_hours')"
+                >
                   3시간이내
                 </button>
-                <button type="button" @click="addFilter('3시간이상')">
+                <button
+                  type="button"
+                  class="btn runtime"
+                  @click="addFilter(runtime, 'over_3_hours')"
+                >
                   3시간이상
                 </button>
               </div>
               <div class="search-bar-item">
-                <button>누구랑</button>
-                <button type="button" @click="addFilter('가족')">가족</button>
-                <button type="button" @click="addFilter('친구')">친구</button>
-                <button type="button" @click="addFilter('연인')">연인</button>
-                <button type="button" @click="addFilter('직장동료')">
+                <button class="btn disabled">누구랑</button>
+                <button
+                  type="button"
+                  class="btn withwho"
+                  @click="addFilter('가족')"
+                >
+                  가족
+                </button>
+                <button
+                  type="button"
+                  class="btn withwho"
+                  @click="addFilter('친구')"
+                >
+                  친구
+                </button>
+                <button
+                  type="button"
+                  class="btn withwho"
+                  @click="addFilter('연인')"
+                >
+                  연인
+                </button>
+                <button
+                  type="button"
+                  class="btn withwho"
+                  @click="addFilter('직장동료')"
+                >
                   직장동료
                 </button>
               </div>
               <div class="search-bar-item">
-                <button>국가</button>
-                <button type="button" @click="addFilter('미국')">미국</button>
-                <button type="button" @click="addFilter('한국')">한국</button>
-                <button type="button" @click="addFilter('일본')">일본</button>
-                <button type="button" @click="addFilter('그외')">그외</button>
+                <button class="btn disabled">국가</button>
+                <button
+                  type="button"
+                  class="btn country"
+                  @click="addFilter(country, 'US')"
+                >
+                  미국
+                </button>
+                <button
+                  type="button"
+                  class="btn country"
+                  @click="addFilter(country, 'KR')"
+                >
+                  한국
+                </button>
+                <button
+                  type="button"
+                  class="btn country"
+                  @click="addFilter(country, 'JP')"
+                >
+                  일본
+                </button>
+                <button
+                  type="button"
+                  class="btn country"
+                  @click="addFilter('그외')"
+                >
+                  그외
+                </button>
               </div>
             </section>
           </div>
@@ -78,6 +153,7 @@ import MovieList from "@/components/MovieList.vue";
 import SearchMovieList from "@/components/SearchMovieList.vue";
 import { onMounted, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   movie: Object,
@@ -85,24 +161,44 @@ const props = defineProps({
 
 const store = useMovieStore();
 
-const searchbar = ref("");
+const searchbar = ref({
+  title: "",
+  genre: "",
+  keyword: "",
+  runtime: "",
+  country: "",
+});
 const showFilters = ref(false);
 
 const displaySearch = () => {
   showFilters.value = true;
 };
-
-const addFilter = (filter) => {
-  if (searchbar.value) {
-    searchbar.value += ` ${filter}`;
+const addFilter = (type, filter) => {
+  if (searchbar.value[type]) {
+    searchbar.value[type] += `+${filter}`;
   } else {
-    searchbar.value = filter;
+    searchbar.value[type] = filter;
   }
 };
-
+const router = useRouter();
 const search = () => {
-  // 검색 로직 추가
-  console.log("검색어:", searchbar.value);
+  store.search({
+    title: searchbar.value.title,
+    genre: searchbar.value.genre,
+    keyword: searchbar.value.keyword,
+    runtime: searchbar.value.runtime,
+    country: searchbar.value.country,
+  });
+  router.push({
+    name: "search",
+    query: {
+      title: searchbar.value,
+      genre: "",
+      keyword: "",
+      runtime: "",
+      country: "",
+    },
+  });
 };
 
 onMounted(() => {
@@ -132,23 +228,32 @@ onMounted(() => {
 }
 .search-bar-item {
   display: flex;
-  padding: 1px;
+  flex-wrap: wrap;
+  padding: 3px;
   align-items: center;
 }
 .country {
-  background-color: #eed3d9;
-  color: white;
-}
-.withwho {
   background-color: #ccd3ca;
   color: white;
+  margin-right: 5px;
+}
+.withwho {
+  background-color: #b2c8df;
+  color: white;
+  margin-right: 5px;
 }
 .runtime {
-  background-color: #ead7c7;
+  background-color: #eed3d9;
   color: white;
+  margin-right: 5px;
 }
 .genre {
-  background-color: #b5c0d0;
+  background-color: #f4d19b;
   color: white;
+  margin-right: 5px;
+}
+
+.disabled {
+  border: none;
 }
 </style>

@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment
 from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer
 from django.conf import settings
-
+from django.db.models import Q
 api_key = settings.TMDB_API_KEY
 # Create your views here.
 
@@ -127,13 +127,33 @@ def get_movie(request):
 @api_view(['GET'])
 def search(request):
     if request.method=='GET':
-        query=request.GET.get('q')
-        if query:
-            movies=Movie.objects.filter(title__contains=query)
-        else:
-            movies=Movie.objects.all()
-        serializer=MovieListSerializer(movies,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        title_query = request.GET.get('title')
+        genre_query = request.GET.get('genre')
+        keyword_query = request.GET.get('keyword')
+        runtime_query = request.GET.get('runtime')
+        country_query = request.GET.get('country')
+
+        movies = Movie.objects.all()
+        if title_query:
+            movies = movies.filter(title__icontains=title_query)
+        if genre_query:
+            movies = movies.filter(genres__name__icontains=genre_query)
+        if keyword_query:
+            movies = movies.filter(keywords__name__icontains=keyword_query)
+        if country_query:
+            movies = movies.filter(origin_country__icontains=country_query)
+        if runtime_query:
+            if runtime_query == 'under_1_hour':
+                movies = movies.filter(runtime__lte=60)
+            elif runtime_query == 'under_2_hours':
+                movies = movies.filter(runtime__lte=120)
+            elif runtime_query == 'under_3_hours':
+                movies = movies.filter(runtime__lte=180)
+            elif runtime_query == 'over_3_hours':
+                movies = movies.filter(runtime__gt=180)
+
+        serializer = MovieListSerializer(movies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
 def popular(request):
