@@ -36,6 +36,7 @@ class CreditSerializer(serializers.ModelSerializer):
 class ReviewCommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
+    profile_photo = serializers.ImageField(source='user.profile_photo', read_only=True)
     class Meta:
         model=ReviewComment
         fields='__all__'

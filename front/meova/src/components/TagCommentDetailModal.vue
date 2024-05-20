@@ -48,11 +48,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div>
-    <div class="movie-category-title">Tag Comments</div>
-    
-  </div> -->
 </template>
 
 <script setup>
@@ -102,7 +97,6 @@ const deleteComment = (tagcommentId) => {
 <style scoped>
 .movie-category-title {
   margin-top: 0px;
-
   text-align: center;
   font-size: 50px;
   font-family: "Caprasimo", serif;
