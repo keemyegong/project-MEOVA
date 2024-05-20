@@ -12,6 +12,7 @@ import ActorDetailView from "@/views/ActorDetailView.vue";
 import DirectorDetailView from "@/views/DirectorDetailView.vue";
 import TagCommentDetailView from "@/views/TagCommentDetailView.vue";
 import ReviewDetailView from "@/views/ReviewDetailView.vue";
+import ReviewUpdateView from "@/views/ReviewUpdateView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,11 @@ const router = createRouter({
       path: "/movies/:movieId/reviews/:reviewId",
       name: "ReviewDetailView",
       component: ReviewDetailView,
+    },
+    {
+      path: "/movies/reviews/:reviewId",
+      name: "ReviewUpdateView",
+      component: ReviewUpdateView,
     },
     {
       path: "/actors/:id",

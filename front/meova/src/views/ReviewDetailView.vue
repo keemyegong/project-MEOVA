@@ -21,6 +21,7 @@
       작성자 | {{ review.username }}
     </span>
     <p>{{ review.content }}</p>
+    <button @click="updateReview(review.id)">수정</button>
     <button @click="deleteReview(review.id)">삭제</button>
     <hr>
 
@@ -97,6 +98,14 @@ const createComment = function () {
   content.value = ""
   fetchReview()
   }
+
+
+const updateReview = (reviewId) => {
+    router.push({
+      name: 'ReviewUpdateView', params: {id : reviewId}
+    })
+  }
+
 
 const deleteReview = (reviewId) => {
   axios({
