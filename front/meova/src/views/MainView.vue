@@ -33,14 +33,14 @@
                 <button
                   type="button"
                   class="btn genre"
-                  @click="addFilter(genre, '공포')"
+                  @click="addFilter('genre', '공포')"
                 >
                   공포
                 </button>
                 <button
                   type="button"
                   class="btn genre"
-                  @click="addFilter(genre, '로맨스')"
+                  @click="addFilter('genre', '로맨스')"
                 >
                   로맨스
                 </button>
@@ -50,28 +50,28 @@
                 <button
                   type="button"
                   class="btn runtime"
-                  @click="addFilter(runtime, 'under_1_hour')"
+                  @click="addFilter('runtime', 'under_1_hour')"
                 >
                   1시간이내
                 </button>
                 <button
                   type="button"
                   class="btn runtime"
-                  @click="addFilter(runtime, 'under_2_hours')"
+                  @click="addFilter('runtime', 'under_2_hours')"
                 >
                   2시간이내
                 </button>
                 <button
                   type="button"
                   class="btn runtime"
-                  @click="addFilter(runtime, 'under_3_hours')"
+                  @click="addFilter('runtime', 'under_3_hours')"
                 >
                   3시간이내
                 </button>
                 <button
                   type="button"
                   class="btn runtime"
-                  @click="addFilter(runtime, 'over_3_hours')"
+                  @click="addFilter('runtime', 'over_3_hours')"
                 >
                   3시간이상
                 </button>
@@ -112,21 +112,21 @@
                 <button
                   type="button"
                   class="btn country"
-                  @click="addFilter(country, 'US')"
+                  @click="addFilter('country', 'US')"
                 >
                   미국
                 </button>
                 <button
                   type="button"
                   class="btn country"
-                  @click="addFilter(country, 'KR')"
+                  @click="addFilter('country', 'KR')"
                 >
                   한국
                 </button>
                 <button
                   type="button"
                   class="btn country"
-                  @click="addFilter(country, 'JP')"
+                  @click="addFilter('country', 'JP')"
                 >
                   일본
                 </button>
@@ -180,23 +180,25 @@ const addFilter = (type, filter) => {
     searchbar.value[type] = filter;
   }
 };
+
 const router = useRouter();
 const search = () => {
   store.search({
     title: searchbar.value.title,
     genre: searchbar.value.genre,
-    keyword: searchbar.value.keyword,
     runtime: searchbar.value.runtime,
     country: searchbar.value.country,
+    withwho: searchbar.value.withwho,
   });
+
   router.push({
     name: "search",
     query: {
-      title: searchbar.value,
-      genre: "",
-      keyword: "",
-      runtime: "",
-      country: "",
+      title: searchbar.value.title,
+      genre: searchbar.value.genre,
+      runtime: searchbar.value.runtime,
+      country: searchbar.value.country,
+      withwho: searchbar.value.withwho,
     },
   });
 };

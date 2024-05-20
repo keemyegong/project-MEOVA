@@ -25,7 +25,7 @@ export const useMovieStore = defineStore(
           country,
         },
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         movies.value = res.data;
       });
     };
@@ -39,7 +39,7 @@ export const useMovieStore = defineStore(
         url: `${API_URL}/api/v1/movies/popular/`,
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           popular_movies.value = response.data;
         })
         .catch((error) => {
@@ -53,7 +53,7 @@ export const useMovieStore = defineStore(
         url: `${API_URL}/api/v1/movies/release/`,
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           release_movies.value = response.data;
         })
         .catch((error) => {
