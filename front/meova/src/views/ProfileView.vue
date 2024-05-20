@@ -13,6 +13,11 @@
         following
         <b>{{ following_count }}</b>
       </button>
+      <button v-if="store.profile_info.pk != store.userinfo.pk" @click="follow">
+        {{ store.userinfo }}
+        <div v-if="isFollow">unfollow</div>
+        <div v-else>follow</div>
+      </button>
     </section>
     <Calendar :userid="store.profile_info.pk" />
   </div>
@@ -27,12 +32,18 @@ const route = useRoute();
 const store = useUserStore();
 
 store.profile(route.params.username);
+const isFollow = computed(() => {
+  return store.profile_info.followers.includes(store.userinfo);
+});
 const follower_count = computed(() => {
   return store.profile_info.followers.length;
 });
 const following_count = computed(() => {
   return store.profile_info.followings.length;
 });
+const follow = function () {
+  store.follow(route.params.username);
+};
 </script>
 
 <style scoped>

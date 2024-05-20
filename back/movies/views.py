@@ -161,6 +161,18 @@ def detail(request, movie_pk):
         movie=get_object_or_404(Movie,pk=movie_pk)
         serializer=MovieSerializer(movie)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_movie(request, movie_pk):
+    movie=get_object_or_404(Movie,pk=movie_pk)
+    if request.method=="POST":
+        if request.user in movie.liked_users.all():
+            movie.liked_users.remove(request.user)
+        else:
+            movie.liked_users.add(request.user)
+        serializer=MovieSerializer(movie)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def actor_detail(request, actor_pk):
