@@ -3,19 +3,20 @@
     <div class="row review-box">
       <div class="col-6">
         <div class="user-info">
-          <img :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`" alt="user profile image" class="user-profile-img">
+          <img
+          v-if="reviewStore.review.profile_photo"
+          :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`"
+          alt="user profile image"
+          class="user-profile-img">
+          <img
+            class="comment-user-profile-im user-profile-img"
+            src="@/assets/default_profile.png"
+            v-else
+            alt=""
+          />
           <span class="user-name">{{ reviewStore.review.nickname ? reviewStore.review.nickname : reviewStore.review.username }}</span>
-          <button
-          type="button"
-          class="review-btn btn btn-secondary"
-          data-bs-container="body"
-          data-bs-toggle="popover"
-          data-bs-placement="top"
-          data-bs-content="Top popover"
-          >
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-
+          <button class="update-btn btn btn-dark" @click="updateReview(reviewStore.review.id)">수정</button>
+          <button class="delete-btn btn btn-dark" @click="deleteReview(reviewStore.review.id)"><i class="bi bi-trash3-fill"></i></button>
 
         </div>
         <!-- 별점 -->
@@ -134,17 +135,25 @@
               <i class="bi bi-pencil"></i>
           </button>
         </form>
-
     </div>
-      <button class="update-btn btn btn-dark" @click="updateReview(reviewStore.review.id)">수정</button>
-      <button class="delete-btn btn btn-dark" @click="deleteReview(reviewStore.review.id)">삭제</button>
+
 
 
     <div
       v-for="comment in reviewStore.review.reviewcomment_set"
       :key="comment.id"
     >
-      <img :src="`http://127.0.0.1:8000${comment.profile_photo}`" alt="user profile image" class="comment-user-profile-img">
+      <img
+      v-if="comment.profile_photo"
+      :src="`http://127.0.0.1:8000${comment.profile_photo}`"
+      alt="user profile image"
+      class="comment-user-profile-img">
+      <img
+        class="comment-user-profile-img"
+        src="@/assets/default_profile.png"
+        v-else
+        alt=""
+      />
       <span class="comment-user-name">{{ comment.nickname ? comment.nickname : comment.username }}</span>
       <i class="bi bi-chat-dots-fill me-2"></i>
       <span class="comment-content">{{ comment.content }}</span>
@@ -252,6 +261,9 @@ const deleteComment = (commentId) => {
   font-size: 50px;
   font-weight: 800;
 }
+.review-comment-input {
+  height: 50px;
+}
 .user-info {
   display: flex;
   margin-top: 50px;
@@ -268,7 +280,8 @@ const deleteComment = (commentId) => {
   font-weight: 800;
 }
 .poster-image {
-  width: 100%;
+  width: 93%;
+  margin-left: 4%;
   border-radius: 1%;
 }
 
@@ -283,19 +296,25 @@ const deleteComment = (commentId) => {
 }
 
 .update-btn {
-  margin-left: 10px;
+  width: 10%;
+  height: 50px;
+  margin-top: 15px;
+  margin-left: auto;
 }
 
 .delete-btn {
+  width: 10%;
+  height: 50px;
+  margin-top: 15px;
   margin-left: 10px;
 }
 .review {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 .review-comment-btn {
-  margin-left: 3%;
-  width: 30%;
+  margin-left: 1%;
+  width: 32%;
 }
 .comment-user-profile-img {
   padding: 3px;

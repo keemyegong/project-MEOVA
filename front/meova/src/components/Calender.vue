@@ -18,7 +18,8 @@
           <td
             v-for="day in week"
             :key="day.date"
-            :class="{ today: isToday(day.date) }"
+            :class="{ today: isToday(day.date), 'has-poster': day.poster.length === 1}"
+            class="calendar-cell"
           >
             <img
               class="posterimg"
@@ -101,11 +102,13 @@ export default {
               if (
                 movieDate.getFullYear() === y &&
                 movieDate.getMonth() === m &&
-                movieDate.getDate() === dNum
+                movieDate.getDate() === dNum &&
+                posters.length === 0
               ) {
                 posters.push(
                   `http://image.tmdb.org/t/p/w500${movie.movie.poster_path}`
-                );
+                )
+                ;
               }
             }
             week.push({
@@ -152,6 +155,12 @@ export default {
 </script>
 
 <style scoped>
+.calendar-cell {
+  position: relative; /* Establish a positioning context */
+  width: 100px; /* Adjust width and height as needed */
+  height: 140px;
+}
+
 #calendar-container {
   width: 100%;
   margin: 30px auto;
@@ -170,14 +179,16 @@ td {
   padding: 10px;
   text-align: center;
   border: 1px solid #ddd;
+  font-weight: 150;
 }
 
 th {
-  background-color: #f4f4f4;
+  color: whitesmoke;
+  background-color: rgb(108, 108, 108);
 }
 
 .today {
-  background-color: #ffeb3b;
+  background-color: rgba(211, 211, 211, 0.313);
   font-weight: bold;
 }
 
@@ -190,6 +201,22 @@ h1 {
   margin-bottom: 20px;
 }
 .posterimg {
+  position: absolute;
   height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.8;
+  object-fit: cover;
 }
+
+
+
+.has-poster {
+  color: white;
+  font-weight: 700;
+}
+
 </style>

@@ -191,9 +191,9 @@
           }"
         >
           <div class="review-item">
-            <div class="card-body review-content">
+            <div class="card-body review-box">
               <h5 class="card-title">{{ review.title }}</h5>
-              <p class="card-text">{{ review.content }}</p>
+              <p class="review-content card-text">{{ review.content }}</p>
               <div class="user-info">
                 <img
                   v-if="review.profile_photo"
@@ -431,8 +431,15 @@ onMounted(() => {
   border-radius: 10px 10px 10px 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-.review-content {
+.review-box {
   padding: 10px;
+}
+.review-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .user-info {
   margin-top: 50px;
