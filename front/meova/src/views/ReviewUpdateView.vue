@@ -39,9 +39,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useReviewStore } from '@/stores/review';
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useReviewStore } from "@/stores/review";
 
 // Store와 router 사용 설정
 const store = useReviewStore();
@@ -52,22 +52,22 @@ const router = useRouter();
 const reviewId = Number(route.params.reviewId);
 
 // 컴포넌트 상태 변수 정의
-const title = ref('');
-const vote = ref(0);
-const content = ref('');
+const title = ref(store.review.title);
+const vote = ref(store.review.vote);
+const content = ref(store.review.content);
 
 // 초기 리뷰 데이터를 가져오기 위한 함수
 const fetchReview = async () => {
-  const review = await store.fetchReview(reviewId);
-  title.value = review.title;
-  vote.value = review.vote;
-  content.value = review.content;
-};
+  await store.fetchReview(reviewId);
 
+  // Store에 데이터가 정상적으로 로드되었는지 확인
+  if (store.review) {
+    title.value = store.review.title || "";
+    vote.value = store.review.vote || 0;
+    content.value = store.review.content || "";
+  }
+};
 // 컴포넌트가 마운트될 때 리뷰 데이터 가져오기
-onMounted(() => {
-  fetchReview();
-});
 
 // 리뷰 업데이트 함수
 const updateReview = async () => {
@@ -80,13 +80,14 @@ const updateReview = async () => {
   try {
     const res = await store.updateReview(updatedReview);
     console.log("성공", res.data);
-    router.push({ name: 'ReviewDetailView', params: { reviewId: res.data.id } });
+    router.push({
+      name: "ReviewDetailView",
+      params: { reviewId: res.data.id },
+    });
   } catch (error) {
     console.error(error);
   }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

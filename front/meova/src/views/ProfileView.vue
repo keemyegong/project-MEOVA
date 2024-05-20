@@ -1,7 +1,18 @@
 <template>
   <div>
     <section v-if="store.profile_info" class="profile">
-      <img :src="store.profile_info.profile_photo" class="profile_img" alt="" />
+      <img
+        v-if="store.profile_info.profile_photo"
+        :src="store.profile_info.profile_photo"
+        class="profile_img"
+        alt="profile_img"
+      />
+      <img
+        class="profile_img"
+        src="@/assets/default_profile.png"
+        v-else
+        alt=""
+      />
       <h1 v-if="store.profile_info.nickname">
         {{ store.profile_info.nickname }}
       </h1>
@@ -14,7 +25,6 @@
         <b>{{ following_count }}</b>
       </button>
       <button v-if="store.profile_info.pk != store.userinfo.pk" @click="follow">
-        {{ store.userinfo }}
         <div v-if="isFollow">unfollow</div>
         <div v-else>follow</div>
       </button>
@@ -33,7 +43,7 @@ const store = useUserStore();
 
 store.profile(route.params.username);
 const isFollow = computed(() => {
-  return store.profile_info.followers.includes(store.userinfo);
+  return store.profile_info.followers.includes(store.userinfo.pk);
 });
 const follower_count = computed(() => {
   return store.profile_info.followers.length;

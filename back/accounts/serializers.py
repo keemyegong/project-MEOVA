@@ -27,6 +27,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 # 상세정보 페이지용 serializer
 class CustomUserDetailsSerializer(UserDetailsSerializer):
+  followers = serializers.SerializerMethodField()
   class Meta:
     extra_fields = []
     # see https://github.com/iMerica/dj-rest-auth/issues/181
@@ -50,17 +51,25 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     if hasattr(UserModel, 'followings'):
       extra_fields.append('followings') 
     model = UserModel
-    fields = ('pk', *extra_fields)
+    fields = ('pk','followers', *extra_fields)
     read_only_fields = ('email',)
-
+  def get_followers(self, obj):
+        # Get all follower objects
+        followers = obj.followers.all()
+        # Extract and return only the primary keys
+        return [follower.pk for follower in followers]
+# class UserPkSerializer(serializers.ModelSerializer):
+#   class Meta:
+#     model=UserModel
+#     fields=('pk',)
 class ProfileSerializer(serializers.ModelSerializer):
-
   followers = serializers.SerializerMethodField()
   class Meta:
       model = UserModel
       fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings','followers',)
 
   def get_followers(self, obj):
-        followers = obj.followers.all() 
-        return ProfileSerializer(followers, many=True).data
-  
+        # Get all follower objects
+        followers = obj.followers.all()
+        # Extract and return only the primary keys
+        return [follower.pk for follower in followers]

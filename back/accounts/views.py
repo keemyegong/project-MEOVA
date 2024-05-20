@@ -29,3 +29,11 @@ def profile(request,username):
             person.followers.add(request.user)
         serializer=ProfileSerializer(person,context={'request':request})
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def followers(request):
+    followers=request.user.followers.all()
+    if request.method=='GET':
+        serializer=ProfileSerializer(followers,many=True)
+        return Response(serializer.data)

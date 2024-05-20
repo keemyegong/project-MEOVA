@@ -151,6 +151,23 @@ export const useUserStore = defineStore(
           console.log(error);
         });
     };
+    const followerlist = ref([]);
+    const followers = function () {
+      axios({
+        method: "get",
+        url: `${BASE_URL}/followers/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          followerlist.value = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     return {
       token,
       isLogin,
@@ -163,6 +180,8 @@ export const useUserStore = defineStore(
       profile,
       profile_info,
       follow,
+      followers,
+      followerlist,
     };
   },
   { persist: true }
