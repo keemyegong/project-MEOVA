@@ -19,32 +19,47 @@
         {{ keyword.name }}
       </button>
       <div class="tag-comment">
-        <RouterLink
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn detail-category-title"
+          data-bs-toggle="modal"
+          data-bs-target="#TagCommentDetailModal"
+        >
+          태그 코멘트
+        </button>
+        <!-- <RouterLink
           class="nav-link" :to="{ name: 'TagCommentDetailView', params: { id: movie.id } }"
         >
           <div class="detail-category-title">
             <p>태그 코멘트</p>
           </div>
-        </RouterLink>
+        </RouterLink> -->
         <template v-if="movie.tagcomment_set">
           <div
             v-for="tagcomment in movie.tagcomment_set.slice().reverse()"
             :key="tagcomment.id"
             class="tag-comment-content"
           >
-          <i class="bi bi-chat-dots-fill me-2"></i>
+            <i class="bi bi-chat-dots-fill me-2"></i>
             {{ tagcomment.content }}
             <span v-if="tagcomment.nickname" class="tag-comment-user">
               | {{ tagcomment.nickname }}
             </span>
-            <span v-else class="tag-comment-user"> | {{ tagcomment.username }} </span>
+            <span v-else class="tag-comment-user">
+              | {{ tagcomment.username }}
+            </span>
           </div>
         </template>
         <template v-else>
           <p>아직 태그코멘트가 없어요!</p>
         </template>
       </div>
-      <form @submit.prevent="createTag" class="tag-comment-input row" ref="form">
+      <form
+        @submit.prevent="createTag"
+        class="tag-comment-input row"
+        ref="form"
+      >
         <div class="col-9">
           <input
             type="text"
@@ -59,7 +74,18 @@
         </button>
       </form>
     </div>
-    
+
+    <!-- Modal -->
+    <div
+      class="modal fade modal-section"
+      id="TagCommentDetailModal"
+      tabindex="-1"
+      aria-labelledby="TagCommentDetailModal"
+      aria-hidden="true"
+    >
+      <TagCommentDetailModal />
+    </div>
+
     <div class="poster-review col-6">
       <div class="rol">
         <img
@@ -68,11 +94,11 @@
           class="movie-image col-12"
         />
 
-          <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
-            <button class="review-btn mt-3 col-12 btn btn-warning">
-              리뷰 작성
-            </button>
-          </RouterLink>
+        <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
+          <button class="review-btn mt-3 col-12 btn btn-warning">
+            리뷰 작성
+          </button>
+        </RouterLink>
       </div>
     </div>
 
@@ -87,7 +113,8 @@
       <p class="detail-category-title">감독</p>
       <div class="director" v-for="director in movie.directors">
         <RouterLink
-          class="nav-link" :to="{ name: 'DirectorDetailView', params: { id: director.id } }"
+          class="nav-link"
+          :to="{ name: 'DirectorDetailView', params: { id: director.id } }"
         >
           <p>{{ director.name }}</p>
         </RouterLink>
@@ -135,11 +162,9 @@
               </span>
           </div>
           </div>
-        </div>
-      </RouterLink>
+        </RouterLink>
       </div>
     </template>
-
   </div>
 </template>
 
@@ -150,7 +175,7 @@ import { useMovieStore } from "@/stores/movie";
 import { useReviewStore } from "@/stores/review";
 import { useUserStore } from "@/stores/user";
 import { useRoute, RouterLink } from "vue-router";
-
+import TagCommentDetailModal from "@/components/TagCommentDetailModal.vue";
 const store = useMovieStore();
 const reviewstore = useReviewStore();
 const userStore = useUserStore();
@@ -159,7 +184,6 @@ const movie = ref(null);
 const movieId = Number(route.params["id"]);
 const content = ref("");
 const form = ref(null);
-
 
 const createTag = function () {
   const tag = {
@@ -203,9 +227,9 @@ onMounted(() => {
 
 <style scoped>
 .movie-title {
-    font-size: 35px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+  font-size: 35px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 .movie-image {
   width: 100%;
@@ -235,7 +259,7 @@ onMounted(() => {
   display: flex;
 }
 .cast::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .review {
   display: flex;
@@ -278,11 +302,11 @@ onMounted(() => {
   width: 13%;
 }
 .country {
-  background-color: #CCD3CA;
+  background-color: #ccd3ca;
   color: white;
 }
 .withwho {
-  background-color: #B2C8DF;
+  background-color: #b2c8df;
   color: white;
 }
 .runtime {
@@ -290,7 +314,7 @@ onMounted(() => {
   color: white;
 }
 .genre {
-  background-color: #F4D19B; 
+  background-color: #f4d19b;
   color: white;
 }
 
@@ -344,5 +368,8 @@ onMounted(() => {
   height: 50px;
   width: 50px;
   border-radius: 100%;
+}
+.modal-section {
+  width: 100%;
 }
 </style>

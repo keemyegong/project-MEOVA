@@ -18,7 +18,7 @@
           <h3>{{ follower.username }}</h3>
           <h4>{{ follower.nickname }}</h4>
         </div>
-        <button @click="follow(follower.username, follower.pk)">
+        <button @click="toggleFollow(follower)">
           <div v-if="isFollowing(follower.pk)">unfollow</div>
           <div v-else>follow</div>
         </button>
@@ -35,8 +35,13 @@ const isFollowing = (followerPk) => {
   console.log(store.userinfo);
   return store.userinfo.followings.includes(followerPk);
 };
-const follow = function (username) {
-  store.follow(username);
+const toggleFollow = async (follower) => {
+  if (isFollowing(follower.pk)) {
+    await store.follow(follower.username); // Unfollow 메소드가 필요함
+  } else {
+    await store.follow(follower.username);
+  }
+  await store.settings(); // Follow/Unfollow 후 사용자 정보를 다시 가져옵니다.
 };
 onMounted(() => {
   store.followers();
