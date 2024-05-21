@@ -69,7 +69,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
-
+LOGOUT_ON_PASSWORD_CHANGE = False
 REST_AUTH = {
   'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
     #  회원 가입 시 우리가 구현한 serializer 를 호출하도록 설정

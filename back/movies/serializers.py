@@ -77,10 +77,18 @@ class MovieSerializer(serializers.ModelSerializer):
     credits = CreditSerializer(source='credit_set', many=True, read_only=True)
     tagcomment_set = TagCommentSerializer(read_only=True, many=True)
     review_set = ReviewSerializer(read_only=True, many=True)
+    my_reviews = serializers.SerializerMethodField()  # 사용자의 리뷰만 추출
     class Meta:
         model=Movie
         fields='__all__'
         read_only_fields=('directors','liked_users','watchproviders',)
+    def get_my_reviews(self, obj):
+        request = self.context.get('request', None)
+        if request is None or request.user.is_anonymous:
+            return []
+        user = request.user
+        user_reviews = obj.review_set.filter(user=user)
+        return ReviewSerializer(user_reviews, many=True).data
         
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:

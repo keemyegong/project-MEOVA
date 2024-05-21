@@ -133,7 +133,24 @@
           class="movie-image col-12"
         />
 
-        <RouterLink :to="{ name: 'CreateReview', params: { id: movie.id } }">
+        <RouterLink
+          :to="{
+            name: 'ReviewDetailView',
+            params: {
+              movieId: movie.id,
+              reviewId: movie.my_reviews[0] ? movie.my_reviews[0].id : null,
+            },
+          }"
+          v-if="movie.my_reviews.length === 1"
+        >
+          <button class="review-btn mt-3 col-12 btn btn-warning">
+            내 리뷰 보기
+          </button>
+        </RouterLink>
+        <RouterLink
+          :to="{ name: 'CreateReview', params: { id: movie.id } }"
+          v-else
+        >
           <button class="review-btn mt-3 col-12 btn btn-warning">
             리뷰 작성
           </button>
@@ -247,6 +264,7 @@ const createTag = function () {
   axios({
     method: "get",
     url: `${store.API_URL}/api/v1/movies/${movieId}/`,
+    headers: { Authorization: `Token ${userStore.token}` },
   })
     .then((response) => {
       console.log(store.API_URL);
@@ -287,6 +305,7 @@ onMounted(() => {
   axios({
     method: "get",
     url: `${store.API_URL}/api/v1/movies/${movieId}/`,
+    headers: { Authorization: `Token ${userStore.token}` },
   })
     .then((response) => {
       console.log(store.API_URL);

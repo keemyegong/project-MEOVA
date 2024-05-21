@@ -75,26 +75,54 @@ def get_movie(request):
                         genre_instance = serializer.save()
                         movie_instance.genres.add(genre_instance)
                         
-                for cast in credit_res.get('cast'):
-                    cast_data={
-                        'name':cast.get('name'),
-                        'gender':cast.get('gender'),
-                        'profile_path':cast.get('profile_path'),
-                        'id':cast.get('id'),
-                    }
-                    serializer = ActorSerializer(data=cast_data)
-                    if serializer.is_valid():
-                        cast_instance = serializer.save()
-                        Credit.objects.create(actor=cast_instance, movie=movie_instance, character=cast.get('character'), order=cast.get('order'))
+                for index, cast in enumerate(credit_res.get('cast')):
+                    if index >= 5:
+                        break  # 처음 5명의 배우만 처리하고 루프 종료
+
+                    # 배우 ID로 기존 배우 검색
+                    existing_actor = Actor.objects.filter(id=cast.get('id')).first()
+
+                    if existing_actor:
+                        # 기존 배우가 있는 경우 기존 배우를 사용하여 Credit 생성
+                        Credit.objects.create(
+                            actor=existing_actor,
+                            movie=movie_instance,
+                            character=cast.get('character'),
+                            order=cast.get('order')
+                        )
+                    else:
+                        # 기존 배우가 없는 경우 새로운 배우를 생성하여 Credit 생성
+                        cast_data = {
+                            'name': cast.get('name'),
+                            'gender': cast.get('gender'),
+                            'profile_path': cast.get('profile_path'),
+                            'id': cast.get('id'),
+                        }
+                        serializer = ActorSerializer(data=cast_data)
+                        if serializer.is_valid():
+                            cast_instance = serializer.save()
+                            Credit.objects.create(
+                                actor=cast_instance,
+                                movie=movie_instance,
+                                character=cast.get('character'),
+                                order=cast.get('order')
+                            )
 
                 directors = [{'name': crew['name'], 'id': crew['id']} for crew in credit_res['crew'] if crew['job'] == 'Director']
 
                 for director_data in directors:
-                    director_serializer = DirectorSerializer(data=director_data)
-                    if director_serializer.is_valid():
-                        director_instance = director_serializer.save()
-                        movie_instance.directors.add(director_instance)
-                
+                    # 감독 ID로 기존 감독 검색
+                    existing_director = Director.objects.filter(id=director_data['id']).first()
+
+                    if existing_director:
+                        # 기존 감독이 있는 경우 기존 감독을 사용하여 Movie에 추가
+                        movie_instance.directors.add(existing_director)
+                    else:
+                        # 기존 감독이 없는 경우 새로운 감독 생성 후 Movie에 추가
+                        director_serializer = DirectorSerializer(data=director_data)
+                        if director_serializer.is_valid():
+                            director_instance = director_serializer.save()
+                            movie_instance.directors.add(director_instance)
                 for keyword in keyword_res.get('keywords'):
                     serializer = KeywordSerializer(data=keyword)
                     if serializer.is_valid():
@@ -177,10 +205,11 @@ def release(request):
         return Response(serializer.data,status=status.HTTP_200_OK)
     
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def detail(request, movie_pk):
     if request.method=="GET":
         movie=get_object_or_404(Movie,pk=movie_pk)
-        serializer=MovieSerializer(movie)
+        serializer=MovieSerializer(movie,context={'request':request})
         return Response(serializer.data,status=status.HTTP_200_OK)
     
 @api_view(['POST'])
@@ -192,7 +221,7 @@ def like_movie(request, movie_pk):
             movie.liked_users.remove(request.user)
         else:
             movie.liked_users.add(request.user)
-        serializer=MovieSerializer(movie)
+        serializer=MovieSerializer(movie,context={'request':request})
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -203,6 +232,19 @@ def actor_detail(request, actor_pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_actor(request, actor_pk):
+    actor=get_object_or_404(Actor,pk=actor_pk)
+    if request.method=="POST":
+        if request.user in actor.liked_users.all():
+            actor.liked_users.remove(request.user)
+        else:
+            actor.liked_users.add(request.user)
+        serializer=MovieSerializer(actor,context={'request':request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])   
 def reviews(request,movie_pk):
     movie=get_object_or_404(Movie,pk=movie_pk)
@@ -211,6 +253,19 @@ def reviews(request,movie_pk):
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user,movie=movie)
             return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_review(request, review_pk):
+    review=get_object_or_404(Review,pk=review_pk)
+    if request.method=="POST":
+        if request.user in review.liked_users.all():
+            review.liked_users.remove(request.user)
+        else:
+            review.liked_users.add(request.user)
+        serializer=ReviewSerializer(review,context={'request':request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])   
@@ -261,6 +316,19 @@ def director_detail(request, director_pk):
         director = get_object_or_404(Director, pk=director_pk)
         serializer = DirectorSerializer(director)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_director(request, director_pk):
+    director=get_object_or_404(Director,pk=director_pk)
+    if request.method=="POST":
+        if request.user in director.liked_users.all():
+            director.liked_users.remove(request.user)
+        else:
+            director.liked_users.add(request.user)
+        serializer=MovieSerializer(director,context={'request':request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

@@ -18,12 +18,48 @@
       </h1>
       <h1 v-else>{{ store.profile_info.username }}</h1>
       <p>{{ store.profile_info.bio }}</p>
-      <button>
-        follower <b>{{ follower_count }}</b></button
-      >|<button>
-        following
-        <b>{{ following_count }}</b>
-      </button>
+      <div
+        class="followinfo"
+        v-if="store.profile_info.pk === store.userinfo.pk"
+      >
+        <button
+          type="button"
+          class="btn"
+          data-bs-toggle="modal"
+          data-bs-target="#ProfileFollowerListModal"
+        >
+          follower <b>{{ follower_count }}</b>
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade modal-section"
+          id="ProfileFollowerListModal"
+          tabindex="-1"
+          aria-labelledby="ProfileFollowerListModal"
+          aria-hidden="true"
+        >
+          <ProfileFollowerListModal />
+        </div>
+        |<button
+          type="button"
+          class="btn"
+          data-bs-toggle="modal"
+          data-bs-target="#ProfileFollowingListModal"
+        >
+          following
+          <b>{{ following_count }}</b>
+        </button>
+        <div
+          class="modal fade modal-section"
+          id="ProfileFollowingListModal"
+          tabindex="-1"
+          aria-labelledby="ProfileFollowerListModal"
+          aria-hidden="true"
+        >
+          <ProfileFollowingListModal />
+        </div>
+      </div>
       <button v-if="store.profile_info.pk != store.userinfo.pk" @click="follow">
         <div v-if="isFollow">unfollow</div>
         <div v-else>follow</div>
@@ -41,6 +77,8 @@
 
 <script setup>
 import Calendar from "@/components/Calender.vue";
+import ProfileFollowerListModal from "@/components/ProfileFollowerListModal.vue";
+import ProfileFollowingListModal from "@/components/ProfileFollowingListModal.vue";
 import UserReviewList from "@/components/UserReviewList.vue"
 import UserFavoriteList from "@/components/UserFavoriteList.vue";
 import { useUserStore } from "@/stores/user";
