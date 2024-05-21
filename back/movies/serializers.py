@@ -118,3 +118,7 @@ class DirectorSerializer(serializers.ModelSerializer):
         model=Director
         fields='__all__'
         read_only_fields=('liked_users',)
+
+# Chat GPT
+class ChatGPTSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=200)

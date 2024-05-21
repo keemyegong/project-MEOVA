@@ -34,4 +34,6 @@ urlpatterns = [
     path('directors/<int:director_pk>/like/', views.like_director), # 영화 감독 상세 정보 조회
     path('movies/<int:movie_pk>/tag-comments/', views.tag_comments), # 태그 코멘트 조회, 생성
     path('tag-comments/<int:tag_comment_pk>/', views.tag_comment_detail), # 태그 코멘트 삭제
+    # Chat GPT
+    path('chat/', views.chat_gpt),
 ]
