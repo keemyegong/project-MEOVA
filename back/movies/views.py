@@ -6,17 +6,18 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
 from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer, ChatGPTSerializer
 from django.conf import settings
 from django.db.models import Q
 api_key = settings.TMDB_API_KEY
+
 # Create your views here.
 
 import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    for i in range(1,3):
+    for i in range(1,21):
         url = f"https://api.themoviedb.org/3/movie/popular?language=ko&page={i}"
         headers = {
         "accept": "application/json",
@@ -346,3 +347,41 @@ def tag_comment_detail(request, tag_comment_pk):
     if request.method=='DELETE'and tag_comment.user==request.user:
         tag_comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Chat GPT
+# views.py
+import os
+from openai import OpenAI
+from django.http import JsonResponse
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
+info = {}
+
+@api_view(['GET'])
+def chat_gpt(request):
+    # 데이터베이스에서 영화 정보 가져오기
+    movies = Movie.objects.all()
+    # movie_list = "\n".join([f"{movie.title} ({movie.genre}): {movie.overview}" for movie in movies])
+    # prompt = f"Based on the following movies, recommend a movie for someone who likes action and comedy:\n{movie_list}"
+    prompt = 'hi!'
+    
+    completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "너는 영화 추천을 위한 chatbot이고 한글로 꼭 대답해야해."},
+        # {"role": "system", "content": "답변을 할 때 이 정보를 기반해서 알려줘 {info}"},
+        {"role": "user", "content": f"{prompt}"},
+        # {"role": "user", "content": f"{prompt}"}
+    ]
+    )
+    
+    response = openai.Completion.create(
+        engine="gpt-4o",
+        prompt=prompt,
+        # max_tokens=100
+    )
+    message = completion.choices[0].message
+    
+    return Response(message, status=status.HTTP_204_NO_CONTENT)
+    
+    # recommendations = response.choices[0].text.strip()
+    # return JsonResponse({'recommendations': recommendations})
