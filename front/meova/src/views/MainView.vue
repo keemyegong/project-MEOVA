@@ -8,21 +8,51 @@
           alt="logo"
         />
         <form class="row g-2" @submit.prevent="search">
-          {{ searchbar }}
           <div class="col-9 offset-1">
-            <input
-              type="text"
-              class="form-control form-control-lg"
-              v-model="searchbar.title"
-              placeholder="영화 뭐 볼까?"
-              @focus="displaySearch"
-            />
+            <div class="form-control form-control-lg">
+              <button
+                class="btn genre"
+                v-for="genre in searchbar.genre.split(' ')"
+                v-if="searchbar.genre"
+              >
+                {{ genre }}
+              </button>
+              <button
+                class="btn runtime"
+                v-for="runtime in searchbar.runtime.split(' ')"
+                v-if="searchbar.runtime"
+              >
+                {{ runtime }}
+              </button>
+              <button
+                class="btn withwho"
+                v-for="keyword in searchbar.keyword.split(' ')"
+                v-if="searchbar.keyword"
+              >
+                {{ keyword }}
+              </button>
+              <button
+                class="btn country"
+                v-for="country in searchbar.country.split(' ')"
+                v-if="searchbar.country"
+              >
+                {{ country }}
+              </button>
+
+              <input
+                type="text"
+                class="search-input form-control"
+                v-model="searchbar.title"
+                placeholder="영화 뭐 볼까?"
+                @focus="displaySearch"
+              />
+            </div>
           </div>
           <div class="col-2">
             <button
               type="submit"
               style="width: 80%"
-              class="btn btn-lg btn-dark"
+              class="btn btn-lg btn-dark p-3"
             >
               <i class="bi bi-search"></i>
             </button>
@@ -44,6 +74,111 @@
                   @click="addFilter('genre', '로맨스')"
                 >
                   로맨스
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '모험')"
+                >
+                  모험
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '판타지')"
+                >
+                  판타지
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '애니메이션')"
+                >
+                  애니메이션
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '드라마')"
+                >
+                  드라마
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '액션')"
+                >
+                  액션
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '코미디')"
+                >
+                  코미디
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '역사')"
+                >
+                  역사
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '스릴러')"
+                >
+                  스릴러
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '범죄')"
+                >
+                  범죄
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '다큐멘터리')"
+                >
+                  다큐멘터리
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', 'SF')"
+                >
+                  SF
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '미스터리')"
+                >
+                  미스터리
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '음악')"
+                >
+                  음악
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '가족')"
+                >
+                  가족
+                </button>
+                <button
+                  type="button"
+                  class="btn genre"
+                  @click="addFilter('genre', '전쟁')"
+                >
+                  전쟁
                 </button>
               </div>
               <div class="search-bar-item">
@@ -82,28 +217,28 @@
                 <button
                   type="button"
                   class="btn withwho"
-                  @click="addFilter('가족')"
+                  @click="addFilter('keyword', 'family')"
                 >
                   가족
                 </button>
                 <button
                   type="button"
                   class="btn withwho"
-                  @click="addFilter('친구')"
+                  @click="addFilter('keyword', 'friendship')"
                 >
                   친구
                 </button>
                 <button
                   type="button"
                   class="btn withwho"
-                  @click="addFilter('연인')"
+                  @click="addFilter('keyword', 'love')"
                 >
                   연인
                 </button>
                 <button
                   type="button"
                   class="btn withwho"
-                  @click="addFilter('직장동료')"
+                  @click="addFilter('keyword', 'casual')"
                 >
                   직장동료
                 </button>
@@ -176,7 +311,7 @@ const displaySearch = () => {
 };
 const addFilter = (type, filter) => {
   if (searchbar.value[type]) {
-    searchbar.value[type] += `+${filter}`;
+    searchbar.value[type] += ` ${filter}`;
   } else {
     searchbar.value[type] = filter;
   }
@@ -188,8 +323,8 @@ const search = () => {
     title: searchbar.value.title,
     genre: searchbar.value.genre,
     runtime: searchbar.value.runtime,
+    keyword: searchbar.value.keyword,
     country: searchbar.value.country,
-    withwho: searchbar.value.withwho,
   });
 
   router.push({
@@ -199,7 +334,7 @@ const search = () => {
       genre: searchbar.value.genre,
       runtime: searchbar.value.runtime,
       country: searchbar.value.country,
-      withwho: searchbar.value.withwho,
+      keyword: searchbar.value.keyword,
     },
   });
 };
@@ -235,6 +370,9 @@ onMounted(() => {
   padding: 3px;
   align-items: center;
 }
+.search-bar-item > button {
+  margin-bottom: 3px;
+}
 .country {
   background-color: #ccd3ca;
   color: white;
@@ -258,5 +396,19 @@ onMounted(() => {
 
 .disabled {
   border: none;
+}
+.search-input {
+  width: auto;
+  border: 0;
+}
+.search-input {
+  flex-grow: 1;
+  min-width: 100px; /* Optional: Minimum width for the input */
+  margin: 5px;
+}
+.form-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 </style>
