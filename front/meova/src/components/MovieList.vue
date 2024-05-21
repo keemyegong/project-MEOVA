@@ -7,7 +7,7 @@
         </RouterLink>
         <div class="movie-item">
         <MovieListItem
-            v-for="movie in store.popular_movies"
+            v-for="movie in store.popular_movies.slice(0, 10)"
             :key="movie.id"
             :movie="movie"
         />
@@ -20,7 +20,7 @@
         </RouterLink>
         <div class="movie-item">
         <MovieListItem
-            v-for="movie in store.release_movies"
+            v-for="movie in store.release_movies.slice(0, 10)"
             :key="movie.id"
             :movie="movie"
         />
