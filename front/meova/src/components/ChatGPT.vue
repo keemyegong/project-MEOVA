@@ -16,7 +16,7 @@
   import OpenAI from 'openai'
   
   // OpenAI API 설정
-  const apiKey = 'sk-proj-MkFuOqkKJ88Q9az12B3HT3BlbkFJFbIdzIWOjXYCbmvNl0R0'
+  const apiKey = process.env.GPT_API_KEY;
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
   
   const userMessage = ref('')
