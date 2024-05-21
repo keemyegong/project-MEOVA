@@ -17,7 +17,7 @@ import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    for i in range(1,21):
+    for i in range(41,61):
         url = f"https://api.themoviedb.org/3/movie/popular?language=ko&page={i}"
         headers = {
         "accept": "application/json",
@@ -378,28 +378,39 @@ info = {}
 def chat_gpt(request):
     # 데이터베이스에서 영화 정보 가져오기
     movies = Movie.objects.all()
-    # movie_list = "\n".join([f"{movie.title} ({movie.genre}): {movie.overview}" for movie in movies])
-    # prompt = f"Based on the following movies, recommend a movie for someone who likes action and comedy:\n{movie_list}"
-    prompt = 'hi!'
-    
-    completion = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": "너는 영화 추천을 위한 chatbot이고 한글로 꼭 대답해야해."},
-        # {"role": "system", "content": "답변을 할 때 이 정보를 기반해서 알려줘 {info}"},
-        {"role": "user", "content": f"{prompt}"},
-        # {"role": "user", "content": f"{prompt}"}
-    ]
-    )
-    
-    response = openai.Completion.create(
-        engine="gpt-4o",
-        prompt=prompt,
-        # max_tokens=100
-    )
-    message = completion.choices[0].message
-    
-    return Response(message, status=status.HTTP_204_NO_CONTENT)
+    movie_list = "\n".join([f"{movie.title}({movie.id}) " for movie in movies])
+    input_message = request.query_params.get('message', '독창적인 컨셉 하나를 정해서 그 컨셉에 맞는 영화 3개를 추천해줘')
+    prompt = f"{input_message}\n영화 목록:\n{movie_list}"
+
+    # OpenAI GPT-4 모델을 통해 응답 생성
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "너는 영화 추천을 위한 chatbot이고 한글로 꼭 대답해야해."},
+                {"role": "user", "content": f"{prompt}"}
+            ],
+            stop=['Human'],
+                frequency_penalty=0.5,
+                presence_penalty=0.5
+        )
+        message = completion.choices[0].message.content
+        return Response({"message": message}, status=status.HTTP_200_OK)
+        response = client.chat.completions.create(
+                model="gpt-4o",
+                temperature=0.0,
+                # response_format={'type':'json_object'},
+                messages= chat_history,
+                stop=['Human'],
+                frequency_penalty=0.5,
+                presence_penalty=0.5
+            )
+        output_message = response.choices[0].message.content
+        print(output_message)
+        chat_history.append({"role": "assistant", "content": f"{output_message}"})
+        return Response(output_message,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     # recommendations = response.choices[0].text.strip()
     # return JsonResponse({'recommendations': recommendations})

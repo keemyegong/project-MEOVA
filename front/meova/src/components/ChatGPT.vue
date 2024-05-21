@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <h1>Movie Recommendations</h1>
@@ -7,6 +6,10 @@
   </div>
 </template>
 
+<<<<<<< HEAD
 <script>
 
 </script>
+=======
+<script setup></script>
+>>>>>>> e5359ffebafea0d1e5663cd2db4ade69f0808d04
