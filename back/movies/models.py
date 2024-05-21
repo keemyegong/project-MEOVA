@@ -31,7 +31,7 @@ class Movie(models.Model):
     id = models.IntegerField(primary_key=True)  # 직접 id 필드 정의
     liked_users=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='liked_movies')
     directors=models.ManyToManyField(Director,related_name='movies')
-    title=models.CharField(max_length=100)
+    title=models.CharField(max_length=200)
     overview=models.TextField()
     poster_path=models.CharField(max_length=50)
     vote_average=models.DecimalField(max_digits=5,decimal_places=4)
@@ -48,13 +48,13 @@ class Movie(models.Model):
 class Credit(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     actor=models.ForeignKey(Actor,on_delete=models.CASCADE)
-    character=models.CharField(max_length=100)
+    character=models.CharField(max_length=200)
     order=models.IntegerField()
     
 class SelectedList(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     movies=models.ManyToManyField(Movie,related_name='selected_lists')
-    title=models.CharField(max_length=100)
+    title=models.CharField(max_length=200)
     overview=models.TextField()
     
 class Review(models.Model):
@@ -62,7 +62,7 @@ class Review(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     vote=models.DecimalField(max_digits=2,decimal_places=1)
-    title=models.CharField(max_length=100)
+    title=models.CharField(max_length=200)
     content=models.TextField()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
