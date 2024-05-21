@@ -2,6 +2,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
 from django.contrib.auth import get_user_model
+from movies.serializers import MovieListSerializer
 UserModel = get_user_model()
 
 
@@ -64,9 +65,11 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
 #     fields=('pk',)
 class ProfileSerializer(serializers.ModelSerializer):
   followers = serializers.SerializerMethodField()
+  liked_movies = MovieListSerializer(many=True, read_only=True)
+  
   class Meta:
       model = UserModel
-      fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings','followers',)
+      fields = ('pk', 'username', 'email', 'bio', 'nickname', 'profile_photo', 'followings','followers', 'liked_movies')
 
   def get_followers(self, obj):
         # Get all follower objects

@@ -123,6 +123,7 @@ export const useReviewStore = defineStore("review", () => {
       });
   };
   return {
+    API_URL,
     createReview,
     updateReview,
     createTag,
