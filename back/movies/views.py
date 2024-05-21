@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer, ChatGPTSerializer
+from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment,Genre,Keyword
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer
 from django.conf import settings
 from django.db.models import Q
 api_key = settings.TMDB_API_KEY
@@ -49,7 +49,7 @@ def get_movie(request):
             adult=movie.get('adult')
             release_date=movie.get('release_date')
             origin_country=movie_res.get('origin_country')[0]
-            genres=movie_res.get('genres')
+            
             save_data = {
                 'id': id,
                 'title': title,
@@ -70,12 +70,20 @@ def get_movie(request):
                 movie_instance = serializer.save()
 
                 # 장르 저장
-                for genre in genres:
-                    serializer = GenreSerializer(data=genre)
-                    if serializer.is_valid():
-                        genre_instance = serializer.save()
-                        movie_instance.genres.add(genre_instance)
-                        
+                for index, genre in enumerate(movie_res.get('genres')):
+                    # 장르 ID로 기존 장르 검색
+                    existing_genre = Genre.objects.filter(id=genre['id']).first()
+
+                    if existing_genre:
+                        # 기존 장르가 있는 경우 기존 장르를 사용하여 Movie에 추가
+                        movie_instance.genres.add(existing_genre)
+                    else:
+                        # 기존 장르가 없는 경우 새로운 장르 생성 후 Movie에 추가
+                        serializer = GenreSerializer(data=genre)
+                        if serializer.is_valid():
+                            genre_instance = serializer.save()
+                            movie_instance.genres.add(genre_instance)
+                            
                 for index, cast in enumerate(credit_res.get('cast')):
                     if index >= 5:
                         break  # 처음 5명의 배우만 처리하고 루프 종료
@@ -125,10 +133,18 @@ def get_movie(request):
                             director_instance = director_serializer.save()
                             movie_instance.directors.add(director_instance)
                 for keyword in keyword_res.get('keywords'):
-                    serializer = KeywordSerializer(data=keyword)
-                    if serializer.is_valid():
-                        keyword_instance = serializer.save()
-                        movie_instance.keywords.add(keyword_instance)
+                    # 키워드 ID로 기존 키워드 검색
+                    existing_keyword = Keyword.objects.filter(id=keyword['id']).first()
+
+                    if existing_keyword:
+                        # 기존 키워드가 있는 경우 기존 키워드를 사용하여 Movie에 추가
+                        movie_instance.keywords.add(existing_keyword)
+                    else:
+                        # 기존 키워드가 없는 경우 새로운 키워드 생성 후 Movie에 추가
+                        serializer = KeywordSerializer(data=keyword)
+                        if serializer.is_valid():
+                            keyword_instance = serializer.save()
+                            movie_instance.keywords.add(keyword_instance)
                         
                 results = watchprovider_res.get('results')
                 if results:
@@ -167,9 +183,11 @@ def search(request):
         if title_query:
             movies = movies.filter(title__icontains=title_query)
         if genre_query:
-            movies = movies.filter(genres__name__icontains=genre_query)
+            for genre in genre_query.split():
+                movies = movies.filter(genres__name__icontains=genre)
         if keyword_query:
-            movies = movies.filter(keywords__name__icontains=keyword_query)
+            for keyword in keyword_query.split():
+                movies = movies.filter(keywords__name__icontains=keyword)
         if country_query:
             movies = movies.filter(origin_country__icontains=country_query)
         if runtime_query:
