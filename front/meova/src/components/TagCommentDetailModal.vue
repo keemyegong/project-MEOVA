@@ -67,6 +67,7 @@ const movie = ref(null);
 axios({
   method: "get",
   url: `${movieStore.API_URL}/api/v1/movies/${movieId}/`,
+  headers: { Authorization: `Token ${userStore.token}` },
 })
   .then((response) => {
     movie.value = response.data;

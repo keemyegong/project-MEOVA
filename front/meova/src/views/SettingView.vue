@@ -19,7 +19,9 @@
             {{ store.userinfo.username }}
           </b>
         </h3>
-        <button class="btn btn-dark btn-sm">비밀번호 바꾸기</button>
+        <button class="btn btn-dark btn-sm" @click="changepassword">
+          비밀번호 바꾸기
+        </button>
       </div>
     </div>
     <form class="row g-3" @submit.prevent="update">
@@ -65,6 +67,7 @@
 <script setup>
 import { useUserStore } from "@/stores/user";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const store = useUserStore();
 onMounted(() => {
@@ -85,6 +88,10 @@ const update = function () {
     profile_photo: profile_photo.value,
   };
   store.update(payload);
+};
+const router = useRouter();
+const changepassword = function () {
+  router.push({ name: "changepassword" });
 };
 </script>
 

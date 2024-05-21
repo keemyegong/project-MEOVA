@@ -37,3 +37,11 @@ def followers(request):
     if request.method=='GET':
         serializer=ProfileSerializer(followers,many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def followings(request):
+    followings=request.user.followings.all()
+    if request.method=='GET':
+        serializer=ProfileSerializer(followings,many=True)
+        return Response(serializer.data)

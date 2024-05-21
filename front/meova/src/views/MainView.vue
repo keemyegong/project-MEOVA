@@ -8,6 +8,7 @@
           alt="logo"
         />
         <form class="row g-2" @submit.prevent="search">
+          {{ searchbar }}
           <div class="col-9 offset-1">
             <input
               type="text"

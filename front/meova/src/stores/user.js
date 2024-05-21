@@ -74,6 +74,28 @@ export const useUserStore = defineStore(
           console.log(error);
         });
     };
+    const changepassword = function (payload) {
+      const { old_password, new_password1, new_password2 } = payload;
+      axios({
+        method: "post",
+        url: `${BASE_URL}/password/change/`,
+        data: {
+          old_password,
+          new_password1,
+          new_password2,
+        },
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          console.log("비밀번호 변경 성공");
+          router.push({ name: "settings" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     const logout = function () {
       axios({
         method: "post",
@@ -145,7 +167,9 @@ export const useUserStore = defineStore(
       })
         .then((res) => {
           console.log(res);
-          profile_info.value = res.data;
+          if (profile_info.pk !== userinfo.pk) {
+            profile_info.value = res.data;
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -168,6 +192,23 @@ export const useUserStore = defineStore(
           console.log(error);
         });
     };
+    const followinglist = ref([]);
+    const followings = function () {
+      axios({
+        method: "get",
+        url: `${BASE_URL}/followings/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          followinglist.value = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     return {
       token,
       isLogin,
@@ -182,6 +223,9 @@ export const useUserStore = defineStore(
       follow,
       followers,
       followerlist,
+      followings,
+      followinglist,
+      changepassword,
     };
   },
   { persist: true }

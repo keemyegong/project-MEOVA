@@ -1,23 +1,37 @@
 <template>
-  <div v-if="reviewStore.review" >
+  <div v-if="reviewStore.review">
     <div class="row review-box">
       <div class="col-6">
         <div class="user-info">
           <img
-          v-if="reviewStore.review.profile_photo"
-          :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`"
-          alt="user profile image"
-          class="user-profile-img">
+            v-if="reviewStore.review.profile_photo"
+            :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`"
+            alt="user profile image"
+            class="user-profile-img"
+          />
           <img
             class="comment-user-profile-im user-profile-img"
             src="@/assets/default_profile.png"
             v-else
             alt=""
           />
-          <span class="user-name">{{ reviewStore.review.nickname ? reviewStore.review.nickname : reviewStore.review.username }}</span>
-          <button class="update-btn btn btn-dark" @click="updateReview(reviewStore.review.id)">수정</button>
-          <button class="delete-btn btn btn-dark" @click="deleteReview(reviewStore.review.id)"><i class="bi bi-trash3-fill"></i></button>
-
+          <span class="user-name">{{
+            reviewStore.review.nickname
+              ? reviewStore.review.nickname
+              : reviewStore.review.username
+          }}</span>
+          <button
+            class="update-btn btn btn-dark"
+            @click="updateReview(reviewStore.review.id)"
+          >
+            수정
+          </button>
+          <button
+            class="delete-btn btn btn-dark"
+            @click="deleteReview(reviewStore.review.id)"
+          >
+            <i class="bi bi-trash3-fill"></i>
+          </button>
         </div>
         <!-- 별점 -->
         <div class="rate">
@@ -121,54 +135,59 @@
           />
         </RouterLink>
       </div>
-
-        <form @submit.prevent="createComment" class="row review" ref="form">
-          <input
-              type="text"
-              placeholder="댓글을 남겨 주세요!"
-              id="content"
-              v-model="content"
-              class="col-8 review-comment-input"
-            />
-          <!-- <input class="btn btn-dark" type="submit" value="입력" /> -->
-          <button type="submit" class="col-4 review-comment-btn btn btn-dark">
-              <i class="bi bi-pencil"></i>
-          </button>
-        </form>
+      <button class="btn" @click="likeButton">
+        <i class="bi bi-heart-fill" v-if="isLiked"></i>
+        <i class="bi bi-heart" v-else></i>
+      </button>
+      <form @submit.prevent="createComment" class="row review" ref="form">
+        <input
+          type="text"
+          placeholder="댓글을 남겨 주세요!"
+          id="content"
+          v-model="content"
+          class="col-8 review-comment-input"
+        />
+        <!-- <input class="btn btn-dark" type="submit" value="입력" /> -->
+        <button type="submit" class="col-4 review-comment-btn btn btn-dark">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </form>
     </div>
-
-
 
     <div
       v-for="comment in reviewStore.review.reviewcomment_set"
       :key="comment.id"
     >
       <img
-      v-if="comment.profile_photo"
-      :src="`http://127.0.0.1:8000${comment.profile_photo}`"
-      alt="user profile image"
-      class="comment-user-profile-img">
+        v-if="comment.profile_photo"
+        :src="`http://127.0.0.1:8000${comment.profile_photo}`"
+        alt="user profile image"
+        class="comment-user-profile-img"
+      />
       <img
         class="comment-user-profile-img"
         src="@/assets/default_profile.png"
         v-else
         alt=""
       />
-      <span class="comment-user-name">{{ comment.nickname ? comment.nickname : comment.username }}</span>
+      <span class="comment-user-name">{{
+        comment.nickname ? comment.nickname : comment.username
+      }}</span>
       <i class="bi bi-chat-dots-fill me-2"></i>
       <span class="comment-content">{{ comment.content }}</span>
-      <button class="comment-delete-btn btn btn-dark" @click="deleteComment(comment.id)">
-          <p class="comment-delete-btn-value">
-            삭제
-          </p>
+      <button
+        class="comment-delete-btn btn btn-dark"
+        @click="deleteComment(comment.id)"
+      >
+        <p class="comment-delete-btn-value">삭제</p>
       </button>
     </div>
-    </div>
+  </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useMovieStore } from "@/stores/movie";
 import { useReviewStore } from "@/stores/review";
@@ -239,13 +258,39 @@ const deleteComment = (commentId) => {
     },
   })
     .then(() => {
-      reviewStore.review.value.reviewcomment_set = review.value.reviewcomment_set.filter(
-        (comment) => comment.id !== commentId
-      );
+      reviewStore.review.value.reviewcomment_set =
+        review.value.reviewcomment_set.filter(
+          (comment) => comment.id !== commentId
+        );
     })
     .catch((error) => {
       console.log(error);
     });
+};
+const isReviewLoaded = computed(() => reviewStore.review !== null);
+
+// 좋아요 여부를 확인하는 상태 변수
+const isLiked = ref(false);
+
+// 리뷰 데이터가 로드되면 isLiked 값 설정
+if (isReviewLoaded.value) {
+  isLiked.value = reviewStore.review.liked_users.includes(
+    userStore.userinfo.pk
+  );
+}
+
+// 비동기 함수로 likeButton 함수 정의
+const likeButton = async function () {
+  try {
+    const response = await axios({
+      method: "post",
+      url: `${movieStore.API_URL}/api/v1/reviews/${reviewStore.review.id}/like/`,
+      headers: { Authorization: `Token ${userStore.token}` },
+    });
+    isLiked.value = response.data.liked_users.includes(userStore.userinfo.pk);
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 
@@ -292,7 +337,7 @@ const deleteComment = (commentId) => {
 .rate-star {
   margin-right: 5px;
   font-size: 45px;
-  color: #FDDE55;
+  color: #fdde55;
 }
 
 .update-btn {
