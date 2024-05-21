@@ -48,7 +48,7 @@ class Movie(models.Model):
 class Credit(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     actor=models.ForeignKey(Actor,on_delete=models.CASCADE)
-    character=models.CharField(max_length=200)
+    character=models.CharField(max_length=500)
     order=models.IntegerField()
     
 class SelectedList(models.Model):
@@ -79,3 +79,5 @@ class TagComment(models.Model):
     content=models.CharField(max_length=200)
     created_at=models.DateTimeField(auto_now_add=True)
 
+class AIRecommend(models.Model):
+    message=models.TextField()
