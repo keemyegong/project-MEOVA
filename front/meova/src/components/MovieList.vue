@@ -30,13 +30,14 @@
                 Recommended Movies
             </div>
         </RouterLink>
-        <p>곧 추가될 예정이에요!</p>
+        <ChatGPT />
     </div>
 </template>
 
 <script setup>
 import { useMovieStore } from '@/stores/movie'
 import MovieListItem from '@/components/MovieListItem.vue'
+import ChatGPT from '@/components/ChatGPT.vue';
 import { useRouter, RouterLink } from 'vue-router'
 
 const store = useMovieStore()
