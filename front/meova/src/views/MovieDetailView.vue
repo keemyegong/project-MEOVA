@@ -192,7 +192,7 @@
 
     <p class="detail-category-title">리뷰</p>
     <template class="review">
-      <div v-for="review in movie.review_set">
+      <div v-for="review in movie.review_set.slice().reverse()">
         <RouterLink
           class="nav-link"
           :to="{

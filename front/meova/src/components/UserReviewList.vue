@@ -4,7 +4,7 @@
       {{ userStore.profile_info.nickname ? userStore.profile_info.nickname : userStore.profile_info.username }}`s Reviews
     </p>
     <div v-if="reviews " class="review">
-        <div v-for="review in reviews"
+        <div v-for="review in reviews.slice().reverse()"
             :key="review.id">
             <div class="review-item">
                 <div class="card-body review-box">

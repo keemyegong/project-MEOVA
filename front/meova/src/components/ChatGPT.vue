@@ -8,7 +8,7 @@
             {{ theme }}
           </span>
             <span class="display-6">❞</span>
-        <span>컨셉에 맞춰 오늘의 영화 3개를 추천해요!</span>
+        <span>테마에 맞춰 오늘의 영화 3개를 추천해요!</span>
       </div>
       <div class="movie-item">
         <MovieListItem

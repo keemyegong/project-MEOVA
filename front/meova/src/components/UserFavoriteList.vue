@@ -4,7 +4,7 @@
         Favorite Movies
       </p>
       <div class="favorite">
-          <div v-for="movie in profile.liked_movies"
+          <div v-for="movie in profile.liked_movies.slice().reverse()"
               :key="movie.id">
               <div class="favorite-item">
                   <div class="card-body favorite-box">

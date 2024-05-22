@@ -1,9 +1,9 @@
 <template>
   <div>
     <form class="row g-3 mt-5" @submit.prevent="changepassword">
-      <h1 class="col-md-6 offset-3 mb-3"><b>비밀번호 변경</b></h1>
+      <h1 class="nato-font col-md-6 offset-3 mb-3"><b>비밀번호 변경</b></h1>
       <div class="col-md-6 offset-3">
-        <label class="form-label" for="password">현재 비밀번호</label>
+        <label class="form-label" for="nato-font password">현재 비밀번호</label>
 
         <input
           type="password"
@@ -13,7 +13,7 @@
         />
       </div>
       <div class="col-md-6 offset-3">
-        <label for="password1" class="form-label">새로운 비밀번호</label>
+        <label for="password1" class="nato-font form-label">새로운 비밀번호</label>
         <input
           type="password"
           class="form-control"
@@ -22,7 +22,7 @@
         />
       </div>
       <div class="col-md-6 offset-3">
-        <label for="password1" class="form-label">새로운 비밀번호 확인</label>
+        <label for="password1" class="nato-font form-label">새로운 비밀번호 확인</label>
         <input
           type="password"
           class="form-control"
@@ -32,7 +32,7 @@
       </div>
 
       <div class="col-md-6 offset-3">
-        <button type="submit" class="btn btn-dark">회원가입</button>
+        <button type="submit" class="nato-font btn btn-dark">변경</button>
       </div>
     </form>
   </div>
@@ -55,3 +55,11 @@ const changepassword = () => {
   store.changepassword(payload);
 };
 </script>
+
+<style scoped>
+  .nato-font {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+</style>

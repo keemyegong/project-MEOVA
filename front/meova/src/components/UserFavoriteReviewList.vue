@@ -4,7 +4,7 @@
         Favorite Reviews
       </p>
       <div class="favorite" v-if="profile.liked_reviews">
-          <div v-for="review in profile.liked_reviews"
+          <div v-for="review in profile.liked_reviews.slice().reverse()"
               :key="review.id">
               <div class="favorite-item">
                   <div class="card-body favorite-box">
