@@ -65,6 +65,10 @@ class MovieListSerializer(serializers.ModelSerializer):
         model=Movie
         exclude=('actors','release_date','popularity',)
 
+class WatchProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=WatchProvider
+        fields='__all__'
 
 class TagCommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -83,10 +87,11 @@ class MovieSerializer(serializers.ModelSerializer):
     tagcomment_set = TagCommentSerializer(read_only=True, many=True)
     review_set = ReviewSerializer(read_only=True, many=True)
     my_reviews = serializers.SerializerMethodField()  # 사용자의 리뷰만 추출
+    watchproviders=WatchProviderSerializer(read_only=True, many=True)
     class Meta:
         model=Movie
         fields='__all__'
-        read_only_fields=('directors','liked_users','watchproviders',)
+        read_only_fields=('liked_users',)
     def get_my_reviews(self, obj):
         request = self.context.get('request', None)
         if request is None or request.user.is_anonymous:
@@ -105,10 +110,6 @@ class KeywordSerializer(serializers.ModelSerializer):
         model=Keyword
         fields='__all__'
         
-class WatchProviderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=WatchProvider
-        fields='__all__'
 
 class ActorSerializer(serializers.ModelSerializer):
     movies = MovieSerializer(read_only=True, many=True)
