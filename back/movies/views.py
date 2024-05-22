@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment,Genre,Keyword,AIRecommend
+from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment,Genre,Keyword,AIRecommend,WatchProvider
 from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer,AIRecommendSerializer
 from django.conf import settings
 from django.db.models import Q
@@ -17,7 +17,7 @@ import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    for i in range(61,81):
+    for i in range(41,81):
         url = f"https://api.themoviedb.org/3/movie/popular?language=ko&page={i}"
         headers = {
         "accept": "application/json",
@@ -156,18 +156,25 @@ def get_movie(request):
                         flatrate = kr_watchprovider.get('flatrate')
                         if flatrate and isinstance(flatrate, list):
                             for watchprovider in flatrate:
-                                # watchprovider를 처리하는 기존 로직
-                                watchprovider_data={
-                                    'name':watchprovider.get('provider_name'),
-                                    'display_priority':watchprovider.get('display_priority'),
-                                    'logo_path':watchprovider.get('logo_path'),
-                                    'id':watchprovider.get('provider_id'),
-                                }
+                                # watchprovider ID로 기존 watchprovider 검색
+                                existing_watchprovider = WatchProvider.objects.filter(id=watchprovider.get('provider_id')).first()
                                 
-                                serializer = WatchProviderSerializer(data=watchprovider_data)
-                                if serializer.is_valid():
-                                    watchprovider_instance = serializer.save()
-                                    movie_instance.watchproviders.add(watchprovider_instance)
+                                if existing_watchprovider:
+                                    # 기존 watchprovider가 있는 경우 기존 watchprovider를 사용하여 Movie에 추가
+                                    movie_instance.watchproviders.add(existing_watchprovider)
+                                else:
+                                    # 기존 watchprovider가 없는 경우 새로운 watchprovider 생성 후 Movie에 추가
+                                    watchprovider_data = {
+                                        'name': watchprovider.get('provider_name'),
+                                        'display_priority': watchprovider.get('display_priority'),
+                                        'logo_path': watchprovider.get('logo_path'),
+                                        'id': watchprovider.get('provider_id'),
+                                    }
+                                    
+                                    serializer = WatchProviderSerializer(data=watchprovider_data)
+                                    if serializer.is_valid():
+                                        watchprovider_instance = serializer.save()
+                                        movie_instance.watchproviders.add(watchprovider_instance)
             
     return Response(response)
 

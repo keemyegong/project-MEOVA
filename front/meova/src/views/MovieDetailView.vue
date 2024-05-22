@@ -1,7 +1,7 @@
 <template>
   <div v-if="movie" class="row movie-detail-box nato-font">
-    <div class="movie-info col-6">
-      <div class=" movie-title">
+    <div class="movie-info col-12 col-md-6">
+      <div class="movie-title">
         <b>{{ movie.title }}</b>
       </div>
       <div class="movie-overview">
@@ -118,7 +118,7 @@
       <TagCommentDetailModal />
     </div>
 
-    <div class="poster-review col-6">
+    <div class="poster-review col-12 col-md-6">
       <div class="rol">
         <img
           :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
@@ -149,17 +149,26 @@
         </RouterLink>
       </div>
     </div>
-    </div>
-    <div v-if="movie.watchproviders">
-      <template v-if="movie.watchproviders.length > 0">
-        <b>Provider</b>
-        <div v-for="watchprovider in movie.watchproviders">
-          {{ watchprovider }}
-        </div>
-      </template>
-    </div>
+    
+    
+    
+    <template v-if="movie.watchproviders.length > 0" class="director-box">
+      <b style="display: flex" class="detail-category-title mt-3 mb-3">제공</b>
 
-    <div class="director-box">
+      <span v-for="watchprovider in movie.watchproviders" style="width: 7%">
+        <img
+          :src="
+            'https://image.tmdb.org/t/p/original/' + watchprovider.logo_path
+          "
+          alt="actor-profile"
+          style="width: 50px; border-radius: 50%"
+        />
+      </span>
+    </template>
+    
+    
+    
+    <div class="director-box mt-5">
       <p class="detail-category-title">감독</p>
       <div class="director" v-for="director in movie.directors">
         <RouterLink
@@ -208,7 +217,7 @@
               <div class="user-info">
                 <img
                   v-if="review.profile_photo"
-                  :src="`http://127.0.0.1:8000${review.profile_photo}`"
+                  :src="`${store.API_URL}${review.profile_photo}`"
                   alt="user profile image"
                   class="user-profile-img"
                 />
@@ -249,12 +258,12 @@ const router = useRouter();
 const movieId = Number(route.params["id"]);
 const content = ref("");
 const form = ref(null);
-const movie=computed(()=>{
-  return store.movie
-})
-const tags=computed(()=>{
-  return store.movie.tagcomment_set
-})
+const movie = computed(() => {
+  return store.movie;
+});
+const tags = computed(() => {
+  return store.movie.tagcomment_set;
+});
 const createTag = function () {
   const tag = {
     content: content.value,
@@ -272,7 +281,7 @@ const createTag = function () {
       console.log(store.API_URL);
       console.log(response);
       // movie.value = response.data;
-      store.getMovie(movieId)
+      store.getMovie(movieId);
     })
     .catch((error) => {
       console.log(error);
@@ -319,8 +328,7 @@ onMounted(() => {
   //   .catch((error) => {
   //     console.log(error);
   //   });
-  store.getMovie(movieId)
-
+  store.getMovie(movieId);
 });
 </script>
 
