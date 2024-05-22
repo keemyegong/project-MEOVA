@@ -1,6 +1,8 @@
 <template>
   <div class="nato-font">
-    <p class="review-item-title">My Reviews</p>
+    <p class="review-item-title">
+      {{ userStore.profile_info.nickname ? userStore.profile_info.nickname : userStore.profile_info.username }}`s Reviews
+    </p>
     <div v-if="reviews " class="review">
         <div v-for="review in reviews"
             :key="review.id">

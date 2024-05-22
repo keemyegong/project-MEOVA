@@ -1,14 +1,14 @@
 <template>
     <div class="nato-font">
-      <p class="favorite-item-title">
-        Favorite Movies
+      <!-- <p class="favorite-item-title">
+        Favorite Reviews
       </p>
       <div class="favorite">
-          <div v-for="movie in profile.liked_movies"
-              :key="movie.id">
+          <div v-for="review in profile.liked_reviews"
+              :key="review.id">
               <div class="favorite-item">
                   <div class="card-body favorite-box">
-                  <p class="favorite-content card-text">{{ movie.content }}</p>
+                  <p class="favorite-content card-text">{{ review.content }}</p>
                       <RouterLink
                       class="nav-link"
                       :to="{
@@ -30,10 +30,10 @@
                   </div>
               </div>
           </div>
-          <div v-if="profile.liked_movies.length === 0">
-            <p class="ms-4">아직 좋아한 영화가 없어요! (⊙_⊙;)</p>
+          <div v-if="profile.liked_reviews.length === 0">
+            <p class="ms-4">아직 좋아한 리뷰가 없어요! (⊙_⊙;)</p>
           </div>
-        </div>
+        </div> -->
       </div>
   </template>
     
