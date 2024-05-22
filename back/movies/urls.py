@@ -19,6 +19,7 @@ urlpatterns = [
     path('meova/search/',views.search), # 영화 검색
     path('movies/popular/',views.popular), # 인기 영화 조회
     path('movies/recommended/',views.recommended), # 추천 영화 조회
+    path('movies/recommended/<int:movie_pk>/',views.recommendedmovies), # 추천 영화 조회
     path('movies/release/',views.release), # 최신 영화 조회
     path('movies/<int:movie_pk>/',views.detail), # 영화 상세 정보 조회
     path('movies/<int:movie_pk>/like/',views.like_movie), # 영화 좋아요

@@ -343,6 +343,7 @@ onMounted(() => {
   store.getRecommendMovies();
   store.getPopularMovies();
   store.getReleaseMovies();
+  store.getRecommendMovies();
 });
 </script>
 

@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment,Genre,Keyword
-from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer
+from .models import Movie, Review, Credit, Actor, ReviewComment, Director, TagComment,Genre,Keyword,AIRecommend
+from .serializers import MovieListSerializer,MovieSerializer,GenreSerializer,ActorSerializer,DirectorSerializer,KeywordSerializer,WatchProviderSerializer,ReviewSerializer,ReviewCommentSerializer,TagCommentSerializer,AIRecommendSerializer
 from django.conf import settings
 from django.db.models import Q
 api_key = settings.TMDB_API_KEY
@@ -213,7 +213,15 @@ def popular(request):
     
 @api_view(['GET'])
 def recommended(request):
-    ...
+    recommend=AIRecommend.objects.all()
+    serializer=AIRecommendSerializer(recommend,many=True)
+    return Response(serializer.data)
+    
+@api_view(['GET'])
+def recommendedmovies(request,movie_pk):
+    movie=get_object_or_404(Movie,pk=movie_pk)
+    serializer=MovieListSerializer(movie)
+    return Response(serializer.data)
 
     
 @api_view(['GET'])
@@ -300,7 +308,7 @@ def review_detail(request, review_pk):
     review=get_object_or_404(Review,pk=review_pk)
     if request.method=='PUT':
         serializer=ReviewSerializer(review,data=request.data,partial=True)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid(raise_exception=True) and request.user == review.user:
             serializer.save()
             return Response(serializer.data)
     elif request.method=='GET':
@@ -387,7 +395,16 @@ def chat_gpt(request):
         completion = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "너는 영화 추천을 위한 chatbot이고 한글로 꼭 대답해야해."},
+                {"role": "system", "content":  (
+                    "너는 영화 추천을 위한 chatbot이고 한글로 꼭 대답해야 해."
+                    "응답 형식은 항상 동일해야 하며, 다음 형식을 따라야 합니다:\n\n"
+                    "\"<테마>\"라는 컨셉으로 영화를 추천해드릴게요:\n\n"
+                    "1. **<영화 제목> (<영화 ID>)** - <영화 설명>\n"
+                    "2. **<영화 제목> (<영화 ID>)** - <영화 설명>\n"
+                    "3. **<영화 제목> (<영화 ID>)** - <영화 설명>\n\n"
+                    "이 세 개의 작품은 <테마> 컨셉에 맞추어 선정되었습니다.\""
+                    )
+                 },
                 {"role": "user", "content": f"{prompt}"}
             ],
             stop=['Human'],
@@ -395,20 +412,24 @@ def chat_gpt(request):
                 presence_penalty=0.5
         )
         message = completion.choices[0].message.content
-        return Response({"message": message}, status=status.HTTP_200_OK)
-        response = client.chat.completions.create(
-                model="gpt-4o",
-                temperature=0.0,
-                # response_format={'type':'json_object'},
-                messages= chat_history,
-                stop=['Human'],
-                frequency_penalty=0.5,
-                presence_penalty=0.5
-            )
-        output_message = response.choices[0].message.content
-        print(output_message)
-        chat_history.append({"role": "assistant", "content": f"{output_message}"})
-        return Response(output_message,status=status.HTTP_200_OK)
+        data = {"message": message}
+        serializer = AIRecommendSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        # response = client.chat.completions.create(
+        #         model="gpt-4o",
+        #         temperature=0.0,
+        #         # response_format={'type':'json_object'},
+        #         messages= chat_history,
+        #         stop=['Human'],
+        #         frequency_penalty=0.5,
+        #         presence_penalty=0.5
+        #     )
+        # output_message = response.choices[0].message.content
+        # print(output_message)
+        # chat_history.append({"role": "assistant", "content": f"{output_message}"})
+        # return Response(output_message,status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

@@ -65,13 +65,9 @@
         <div v-else>follow</div>
       </button>
     </section>
-    <Calendar
-    :userid="store.profile_info.pk" />
-    <UserReviewList
-    :userid="store.profile_info.pk"/>
-    <UserFavoriteList
-    :profile="store.profile_info"
-    />
+    <Calendar :userid="store.profile_info.pk" />
+    <UserReviewList :userid="store.profile_info.pk" />
+    <UserFavoriteList :profile="store.profile_info" />
   </div>
 </template>
 
@@ -79,7 +75,7 @@
 import Calendar from "@/components/Calender.vue";
 import ProfileFollowerListModal from "@/components/ProfileFollowerListModal.vue";
 import ProfileFollowingListModal from "@/components/ProfileFollowingListModal.vue";
-import UserReviewList from "@/components/UserReviewList.vue"
+import UserReviewList from "@/components/UserReviewList.vue";
 import UserFavoriteList from "@/components/UserFavoriteList.vue";
 import { useUserStore } from "@/stores/user";
 import { ref, onMounted, computed } from "vue";
@@ -100,6 +96,9 @@ const following_count = computed(() => {
 const follow = function () {
   store.follow(route.params.username);
 };
+onMounted(() => {
+  store.settings();
+});
 </script>
 
 <style scoped>

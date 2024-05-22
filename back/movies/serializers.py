@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Movie, Director, Genre,Keyword,Actor,Director,WatchProvider,Credit,Review,ReviewComment, TagComment
+from .models import Movie, Director, Genre,Keyword,Actor,Director,WatchProvider,Credit,Review,ReviewComment, TagComment,AIRecommend
+
+class AIRecommendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=AIRecommend
+        fields='__all__'
 
 class MovieCardSerializer(serializers.ModelSerializer):
     class Meta:

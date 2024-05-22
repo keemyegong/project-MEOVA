@@ -29,8 +29,26 @@ export const useMovieStore = defineStore(
         movies.value = res.data;
       });
     };
+    const recommendations = ref({});
+    const recommendmovies = ref([]);
     const getRecommendMovies = function () {
-      console.log("추천알고리즘이없어요!");
+      return axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/recommended/`,
+      }).then((res) => {
+        recommendations.value = res.data[res.data.length - 1];
+      });
+    };
+    const getRecommendMovieList = function (ids) {
+      recommendmovies.value = [];
+      for (const pk of ids) {
+        axios({
+          method: "get",
+          url: `${API_URL}/api/v1/movies/recommended/${pk}/`,
+        }).then((res) => {
+          recommendmovies.value.push(res.data);
+        });
+      }
     };
 
     const getPopularMovies = function () {
@@ -79,6 +97,7 @@ export const useMovieStore = defineStore(
       API_URL,
       isMain,
       getRecommendMovies,
+      recommendations,
       getPopularMovies,
       getReleaseMovies,
       recommend_movies,
@@ -86,6 +105,8 @@ export const useMovieStore = defineStore(
       release_movies,
       search,
       movies,
+      getRecommendMovieList,
+      recommendmovies,
     };
   },
   { persist: true }
