@@ -35,6 +35,7 @@ const movieStore = useMovieStore();
 const extractThemeAndIds = () => {
   if (recommendations.value.message) {
     const themeMatch =
+      recommendations.value.message.match(/"(.+?)"이라는 컨셉으로/) ||
       recommendations.value.message.match(/"(.+?)"라는 컨셉으로/);
     theme.value = themeMatch ? themeMatch[1] : "테마 없음";
 
@@ -64,7 +65,7 @@ onMounted(() => {
   });
 });
 
-// Watch for changes in recommendations and extract theme and movie IDs
+// then으로 대체
 // watch(recommendations, (newVal) => {
 //   if (newVal.message) {
 //   }

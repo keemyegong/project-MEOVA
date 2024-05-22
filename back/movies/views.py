@@ -17,7 +17,7 @@ import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    for i in range(41,61):
+    for i in range(61,81):
         url = f"https://api.themoviedb.org/3/movie/popular?language=ko&page={i}"
         headers = {
         "accept": "application/json",
@@ -33,7 +33,8 @@ def get_movie(request):
             keyword_res = requests.get(keyword_url,headers=headers).json()
             watchprovider_url = f"https://api.themoviedb.org/3/movie/{id}/watch/providers"
             watchprovider_res = requests.get(watchprovider_url,headers=headers).json()
-            
+            if any(keyword['name'].lower() == 'softcore' for keyword in keyword_res.get('keywords', [])):
+                continue  # softcore 키워드가 있으면 다음 영화로 넘어감
             title = movie.get('title')
             overview=movie.get('overview')
             if overview:
