@@ -58,6 +58,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         # Get all follower objects
         followers = obj.followers.all()
         # Extract and return only the primary keys
+        print(followers)
         return [follower.pk for follower in followers]
 # class UserPkSerializer(serializers.ModelSerializer):
 #   class Meta:

@@ -39,9 +39,9 @@
                 class="delete-btn btn btn-dark"
               >
                 <div class="delete-btn-value" v-if="isFollowing(follower.pk)">
-                  follow
+                  unfollow
                 </div>
-                <div class="delete-btn-value" v-else>unfollow</div>
+                <div class="delete-btn-value" v-else>follow</div>
               </button>
             </div>
           </div>
