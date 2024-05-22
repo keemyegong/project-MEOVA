@@ -8,7 +8,7 @@
           alt="logo"
         />
         <form class="row g-2" @submit.prevent="search">
-          <div class="col-9 offset-1">
+          <div class="nato-font col-9 offset-1">
             <div class="form-control form-control-lg">
               <button
                 class="btn genre"
@@ -57,7 +57,7 @@
               <i class="bi bi-search"></i>
             </button>
           </div>
-          <div v-if="showFilters" class="col-9 offset-1">
+          <div v-if="showFilters" class="nato-font col-9 offset-1">
             <section class="search-bar">
               <div class="search-bar-item">
                 <button class="btn disabled">장르</button>
@@ -411,5 +411,11 @@ onMounted(() => {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row g-3 mb-5 mt-5">
+    <div class="nato-font row g-3 mb-5 mt-5">
       <img
         class="col-1 offset-3"
         :src="store.userinfo.profile_photo"
@@ -24,7 +24,7 @@
         </button>
       </div>
     </div>
-    <form class="row g-3" @submit.prevent="update">
+    <form class="nato-font row g-3" @submit.prevent="update">
       <div class="col-md-6 offset-3">
         <label class="form-label" for="profile_photo">프로필 사진</label>
         <input
@@ -95,4 +95,10 @@ const changepassword = function () {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+</style>

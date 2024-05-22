@@ -1,5 +1,5 @@
 <template>
-  <div id="calendar-container">
+  <div id="calendar-container" class="nato-font">
     <h1>{{ nowM + 1 }}월</h1>
     <table>
       <thead>
@@ -211,12 +211,14 @@ h1 {
   opacity: 0.8;
   object-fit: cover;
 }
-
-
-
 .has-poster {
   color: white;
   font-weight: 700;
+}
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 </style>

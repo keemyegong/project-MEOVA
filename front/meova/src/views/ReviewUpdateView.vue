@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="nato-font">
     <form class="row g-3 mt-5" @submit.prevent="updateReview">
-      <h1 class="col-md-6 offset-3 mb-3"><b>리뷰 수정</b></h1>
+      <h1 class="col-md-6 offset-3 mb-3"><b>리뷰를 수정해 주세요!</b></h1>
       <div class="col-md-6 offset-3">
         <label class="form-label" for="title">제목</label>
 
@@ -90,4 +90,10 @@ const updateReview = async () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+</style>

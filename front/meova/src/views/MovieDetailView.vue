@@ -1,7 +1,7 @@
 <template>
-  <div v-if="movie" class="row movie-detail-box">
+  <div v-if="movie" class="row movie-detail-box nato-font">
     <div class="movie-info col-6">
-      <div class="movie-title">
+      <div class=" movie-title">
         <b>{{ movie.title }}</b>
       </div>
       <div class="movie-overview">
@@ -231,6 +231,9 @@
             </div>
           </div>
         </RouterLink>
+      </div>
+      <div v-if="movie.review_set.length === 0">
+        <p>아직 작성된 리뷰가 없어요! (⊙x⊙;)</p>
       </div>
     </template>
   </div>
@@ -471,5 +474,10 @@ onMounted(() => {
 }
 .modal-section {
   width: 100%;
+}
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div v-if="reviewStore.review">
     <div class="row review-box">
-      <div class="col-6">
-        <div class="user-info">
+      <div class="col-7 user-box">
+        <div class="m-1 user-info">
           <img
             v-if="reviewStore.review.profile_photo"
             :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`"
@@ -10,28 +10,21 @@
             class="user-profile-img"
           />
           <img
-            class="comment-user-profile-im user-profile-img"
+            class="comment-user-profile-img user-profile-img"
             src="@/assets/default_profile.png"
             v-else
             alt=""
           />
-          <span class="user-name">{{
+          <p class="user-name">{{
             reviewStore.review.nickname
               ? reviewStore.review.nickname
               : reviewStore.review.username
-          }}</span>
-          <button
-            class="update-btn btn btn-dark"
-            @click="updateReview(reviewStore.review.id)"
-          >
-            수정
-          </button>
-          <button
-            class="delete-btn btn btn-dark"
-            @click="deleteReview(reviewStore.review.id)"
-          >
-            <i class="bi bi-trash3-fill"></i>
-          </button>
+          }}</p>
+      <button class="like-btn btn" @click="likeButton">
+        <i class="bi bi-heart-fill" v-if="isLiked"></i>
+        <i class="bi bi-heart" v-else></i>
+      </button>
+
         </div>
         <!-- 별점 -->
         <div class="rate">
@@ -114,11 +107,27 @@
           </div>
         </div>
         <div class="review">
-          <p class="review-title">{{ reviewStore.review.title }}</p>
+          <div class="row">
+            <p class="review-title col-8">{{ reviewStore.review.title }}</p>
+            <div class="button-group col-4" v-if="isReviewOwner">
+              <button
+                class="update-btn btn btn-dark"
+                @click="updateReview(reviewStore.review.id)"
+              >
+                <p class="update-txt">수정</p>
+              </button>
+              <button
+                class="delete-btn btn btn-dark"
+                @click="deleteReview(reviewStore.review.id)"
+              >
+                <i class="update-txt bi bi-trash3-fill"></i>
+              </button>
+            </div>
+          </div>
           <p>{{ reviewStore.review.content }}</p>
         </div>
       </div>
-      <div v-if="reviewStore.review.movie" class="col-6">
+      <div v-if="reviewStore.review.movie" class="poster-box col-5">
         <RouterLink
           :to="{
             name: 'MovieDetailView',
@@ -135,11 +144,7 @@
           />
         </RouterLink>
       </div>
-      <button class="btn" @click="likeButton">
-        <i class="bi bi-heart-fill" v-if="isLiked"></i>
-        <i class="bi bi-heart" v-else></i>
-      </button>
-      <form @submit.prevent="createComment" class="row review" ref="form">
+      <form @submit.prevent="createComment" class="nato-font row review" ref="form">
         <input
           type="text"
           placeholder="댓글을 남겨 주세요!"
@@ -157,6 +162,7 @@
     <div
       v-for="comment in reviewStore.review.reviewcomment_set"
       :key="comment.id"
+      class="comment-box"
     >
       <img
         v-if="comment.profile_photo"
@@ -269,6 +275,14 @@ const deleteComment = (commentId) => {
 };
 const isReviewLoaded = computed(() => reviewStore.review !== null);
 
+const isReviewOwner = computed(() => {
+  return (
+    reviewStore.review &&
+    userStore.userinfo &&
+    reviewStore.review.user === userStore.userinfo.pk
+  );
+});
+
 // 좋아요 여부를 확인하는 상태 변수
 const isLiked = ref(false);
 
@@ -311,6 +325,7 @@ const likeButton = async function () {
 }
 .user-info {
   display: flex;
+  align-items: center;
   margin-top: 50px;
   margin-bottom: 5px;
 }
@@ -321,45 +336,61 @@ const likeButton = async function () {
   margin-right: 20px;
 }
 .user-name {
-  font-size: 50px;
-  font-weight: 800;
+  font-size: 2.3vw;
+  font-weight: 700;
+}
+.button-group {
+  display: flex;
+  margin: auto;
+}
+.update-btn,
+.delete-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 40px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+.update-txt {
+  font-size: 90%;
+  margin: 0;
+}
+.poster-box {
+  padding: 0;
 }
 .poster-image {
   width: 93%;
-  margin-left: 4%;
   border-radius: 1%;
 }
 
 /* 별점 */
 .rate {
   text-align: center;
+  margin-top: 10px;
 }
 .rate-star {
   margin-right: 5px;
-  font-size: 45px;
+  font-size: 3vw;
   color: #fdde55;
-}
-
-.update-btn {
-  width: 10%;
-  height: 50px;
-  margin-top: 15px;
-  margin-left: auto;
-}
-
-.delete-btn {
-  width: 10%;
-  height: 50px;
-  margin-top: 15px;
-  margin-left: 10px;
 }
 .review {
   margin-top: 20px;
   margin-bottom: 40px;
 }
+.like-btn {
+  font-size: 2.5vw;
+  margin-left: auto;
+}
 .review-comment-btn {
   margin-left: 1%;
-  width: 32%;
+  width: 31%;
+}
+.comment-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 .comment-user-profile-img {
   padding: 3px;
@@ -367,7 +398,6 @@ const likeButton = async function () {
   height: 53px;
   border-radius: 100%;
 }
-
 .comment-user-name {
   margin-left: 10px;
   margin-right: 10px;
@@ -381,5 +411,10 @@ const likeButton = async function () {
   margin-left: 10px;
   width: 50px;
   height: 30px;
+}
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 </style>

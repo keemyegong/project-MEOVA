@@ -25,7 +25,7 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="nato-font collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="store.isLogin">
           <li class="nav-item">
             <div class="nav-link" @click="store.logout">로그아웃</div>
@@ -75,4 +75,9 @@ const movie = useMovieStore();
 </script>
 
 <style scoped>
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 </style>
