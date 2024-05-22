@@ -61,7 +61,7 @@
     display: flex;
   }
   .favorite-item-title {
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 2%;
     font-size: 40px;
     font-family: "Caprasimo", serif;

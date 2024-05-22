@@ -8,10 +8,13 @@
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caprasimo&family=Grandiflora+One&family=Modak&family=Moirai+One&family=Moul&family=Nanum+Myeongjo&family=Noto+Serif+KR:wght@200..900&family=Rubik+Scribble&family=Shrikhand&display=swap");
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
+
       footer {
+        font-weight: 150;
         height: 150px;
         margin-top: 100px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         margin-bottom: 0;
@@ -21,6 +24,7 @@
         font-optical-sizing: auto;
         font-style: normal;
       }
+
     </style>
     <link
       rel="stylesheet"
@@ -30,9 +34,10 @@
   <body>
     <div class="container" style="min-height: 100vh" id="app"></div>
     <footer class="bg-dark text-white text-center py-3">
-      <p style="font-size: 15px; color: whitesmoke">
-        © MEOVA FOOTER 나중에 엄청나게 멋있게 꾸며준다
+      <p class="footer" style="font-size: 15px; color: whitesmoke">
+        © 2024 MEOVA 윤채영 김예운 with Muah
       </p>
+      <p><a class="nav-link" href="https://github.com/keemyegong/project-meova"><i class="bi bi-github"></i></a> </p>
     </footer>
     <script type="module" src="/src/main.js"></script>
   </body>

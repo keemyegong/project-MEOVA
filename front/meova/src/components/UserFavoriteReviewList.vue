@@ -1,28 +1,35 @@
 <template>
     <div class="nato-font">
-      <!-- <p class="favorite-item-title">
+      <p class="favorite-item-title">
         Favorite Reviews
       </p>
-      <div class="favorite">
+      <div class="favorite" v-if="profile.liked_reviews">
           <div v-for="review in profile.liked_reviews"
               :key="review.id">
               <div class="favorite-item">
                   <div class="card-body favorite-box">
-                  <p class="favorite-content card-text">{{ review.content }}</p>
+                  <p class="favorite-content card-text">{{ review.title }}</p>
                       <RouterLink
                       class="nav-link"
                       :to="{
-                          name: 'MovieDetailView',
-                          params: { id: movie.id },
+                          name: 'ReviewDetailView',
+                          params: { movieId: review.movie.id, reviewId: review.id},
                       }">
                           <div class="movie-info">
-                              <img
-                              :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
-                              alt="movie poster image"
-                              class="poster-img"
-                              />
+                            <img
+                              v-if="review.profile_photo"
+                              :src="review.profile_photo"
+                              class="profile-img"
+                              alt="profile_img"
+                            />
+                            <img
+                              class="profile-img"
+                              src="@/assets/default_profile.png"
+                              v-else
+                              alt=""
+                            />
                               <p class="movie-title ms-3 card-subtitle mt-2 text-body-secondary">
-                                  {{ movie.title }}
+                                  {{ review.content }}
                               </p>
                               
                           </div>
@@ -33,7 +40,7 @@
           <div v-if="profile.liked_reviews.length === 0">
             <p class="ms-4">아직 좋아한 리뷰가 없어요! (⊙_⊙;)</p>
           </div>
-        </div> -->
+        </div>
       </div>
   </template>
     
@@ -61,7 +68,7 @@
     display: flex;
   }
   .favorite-item-title {
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 2%;
     font-size: 40px;
     font-family: "Caprasimo", serif;
@@ -94,7 +101,7 @@
   .movie-title {
       font-weight: 700;
   }
-  .poster-img {
+  .profile-img {
     height: 50px;
     width: 50px;
     border-radius: 100%;

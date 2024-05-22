@@ -1,8 +1,15 @@
 <template>
   <div>
     <div v-if="result">
-      <h3>오늘의 테마 : {{ theme }}</h3>
-      <p></p>
+      <div class="movie-info">
+        <span>챗GPT가</span>
+        <span class="display-6">❝</span>
+          <span class="theme">
+            {{ theme }}
+          </span>
+            <span class="display-6">❞</span>
+        <span>컨셉에 맞춰 오늘의 영화 3개를 추천해요!</span>
+      </div>
       <div class="movie-item">
         <MovieListItem
           v-for="movie in recommendmovies"
@@ -73,9 +80,36 @@ onMounted(() => {
 </script>
 <style scoped>
 .movie-item {
+  justify-content: center;
   width: 100%;
   margin-bottom: 150px;
   overflow: auto;
   display: flex;
+}
+.movie-category-title {
+  margin-top: 0px;
+  text-align: center;
+  font-size: 30px;
+  font-family: "Bagel Fat One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.movie-info {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 300;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.theme {
+  color: rgb(122, 122, 122);
+  margin-left: 7px;
+  margin-right: 7px;
+  font-size:30px;
+  font-family: "Grandiflora One", cursive;
+  font-weight: 1000;
+  font-style: normal;
+  background-color: rgba(197, 197, 197, 0.253);
 }
 </style>
