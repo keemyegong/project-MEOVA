@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <form class="row g-3 mt-5" @submit.prevent="login">
-      <h1 class="nato-font col-md-6 offset-3 mb-3"><b>로그인</b></h1>
-      <div class="col-md-6 offset-3">
-        <label class="form-label" for="username">
+  <div class="login">
+    <form class="login-form" @submit.prevent="login">
+      <h1 class="nato-font"><b>로그인</b></h1>
+      <div>
+        <label class="mt-3 form-label" for="username">
           <p>아이디</p></label>
 
         <input
@@ -13,8 +13,8 @@
           v-model="username"
         />
       </div>
-      <div class="col-md-6 offset-3">
-        <label for="password" class="form-label">
+      <div>
+        <label for="password" class="mt-3 form-label">
           <p>비밀번호</p></label>
         <input
           type="password"
@@ -24,8 +24,8 @@
         />
       </div>
 
-      <div class="col-md-6 offset-3">
-        <button type="submit" class="nato-font btn btn-dark">로그인</button>
+      <div>
+        <button type="submit" class="nato-font btn btn-dark mt-3">로그인</button>
       </div>
     </form>
   </div>
@@ -53,4 +53,15 @@ const login = () => {
     font-optical-sizing: auto;
     font-style: normal;
   }
+
+  .login {
+    margin-top: 70px;
+  }
+  .login-form {
+    margin: auto;
+    width: 50%;
+    max-width: 500px;
+    min-width: 300px;
+  }
+
 </style>

@@ -125,7 +125,6 @@
           alt="movie-poster"
           class="movie-image col-12"
         />
-
         <RouterLink
           :to="{
             name: 'ReviewDetailView',
@@ -150,13 +149,15 @@
         </RouterLink>
       </div>
     </div>
-
-    <template v-if="movie.watchproviders.length > 0">
-      <b>Provider</b>
-      <div v-for="watchprovider in movie.watchproviders">
-        {{ watchprovider }}
-      </div>
-    </template>
+    </div>
+    <div v-if="movie.watchproviders">
+      <template v-if="movie.watchproviders.length > 0">
+        <b>Provider</b>
+        <div v-for="watchprovider in movie.watchproviders">
+          {{ watchprovider }}
+        </div>
+      </template>
+    </div>
 
     <div class="director-box">
       <p class="detail-category-title">감독</p>
@@ -191,7 +192,7 @@
     </template>
 
     <p class="detail-category-title">리뷰</p>
-    <template class="review">
+    <div v-if="movie.review_set" class="review">
       <div v-for="review in movie.review_set.slice().reverse()">
         <RouterLink
           class="nav-link"
@@ -228,8 +229,7 @@
       <div v-if="movie.review_set.length === 0">
         <p>아직 작성된 리뷰가 없어요! (⊙x⊙;)</p>
       </div>
-    </template>
-  </div>
+    </div>
 </template>
 
 <script setup>

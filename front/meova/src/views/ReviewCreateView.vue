@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <form class="nato-font row g-3 mt-5" @submit.prevent="createReview">
-      <h1 class="col-md-6 offset-3 mb-3"><b>영화는 어땠나요?</b></h1>
-      <div class="col-md-6 offset-3">
-        <label class="form-label" for="title">제목</label>
+  <div class="review-create">
+    <form class="nato-font create-form" @submit.prevent="createReview">
+      <h1><b>영화는 어땠나요?</b></h1>
+      <div>
+        <label class="form-label mt-3" for="title">제목</label>
 
-        <input type="text" class="form-control" id="title" v-model="title" />
+        <input type="text" class="form-control mt-3" id="title" v-model="title" />
       </div>
-      <div class="col-md-6 offset-3">
-        <label class="form-label" for="vote">별점</label>
+      <div>
+        <label class="form-label mt-3" for="vote">별점</label>
 
         <input
           type="range"
@@ -21,8 +21,8 @@
         />
       </div>
 
-      <div class="col-md-6 offset-3">
-        <label for="content" class="form-label">내용</label>
+      <div>
+        <label for="content" class="form-label mt-3">내용</label>
         <textarea
           class="form-control"
           v-model="content"
@@ -31,8 +31,8 @@
         ></textarea>
       </div>
 
-      <div class="col-md-6 offset-3">
-        <button type="submit" class="btn btn-dark">등록</button>
+      <div>
+        <button type="submit" class="btn btn-dark mt-3">등록</button>
       </div>
     </form>
   </div>
@@ -66,5 +66,15 @@ const createReview = function () {
   font-optical-sizing: auto;
   font-style: normal;
 }
+.review-create {
+  margin-top: 70px;
+}
+.create-form {
+  margin: auto;
+  width: 50%;
+  max-width: 500px;
+  min-width: 300px;
+}
+
 </style>
 
