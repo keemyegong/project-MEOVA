@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section v-if="store.profile_info" class="profile">
+    <section v-if="store.profile_info" class="nato-font profile">
       <img
         v-if="store.profile_info.profile_photo"
         :src="store.profile_info.profile_photo"
@@ -28,7 +28,7 @@
           data-bs-toggle="modal"
           data-bs-target="#ProfileFollowerListModal"
         >
-          follower <b>{{ follower_count }}</b>
+          follower <b class="follow-cnt">{{ follower_count }}</b>
         </button>
 
         <!-- Modal -->
@@ -48,7 +48,7 @@
           data-bs-target="#ProfileFollowingListModal"
         >
           following
-          <b>{{ following_count }}</b>
+          <b class="follow-cnt">{{ following_count }}</b>
         </button>
         <div
           class="modal fade modal-section"
@@ -119,5 +119,15 @@ const follow = function () {
 .profile > button {
   border: 0cap;
   background-color: white;
+}
+
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.follow-cnt {
+  margin-left: 3px;
 }
 </style>

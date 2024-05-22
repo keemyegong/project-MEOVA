@@ -1,7 +1,7 @@
 <template>
   <div>
-    <form class="row g-3 mt-5" @submit.prevent="createReview">
-      <h1 class="col-md-6 offset-3 mb-3"><b>리뷰생성</b></h1>
+    <form class="nato-font row g-3 mt-5" @submit.prevent="createReview">
+      <h1 class="col-md-6 offset-3 mb-3"><b>영화는 어땠나요?</b></h1>
       <div class="col-md-6 offset-3">
         <label class="form-label" for="title">제목</label>
 
@@ -32,7 +32,7 @@
       </div>
 
       <div class="col-md-6 offset-3">
-        <button type="submit" class="btn btn-dark">생성</button>
+        <button type="submit" class="btn btn-dark">등록</button>
       </div>
     </form>
   </div>
@@ -60,5 +60,11 @@ const createReview = function () {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+</style>
 

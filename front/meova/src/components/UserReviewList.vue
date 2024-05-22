@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="nato-font">
     <p class="review-item-title">My Reviews</p>
-    <div class="review">
+    <div v-if="reviews " class="review">
         <div v-for="review in reviews"
             :key="review.id">
             <div class="review-item">
@@ -27,6 +27,9 @@
                     </RouterLink>
                 </div>
             </div>
+        </div>
+        <div v-if="reviews.length === 0">
+            <p class="ms-4">아직 작성된 리뷰가 없어요! (T_T)</p>
         </div>
       </div>
     </div>
@@ -106,6 +109,11 @@ axios({
   height: 50px;
   width: 50px;
   border-radius: 100%;
+}
+.nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 </style>
   

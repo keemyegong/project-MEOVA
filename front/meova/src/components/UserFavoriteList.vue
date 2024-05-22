@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="nato-font">
       <p class="favorite-item-title">
         My Favorite
       </p>
@@ -29,6 +29,9 @@
                       </RouterLink>
                   </div>
               </div>
+          </div>
+          <div v-if="profile.liked_movies.length === 0">
+            <p class="ms-4">아직 좋아한 영화가 없어요! (⊙_⊙;)</p>
           </div>
         </div>
       </div>
@@ -96,5 +99,10 @@
     width: 50px;
     border-radius: 100%;
   }
+  .nato-font {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
   </style>
     
