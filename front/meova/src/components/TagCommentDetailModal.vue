@@ -28,6 +28,9 @@
                     : tagcomment.username
                 }}
               </span>
+              <span class="tag-comment-user ms-5">
+                {{ reviewStore.changeToDate(tagcomment.created_at) }}</span
+              >
               <button
                 v-if="isReviewOwner(tagcomment.user)"
                 @click="deleteComment(tagcomment.id)"
@@ -58,17 +61,19 @@ import { useUserStore } from "@/stores/user";
 import { useMovieStore } from "@/stores/movie";
 import { useRoute, RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
+import { useReviewStore } from "@/stores/review";
 
 const userStore = useUserStore();
 const movieStore = useMovieStore();
-const tags=computed(()=>{
-  return movieStore.movie.tagcomment_set
-})
+const reviewStore = useReviewStore();
+const tags = computed(() => {
+  return movieStore.movie.tagcomment_set;
+});
 const route = useRoute();
 const movieId = Number(route.params["id"]);
-const movie = computed(()=>{
-  return movieStore.movie
-})
+const movie = computed(() => {
+  return movieStore.movie;
+});
 // const fetchComment = function () {
 //   axios({
 //     method: "get",
@@ -82,10 +87,10 @@ const movie = computed(()=>{
 //       console.log(error);
 //     });
 // };
-onMounted(()=>{
+onMounted(() => {
   // fetchComment()
-  movieStore.getMovie(movieId)
-})
+  movieStore.getMovie(movieId);
+});
 const deleteComment = (tagcommentId) => {
   axios({
     method: "delete",
@@ -98,7 +103,7 @@ const deleteComment = (tagcommentId) => {
       // movie.value.tagcomment_set = movie.value.tagcomment_set.filter(
       // //   (tagcomment) => tagcomment.id !== tagcommentId
       // );
-      movieStore.getMovie(movieId)
+      movieStore.getMovie(movieId);
     })
     .catch((error) => {
       console.log(error);
@@ -112,7 +117,6 @@ const isReviewOwner = (user) => {
     user === userStore.userinfo.pk
   );
 };
-
 </script>
 
 <style scoped>

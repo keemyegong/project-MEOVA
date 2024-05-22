@@ -5,7 +5,7 @@
         <div class="m-1 user-info">
           <img
             v-if="reviewStore.review.profile_photo"
-            :src="`http://127.0.0.1:8000${reviewStore.review.profile_photo}`"
+            :src="`${movieStore.API_URL}${reviewStore.review.profile_photo}`"
             alt="user profile image"
             class="user-profile-img"
           />
@@ -16,24 +16,25 @@
             alt=""
           />
           <RouterLink
-          class="nav-link"
-          v-if="reviewStore.review"
-          :to="{
-            name: 'profile',
-            params: { 'username': reviewStore.review.username },
-          }"
-        >
-          <p class="user-name">{{
-            reviewStore.review.nickname
-              ? reviewStore.review.nickname
-              : reviewStore.review.username
-          }}</p>
+            class="nav-link"
+            v-if="reviewStore.review"
+            :to="{
+              name: 'profile',
+              params: { username: reviewStore.review.username },
+            }"
+          >
+            <p class="user-name">
+              {{
+                reviewStore.review.nickname
+                  ? reviewStore.review.nickname
+                  : reviewStore.review.username
+              }}
+            </p>
           </RouterLink>
-      <button class="like-btn btn" @click="likeButton">
-        <i class="bi bi-heart-fill" v-if="isLiked"></i>
-        <i class="bi bi-heart" v-else></i>
-      </button>
-
+          <button class="like-btn btn" @click="likeButton">
+            <i class="bi bi-heart-fill" v-if="isLiked"></i>
+            <i class="bi bi-heart" v-else></i>
+          </button>
         </div>
         <!-- 별점 -->
         <div class="rate">
@@ -118,7 +119,13 @@
         <div class="review">
           <div class="row">
             <p class="review-title col-8">{{ reviewStore.review.title }}</p>
-            <div class="button-group col-4" v-if="isReviewOwner(reviewStore.review.user)">
+            <div
+              class="button-group col-4"
+              v-if="isReviewOwner(reviewStore.review.user)"
+            >
+              <span class="comment-content">{{
+                reviewStore.changeToDate(reviewStore.review.created_at)
+              }}</span>
               <button
                 class="update-btn btn btn-dark"
                 @click="updateReview(reviewStore.review.id)"
@@ -153,7 +160,11 @@
           />
         </RouterLink>
       </div>
-      <form @submit.prevent="createComment" class="nato-font row review" ref="form">
+      <form
+        @submit.prevent="createComment"
+        class="nato-font row review"
+        ref="form"
+      >
         <input
           type="text"
           placeholder="댓글을 남겨 주세요!"
@@ -168,14 +179,10 @@
       </form>
     </div>
 
-    <div
-      v-for="comment in comments"
-      :key="comment.id"
-      class="comment-box"
-    >
+    <div v-for="comment in comments" :key="comment.id" class="comment-box">
       <img
         v-if="comment.profile_photo"
-        :src="`http://127.0.0.1:8000${comment.profile_photo}`"
+        :src="`${movieStore.API_URL}${comment.profile_photo}`"
         alt="user profile image"
         class="comment-user-profile-img"
       />
@@ -197,6 +204,9 @@
       >
         <p class="comment-delete-btn-value">삭제</p>
       </button>
+      <span class="comment-content ms-1">{{
+        reviewStore.changeToDate(comment.created_at)
+      }}</span>
     </div>
   </div>
 </template>
@@ -221,9 +231,9 @@ const form = ref(null);
 const movie = ref(null);
 // const comments = ref(null)
 const content = ref(null);
-const comments=computed(()=>{
-  return reviewStore.review.reviewcomment_set
-})
+const comments = computed(() => {
+  return reviewStore.review.reviewcomment_set;
+});
 const fetchReview = function () {
   reviewStore.fetchReview(reviewId);
 };
@@ -235,9 +245,9 @@ const createComment = function () {
     content: content.value,
     id: reviewId,
   };
-  reviewStore.createComment(review).then(()=>{
+  reviewStore.createComment(review).then(() => {
     fetchReview();
-  })
+  });
   form.value.reset();
   content.value = "";
 };
@@ -281,7 +291,7 @@ const deleteComment = (commentId) => {
       //   review.value.reviewcomment_set.filter(
       //     (comment) => comment.id !== commentId
       //   );
-      fetchReview()
+      fetchReview();
     })
     .catch((error) => {
       console.log(error);
@@ -291,12 +301,9 @@ const isReviewLoaded = computed(() => reviewStore.review !== null);
 
 const isReviewOwner = (user) => {
   return (
-    reviewStore.review &&
-    userStore.userinfo &&
-    user === userStore.userinfo.pk
+    reviewStore.review && userStore.userinfo && user === userStore.userinfo.pk
   );
 };
-
 
 // 좋아요 여부를 확인하는 상태 변수
 const isLiked = ref(false);
