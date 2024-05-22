@@ -1,16 +1,18 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useUserStore } from "./user";
 
 export const useMovieStore = defineStore(
   "movie",
   () => {
     const API_URL = "http://127.0.0.1:8000";
-
+    const userStore = useUserStore()
     const recommend_movies = ref([]);
     const popular_movies = ref([]);
     const release_movies = ref([]);
     const movies = ref([]);
+    const movie = ref(null)
 
     const search = function (q) {
       const { title, genre, keyword, runtime, country } = q;
@@ -80,19 +82,21 @@ export const useMovieStore = defineStore(
     };
     const isMain = ref(false);
 
-    // const getMovie = function (movieId) {
-    //   axios({
-    //     method: 'get',
-    //     url: `${API_URL}/api/v1/movies/${movieId}/`
-    //   })
-    //   .then(response => {
-    //     console.log(response)
-    //     movie.value = response.data
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
-    // }
+    const getMovie = function (movieId) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/api/v1/movies/${movieId}/`,
+        headers: { Authorization: `Token ${userStore.token}` },
+      })
+      .then(response => {
+        console.log(response)
+        movie.value = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+    }
     return {
       API_URL,
       isMain,
@@ -104,9 +108,11 @@ export const useMovieStore = defineStore(
       popular_movies,
       release_movies,
       search,
+      movie,
       movies,
       getRecommendMovieList,
       recommendmovies,
+      getMovie
     };
   },
   { persist: true }

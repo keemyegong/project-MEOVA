@@ -86,7 +86,7 @@ export const useReviewStore = defineStore("review", () => {
 
   const createComment = function (review) {
     const { id, content } = review;
-    axios({
+    return axios({
       method: "post",
       url: `${API_URL}/reviews/${id}/comments/`,
       data: {

@@ -67,16 +67,9 @@
         >
           태그 코멘트
         </button>
-        <!-- <RouterLink
-          class="nav-link" :to="{ name: 'TagCommentDetailView', params: { id: movie.id } }"
-        >
-          <div class="detail-category-title">
-            <p>태그 코멘트</p>
-          </div>
-        </RouterLink> -->
-        <template v-if="movie.tagcomment_set">
+        <template v-if="tags">
           <div
-            v-for="tagcomment in movie.tagcomment_set.slice().reverse()"
+            v-for="tagcomment in tags.slice().reverse()"
             :key="tagcomment.id"
             class="tag-comment-content"
           >
@@ -241,7 +234,7 @@
 
 <script setup>
 import axios from "axios";
-import { onMounted, onUpdated, ref } from "vue";
+import { computed, onMounted, onUpdated, ref } from "vue";
 import { useMovieStore } from "@/stores/movie";
 import { useReviewStore } from "@/stores/review";
 import { useUserStore } from "@/stores/user";
@@ -251,11 +244,17 @@ const store = useMovieStore();
 const reviewstore = useReviewStore();
 const userStore = useUserStore();
 const route = useRoute();
-const movie = ref(null);
+const router = useRouter();
+// const movie = ref(null);
 const movieId = Number(route.params["id"]);
 const content = ref("");
 const form = ref(null);
-
+const movie=computed(()=>{
+  return store.movie
+})
+const tags=computed(()=>{
+  return store.movie.tagcomment_set
+})
 const createTag = function () {
   const tag = {
     content: content.value,
@@ -272,13 +271,14 @@ const createTag = function () {
     .then((response) => {
       console.log(store.API_URL);
       console.log(response);
-      movie.value = response.data;
+      // movie.value = response.data;
+      store.getMovie(movieId)
     })
     .catch((error) => {
       console.log(error);
     });
 };
-const router = useRouter();
+
 const search = function (q) {
   store.search(q);
   router.push({ name: "search", query: q });
@@ -302,22 +302,25 @@ const searchByRuntime = function (runtime) {
     country: "",
   });
 };
-onUpdated(() => {});
+
 console.log(store.API_URL);
+
 onMounted(() => {
-  axios({
-    method: "get",
-    url: `${store.API_URL}/api/v1/movies/${movieId}/`,
-    headers: { Authorization: `Token ${userStore.token}` },
-  })
-    .then((response) => {
-      console.log(store.API_URL);
-      console.log(response);
-      movie.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // axios({
+  //   method: "get",
+  //   url: `${store.API_URL}/api/v1/movies/${movieId}/`,
+  //   headers: { Authorization: `Token ${userStore.token}` },
+  // })
+  //   .then((response) => {
+  //     console.log(store.API_URL);
+  //     console.log(response);
+  //     movie.value = response.data;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  store.getMovie(movieId)
+
 });
 </script>
 

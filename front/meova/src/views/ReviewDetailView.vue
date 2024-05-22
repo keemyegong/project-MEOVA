@@ -15,11 +15,20 @@
             v-else
             alt=""
           />
+          <RouterLink
+          class="nav-link"
+          v-if="reviewStore.review"
+          :to="{
+            name: 'profile',
+            params: { 'username': reviewStore.review.username },
+          }"
+        >
           <p class="user-name">{{
             reviewStore.review.nickname
               ? reviewStore.review.nickname
               : reviewStore.review.username
           }}</p>
+          </RouterLink>
       <button class="like-btn btn" @click="likeButton">
         <i class="bi bi-heart-fill" v-if="isLiked"></i>
         <i class="bi bi-heart" v-else></i>
@@ -109,7 +118,7 @@
         <div class="review">
           <div class="row">
             <p class="review-title col-8">{{ reviewStore.review.title }}</p>
-            <div class="button-group col-4" v-if="isReviewOwner">
+            <div class="button-group col-4" v-if="isReviewOwner(reviewStore.review.user)">
               <button
                 class="update-btn btn btn-dark"
                 @click="updateReview(reviewStore.review.id)"
@@ -160,7 +169,7 @@
     </div>
 
     <div
-      v-for="comment in reviewStore.review.reviewcomment_set"
+      v-for="comment in comments"
       :key="comment.id"
       class="comment-box"
     >
@@ -182,6 +191,7 @@
       <i class="bi bi-chat-dots-fill me-2"></i>
       <span class="comment-content">{{ comment.content }}</span>
       <button
+        v-if="isReviewOwner(comment.user)"
         class="comment-delete-btn btn btn-dark"
         @click="deleteComment(comment.id)"
       >
@@ -209,9 +219,11 @@ const movieId = Number(route.params["movieId"]);
 const reviewId = Number(route.params["reviewId"]);
 const form = ref(null);
 const movie = ref(null);
-
+// const comments = ref(null)
 const content = ref(null);
-
+const comments=computed(()=>{
+  return reviewStore.review.reviewcomment_set
+})
 const fetchReview = function () {
   reviewStore.fetchReview(reviewId);
 };
@@ -223,10 +235,11 @@ const createComment = function () {
     content: content.value,
     id: reviewId,
   };
-  reviewStore.createComment(review);
+  reviewStore.createComment(review).then(()=>{
+    fetchReview();
+  })
   form.value.reset();
   content.value = "";
-  fetchReview();
 };
 
 const updateReview = (reviewId) => {
@@ -264,10 +277,11 @@ const deleteComment = (commentId) => {
     },
   })
     .then(() => {
-      reviewStore.review.value.reviewcomment_set =
-        review.value.reviewcomment_set.filter(
-          (comment) => comment.id !== commentId
-        );
+      // reviewStore.review.value.reviewcomment_set =
+      //   review.value.reviewcomment_set.filter(
+      //     (comment) => comment.id !== commentId
+      //   );
+      fetchReview()
     })
     .catch((error) => {
       console.log(error);
@@ -275,13 +289,14 @@ const deleteComment = (commentId) => {
 };
 const isReviewLoaded = computed(() => reviewStore.review !== null);
 
-const isReviewOwner = computed(() => {
+const isReviewOwner = (user) => {
   return (
     reviewStore.review &&
     userStore.userinfo &&
-    reviewStore.review.user === userStore.userinfo.pk
+    user === userStore.userinfo.pk
   );
-});
+};
+
 
 // 좋아요 여부를 확인하는 상태 변수
 const isLiked = ref(false);

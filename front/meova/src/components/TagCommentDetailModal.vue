@@ -13,8 +13,8 @@
         ></button>
       </div>
       <div class="modal-body">
-        <template v-if="movie && movie.tagcomment_set">
-          <div v-for="tagcomment in movie.tagcomment_set" :key="tagcomment.id">
+        <template v-if="movie && tags">
+          <div v-for="tagcomment in tags" :key="tagcomment.id">
             <div class="tag-comment">
               <span class="tag-comment-content">
                 <i class="bi bi-chat-dots-fill me-2"></i>
@@ -29,6 +29,7 @@
                 }}
               </span>
               <button
+                v-if="isReviewOwner(tagcomment.user)"
                 @click="deleteComment(tagcomment.id)"
                 class="delete-btn btn btn-dark"
               >
@@ -52,30 +53,39 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useMovieStore } from "@/stores/movie";
 import { useRoute, RouterLink } from "vue-router";
+import { storeToRefs } from "pinia";
 
 const userStore = useUserStore();
 const movieStore = useMovieStore();
-
+const tags=computed(()=>{
+  return movieStore.movie.tagcomment_set
+})
 const route = useRoute();
 const movieId = Number(route.params["id"]);
-const movie = ref(null);
-
-axios({
-  method: "get",
-  url: `${movieStore.API_URL}/api/v1/movies/${movieId}/`,
-  headers: { Authorization: `Token ${userStore.token}` },
+const movie = computed(()=>{
+  return movieStore.movie
 })
-  .then((response) => {
-    movie.value = response.data;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+// const fetchComment = function () {
+//   axios({
+//     method: "get",
+//     url: `${movieStore.API_URL}/api/v1/movies/${movieId}/`,
+//     headers: { Authorization: `Token ${userStore.token}` },
+//   })
+//     .then((response) => {
+//       movie.value = response.data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
+onMounted(()=>{
+  // fetchComment()
+  movieStore.getMovie(movieId)
+})
 const deleteComment = (tagcommentId) => {
   axios({
     method: "delete",
@@ -85,14 +95,24 @@ const deleteComment = (tagcommentId) => {
     },
   })
     .then(() => {
-      movie.value.tagcomment_set = movie.value.tagcomment_set.filter(
-        (tagcomment) => tagcomment.id !== tagcommentId
-      );
+      // movie.value.tagcomment_set = movie.value.tagcomment_set.filter(
+      // //   (tagcomment) => tagcomment.id !== tagcommentId
+      // );
+      movieStore.getMovie(movieId)
     })
     .catch((error) => {
       console.log(error);
     });
 };
+
+const isReviewOwner = (user) => {
+  return (
+    movie.value.tagcomment_set &&
+    userStore.userinfo &&
+    user === userStore.userinfo.pk
+  );
+};
+
 </script>
 
 <style scoped>
