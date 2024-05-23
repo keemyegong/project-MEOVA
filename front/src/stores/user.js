@@ -7,7 +7,7 @@ export const useUserStore = defineStore(
   () => {
     const router = useRouter();
     const token = ref(null);
-    const BASE_URL = "https://meova.pythonanywhere.com/accounts";
+    const BASE_URL = "http://127.0.0.1:8000/accounts";
     const isLogin = computed(() => {
       if (token.value === null) {
         return false;

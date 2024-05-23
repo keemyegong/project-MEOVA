@@ -19,7 +19,7 @@
               <span class="follower-card-content">
                 <img
                   v-if="following.profile_photo"
-                  :src="following.profile_photo"
+                  :src="`${movieStore.API_URL}${following.profile_photo}`"
                   class="profile_img"
                   alt="profile_img"
                 />
@@ -59,9 +59,11 @@
 </template>
 
 <script setup>
+import { useMovieStore } from "@/stores/movie";
 import { useUserStore } from "@/stores/user";
 import { onMounted, computed } from "vue";
 const store = useUserStore();
+const movieStore = useMovieStore();
 const followings = computed(() => {
   return store.followinglist;
 });
