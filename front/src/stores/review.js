@@ -7,8 +7,8 @@ import moment from "moment";
 export const useReviewStore = defineStore("review", () => {
   const user = useUserStore();
   const router = useRouter();
-  const BASE_URL = "http://127.0.0.1:8000/api/v1/movies";
-  const API_URL = "http://127.0.0.1:8000/api/v1";
+  const BASE_URL = "https://meova.pythonanywhere.com/api/v1/movies";
+  const API_URL = "https://meova.pythonanywhere.com/api/v1";
   const changeToDate = (datetime) => {
     // 오늘 날짜
     let now = moment(new Date());
