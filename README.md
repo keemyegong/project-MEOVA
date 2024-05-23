@@ -52,7 +52,7 @@
 
 ## 3. 프로젝트 일정
 ### Gantt Chart
-![gantt-chart](README/gantt-chart.png)
+![gantt-chart](README/gantt-chart.PNG)
 
 - 5/5-5/10 프로젝트 구상 및 기획
 - 5/13-5/16 프로젝트 모델 및 DB 설계, API 요청
@@ -65,16 +65,24 @@
 💻 화면 설계 
 - [figma](https://www.figma.com/proto/A5Q4TMCcsThwYGinL1q1aA/MOVIE?page-id=0%3A1&node-id=1-233&viewport=1091%2C-34%2C0.09&t=xA1Tlm1Y1lJSASJD-1&scaling=min-zoom&starting-point-node-id=1%3A233&show-proto-sidebar=1)
 
-| 메인 화면                        | 검색 화면                     | 메인 영화 |
-| ------------------------------- | ------------------------------|----|
-| ![메인](README/main.png) | ![검색](README/main_search.PNG) | ![메인2](README/movies.PNG)|
+| 메인 화면                        | 검색 화면                     |
+| ------------------------------- | ------------------------------|
+| ![메인](README/main.png) | ![검색](README/main_search.PNG) | 
 
-| 유저 프로필                   | 영화 상세 정보                  | 배우 정보 |
-| ---------------------------- | ------------------------------| ---|
-| ![유저](README/profile.PNG)  | ![영화](README/movie_detail.PNG) | ![배우](README/actor.PNG)|
+| 메인 영화 | 검색 영화 |
+| --- | --- |
+|![영화1](README/movies.PNG)| ![영화2](README/movies2.PNG) |
 
+
+| 영화 상세 정보 | 배우 정보 |
+| ---| --- |
+| ![영화](README/movie_detail.PNG) | ![배우](README/actor.PNG)|
+
+| 유저 정보 | 리뷰 |
+| --- | --- |
+| ![유저](README/profile.PNG) | ![유저](README/review.PNG) |
 <aside>
-    ⚙ 기능 설계
+    ⚙ 기획 기능
 
     - 영화 추천
     - 영화 상세 정보 조회
@@ -103,9 +111,14 @@
 
 ## 5. 프로젝트 수행 절차 및 방법
 ### 일정 계획 및 공유
-| 월간 일정 | 주간 일정 | 일일 일정 |
-| --- | --- | --- |
-|![planner2](README/planner2.PNG)|![planner1](README/planner1.PNG)|![planner3](README/planner3.PNG)|
+| 월간 일정 | 
+| --- |
+|![planner2](README/planner2.PNG)|
+
+| 주간 일정 | 일일 일정 |
+| --- | --- |
+|![planner1](README/planner1.PNG)|![planner3](README/planner3.PNG)|
+
 ### github 협업
 | github1 | github2|
 | --- | --- |
@@ -173,14 +186,16 @@
 회원 탈퇴
 
 ## 6. AI 활용 - 챗GPT
-| 추천 영화 1                        | 추천 영화 2                     | 대기 상태 |
-| ------------------------------- | ------------------------------|----|
-| ![메인](README/ai1.png) | ![검색](README/ai3.PNG) | ![메인2](README/ai2.PNG)|
+| 추천 영화 |
+| --- |
+| ![메인](README/ai1.png) |
+|![검색](README/ai3.PNG) | 
 
 <aside>
     🤖 기능
 
-    AI가 직접 독창적인 테마 하나를 선정한 뒤, MEOVA의 영화 데이터베이스를 참조해 테마에 적합한 영화 세 가지를 선정해 추천
+    AI가 직접 독창적인 테마 하나를 선정한 뒤,
+    MEOVA의 영화 데이터베이스를 참조해 테마에 적합한 영화 세 가지를 선정해 추천
 </aside>
 
   👾 AI 추천 알고리즘
