@@ -148,9 +148,7 @@
           </button>
         </RouterLink>
       </div>
-    </div>
-    
-    
+    </div>  
     
     <template v-if="movie.watchproviders.length > 0" class="director-box">
       <b style="display: flex" class="detail-category-title mt-3 mb-3">제공</b>
@@ -165,8 +163,6 @@
         />
       </span>
     </template>
-    
-    
     
     <div class="director-box mt-5">
       <p class="detail-category-title">감독</p>
@@ -239,6 +235,7 @@
         <p>아직 작성된 리뷰가 없어요! (⊙x⊙;)</p>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
