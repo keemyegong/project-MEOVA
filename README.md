@@ -67,11 +67,11 @@
 
 | 메인 화면                        | 검색 화면                     | 메인 영화 |
 | ------------------------------- | ------------------------------|----|
-| ![메인](README/main.png) | ![검색](README/main_search.png) | ![메인2](README/movies.png)|
+| ![메인](README/main.png) | ![검색](README/main_search.PNG) | ![메인2](README/movies.PNG)|
 
 | 유저 프로필                   | 영화 상세 정보                  | 배우 정보 |
 | ---------------------------- | ------------------------------| ---|
-| ![유저](README/profile.png)  | ![영화](README/movie_detail.png) | ![배우](README/actor.png)|
+| ![유저](README/profile.PNG)  | ![영화](README/movie_detail.PNG) | ![배우](README/actor.PNG)|
 
 <aside>
     ⚙ 기능 설계
@@ -105,11 +105,11 @@
 ### 일정 계획 및 공유
 | 월간 일정 | 주간 일정 | 일일 일정 |
 | --- | --- | --- |
-|![planner2](README/planner2.png)|![planner1](README/planner1.png)|![planner3](README/planner3.png)|
+|![planner2](README/planner2.PNG)|![planner1](README/planner1.PNG)|![planner3](README/planner3.PNG)|
 ### github 협업
 | github1 | github2|
 | --- | --- |
-|![git1](README/git1.png) | ![git2](README/git2.png) |
+|![git1](README/git1.PNG) | ![git2](README/git2.PNG) |
 
 ## 6. 프로젝트 수행 결과
 <aside>
@@ -117,9 +117,10 @@
 
     - 영화 태그 검색
     - AI 영화 추천
-    - 영화 상세 정보
+    - 영화 상세 정보 제공 (영화, 감독, 배우)
     - 태그 코멘트
     - 관람 기록 캘린더
+    - 평점 및 리뷰 공유
 
 </aside>
 
@@ -174,7 +175,7 @@
 ## 6. AI 활용 - 챗GPT
 | 추천 영화 1                        | 추천 영화 2                     | 대기 상태 |
 | ------------------------------- | ------------------------------|----|
-| ![메인](README/ai1.png) | ![검색](README/ai3.png) | ![메인2](README/ai2.png)|
+| ![메인](README/ai1.png) | ![검색](README/ai3.PNG) | ![메인2](README/ai2.PNG)|
 
 <aside>
     🤖 기능
@@ -190,7 +191,8 @@
 ```python
     movies = Movie.objects.all()
     movie_list = "\n".join([f"{movie.title}({movie.id}) " for movie in movies])
-    input_message = request.query_params.get('message', '독창적인 컨셉 하나를 정해서 그 컨셉에 맞는 영화 3개를 추천해줘')
+    input_message = request.query_params.get('message',
+      '독창적인 컨셉 하나를 정해서 그 컨셉에 맞는 영화 3개를 추천해줘')
     prompt = f"{input_message}\n영화 목록:\n{movie_list}"
     messages=[
       {"role": "system", "content":  (
@@ -209,7 +211,12 @@
 ```javascript
     {
     "id": 59,
-    "message": "\"독창적인 세계관 속에서 모험을 떠나는 영웅들\"이라는 컨셉으로 영화를 추천해드릴게요:\n\n1. **스타워즈 에피소드 4: 새로운 희망 (11)** - 은하계를 무대로 한 서사적 전투와 젊은 루크 스카이워커의 여정을 그린 영화입니다.\n2. **반지의 제왕: 반지 원정대 (120)** - 중간계를 배경으로 한 판타지 모험 영화로, 프로도 배긴스가 사우론의 반지를 파괴하기 위해 떠나는 여정을 그립니다.\n3. **아바타 (19995)** - 판도라 행성에서 벌어지는 인류와 나비 족 간의 충돌을 그리며, 독창적이고 환상적인 세계관 속에서 펼쳐지는 이야기입니다.\n\n이 세 개의 작품은 \"독창적인 세계관 속에서 모험을 떠나는 영웅들\" 컨셉에 맞추어 선정되었습니다."
+    "message": "\"독창적인 세계관 속에서 모험을 떠나는 영웅들\"이라는 컨셉으로 영화를 추천해드릴게요:\n\n1. \
+    **스타워즈 에피소드 4: 새로운 희망 (11)** - 은하계를 무대로 한 서사적 전투와 젊은 루크 스카이워커의 여정을 \
+    그린 영화입니다.\n2. **반지의 제왕: 반지 원정대 (120)** - 중간계를 배경으로 한 판타지 모험 영화로, \
+    프로도 배긴스가 사우론의 반지를 파괴하기 위해 떠나는 여정을 그립니다.\n3. **아바타 (19995)** - \
+    판도라 행성에서 벌어지는 인류와 나비 족 간의 충돌을 그리며, 독창적이고 환상적인 세계관 속에서 펼쳐지는 이야기입니다.\n\n
+    이 세 개의 작품은 \"독창적인 세계관 속에서 모험을 떠나는 영웅들\" 컨셉에 맞추어 선정되었습니다."
   }
 ```
 ```javascript
