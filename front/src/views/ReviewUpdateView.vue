@@ -1,14 +1,14 @@
 <template>
-  <div class="nato-font">
-    <form class="row g-3 mt-5" @submit.prevent="updateReview">
-      <h1 class="col-md-6 offset-3 mb-3"><b>리뷰를 수정해 주세요!</b></h1>
-      <div class="col-md-6 offset-3">
-        <label class="form-label" for="title">제목</label>
+  <div class="review-create nato-font">
+    <form class="nato-font create-form" @submit.prevent="updateReview">
+      <h1><b>리뷰를 수정해 주세요!</b></h1>
+      <div>
+        <label class="form-label mt-3" for="title">제목</label>
 
         <input type="text" class="form-control" id="title" v-model="title" />
       </div>
-      <div class="col-md-6 offset-3">
-        <label class="form-label" for="vote">별점</label>
+      <div>
+        <label class="form-label mt-3" for="vote">별점</label>
 
         <input
           type="range"
@@ -21,8 +21,8 @@
         />
       </div>
 
-      <div class="col-md-6 offset-3">
-        <label for="content" class="form-label">내용</label>
+      <div>
+        <label for="content" class="form-label mt-3">내용</label>
         <textarea
           class="form-control"
           v-model="content"
@@ -31,7 +31,7 @@
         ></textarea>
       </div>
 
-      <div class="col-md-6 offset-3">
+      <div>
         <button type="submit" class="btn btn-dark">수정</button>
       </div>
     </form>
@@ -95,5 +95,14 @@ const updateReview = async () => {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+.review-create {
+  margin-top: 70px;
+}
+.create-form {
+  margin: auto;
+  width: 50%;
+  max-width: 500px;
+  min-width: 300px;
 }
 </style>
