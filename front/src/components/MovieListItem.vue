@@ -12,7 +12,7 @@
         />
         <p class="movie-title">{{ movie.title }}</p>
       </RouterLink>
-      <button class="btn" @click="likeButton">
+      <button class="btn p-0" @click="likeButton">
         <i class="bi bi-heart-fill" v-if="isLiked"></i>
         <i class="bi bi-heart" v-else></i>
       </button>

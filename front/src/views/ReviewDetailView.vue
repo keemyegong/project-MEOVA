@@ -118,26 +118,40 @@
         </div>
         <div class="review">
           <div class="row">
-            <p class="review-title col-6">{{ reviewStore.review.title }}</p>
-            <div
-              class="button-group align-items-center col-4"
-              v-if="isReviewOwner(reviewStore.review.user)"
-            >
-              <div style="min-width: 60px" class="comment-content">
+            <p class="review-title col-8">{{ reviewStore.review.title }}</p>
+            <div class="button-group align-items-center col-2">
+              <div style="min-width: 70px" class="comment-content">
                 {{ reviewStore.changeToDate(reviewStore.review.created_at) }}
               </div>
-              <button
-                class="update-btn btn btn-dark"
-                @click="updateReview(reviewStore.review.id)"
-              >
-                <p class="update-txt">수정</p>
-              </button>
-              <button
-                class="delete-btn btn btn-dark"
-                @click="deleteReview(reviewStore.review.id)"
-              >
-                <i class="update-txt bi bi-trash3-fill"></i>
-              </button>
+              <div>
+                <button
+                  v-if="isReviewOwner(reviewStore.review.user)"
+                  class="icon-button button-white"
+                  @click="toggleDropdown"
+                >
+                  <i class="bi bi-three-dots-vertical custom-icon"></i>
+                </button>
+
+                <div
+                  :class="{
+                    'dropdown-menu': true,
+                    active: isDropdownActive,
+                  }"
+                >
+                  <button
+                    class="button-white"
+                    @click="updateReview(reviewStore.review.id)"
+                  >
+                    수정
+                  </button>
+                  <button
+                    class="button-white"
+                    @click="deleteReview(reviewStore.review.id)"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <p>{{ reviewStore.review.content }}</p>
@@ -204,7 +218,7 @@
       >
         <p class="comment-delete-btn-value">삭제</p>
       </button>
-      <span class="comment-content ms-1">{{
+      <span class="comment-time ms-1">{{
         reviewStore.changeToDate(comment.created_at)
       }}</span>
     </div>
@@ -328,9 +342,42 @@ const likeButton = async function () {
     console.log(error);
   }
 };
+const isDropdownActive = ref(false);
+const toggleDropdown = function () {
+  isDropdownActive.value = !isDropdownActive.value;
+};
 </script>
 
 <style scoped>
+.button-white {
+  padding: 3px 5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.dropdown-menu {
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none; /* 처음에는 숨겨진 상태 */
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+.dropdown-menu.active button {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
 .review-title {
   font-size: 25px;
   font-weight: 700;
@@ -429,7 +476,11 @@ const likeButton = async function () {
   margin-right: 10px;
   font-weight: 600;
 }
-
+.comment-time {
+  color: gray;
+  font-size: 12px;
+  font-weight: 150;
+}
 .comment-delete-btn-value {
   font-size: 11px;
 }
@@ -442,5 +493,8 @@ const likeButton = async function () {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+.bi-heart-fill {
+  color: red;
 }
 </style>

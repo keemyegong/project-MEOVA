@@ -83,7 +83,7 @@ export const useMovieStore = defineStore(
     const isMain = ref(false);
 
     const getMovie = function (movieId) {
-      axios({
+      return axios({
         method: "get",
         url: `${API_URL}/api/v1/movies/${movieId}/`,
         headers: { Authorization: `Token ${userStore.token}` },

@@ -59,6 +59,7 @@
       </div>
     </form>
   </div>
+  <p @click="deleteAccount" class="nato-font delete-account">회원탈퇴</p>
 </template>
 
 <script setup>
@@ -90,9 +91,20 @@ const router = useRouter();
 const changepassword = function () {
   router.push({ name: "changepassword" });
 };
+const deleteAccount = function () {
+  if (window.confirm("정말 탈퇴하시겠습니까?")) {
+    store.deleteAccount();
+  }
+};
 </script>
 
 <style scoped>
+.delete-account {
+  font-size: 0.7rem;
+  color: gray;
+  text-align: center;
+  margin-top: 40%;
+}
 .profile-header {
   margin-top: 70px;
   display: flex;
