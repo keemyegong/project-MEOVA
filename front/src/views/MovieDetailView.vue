@@ -215,7 +215,7 @@
               <div class="user-info">
                 <img
                   v-if="review.profile_photo"
-                  :src="`${store.API_URL}${review.profile_photo}`"
+                  :src="`${review.profile_photo}`"
                   alt="user profile image"
                   class="user-profile-img"
                 />

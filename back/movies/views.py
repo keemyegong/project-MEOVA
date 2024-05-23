@@ -17,7 +17,7 @@ import requests
 
 @api_view(['GET'])
 def get_movie(request):
-    for i in range(41,81):
+    for i in range(1,21):
         url = f"https://api.themoviedb.org/3/movie/popular?language=ko&page={i}"
         headers = {
         "accept": "application/json",
