@@ -3,6 +3,10 @@
     <div class="movie-info col-12 col-md-6">
       <div class="movie-title">
         <b>{{ movie.title }}</b>
+        <button class="btn p-0" @click="likeButton">
+          <i class="bi bi-heart-fill h3" v-if="isLiked"></i>
+          <i class="bi bi-heart h3" v-else></i>
+        </button>
       </div>
       <div class="movie-overview">
         <p class="overview">
@@ -148,7 +152,7 @@
           </button>
         </RouterLink>
       </div>
-    </div>  
+    </div>
     <template v-if="movie.watchproviders.length > 0" class="director-box">
       <b style="display: flex" class="detail-category-title mt-3 mb-3">제공</b>
 
@@ -308,7 +312,7 @@ const searchByRuntime = function (runtime) {
 };
 
 console.log(store.API_URL);
-
+const isLiked = ref(null);
 onMounted(() => {
   // axios({
   //   method: "get",
@@ -323,15 +327,36 @@ onMounted(() => {
   //   .catch((error) => {
   //     console.log(error);
   //   });
-  store.getMovie(movieId);
+  store.getMovie(movieId).then(() => {
+    isLiked.value = store.movie.liked_users.includes(userStore.userinfo.pk);
+  });
 });
+
+const likeButton = function () {
+  axios({
+    method: "post",
+    url: `${store.API_URL}/api/v1/movies/${movieId}/like/`,
+    headers: { Authorization: `Token ${userStore.token}` },
+  })
+    .then((res) => {
+      isLiked.value = res.data.liked_users.includes(userStore.userinfo.pk);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 </script>
 
 <style scoped>
+.bi-heart-fill {
+  color: red;
+}
 .movie-title {
   font-size: 35px;
   margin-top: 10px;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 .movie-image {
   width: 100%;

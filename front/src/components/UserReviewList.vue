@@ -52,7 +52,7 @@ import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useReviewStore } from "@/stores/review";
 import { useRoute } from "vue-router";
-
+import { onBeforeRouteUpdate } from "vue-router";
 const reviewStore = useReviewStore();
 const userStore = useUserStore();
 const route = useRoute();
@@ -62,6 +62,21 @@ const props = defineProps({
   userid: Number,
 });
 onMounted(() => {
+  axios({
+    method: "get",
+    url: `${reviewStore.API_URL}/${props.userid}/reviews/`,
+    headers: { Authorization: `Token ${userStore.token}` },
+  })
+    .then((response) => {
+      reviews.value = response.data;
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+onBeforeRouteUpdate((to, from, next) => {
+  console.log("to : ", to);
   axios({
     method: "get",
     url: `${reviewStore.API_URL}/${props.userid}/reviews/`,

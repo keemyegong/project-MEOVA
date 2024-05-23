@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import ProfileSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -45,3 +46,9 @@ def followings(request):
     if request.method=='GET':
         serializer=ProfileSerializer(followings,many=True)
         return Response(serializer.data)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated]) 
+def delete(request):
+    request.user.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)

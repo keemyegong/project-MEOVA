@@ -51,7 +51,10 @@ export const useUserStore = defineStore(
           router.push({ name: "main" });
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error.response.data);
+          for (const errors in error.response.data) {
+            window.alert(error.response.data[errors]);
+          }
         });
     };
     const signup = function (payload) {
@@ -71,7 +74,10 @@ export const useUserStore = defineStore(
           login({ username, password });
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error.response.data);
+          for (const errors in error.response.data) {
+            window.alert(error.response.data[errors]);
+          }
         });
     };
     const changepassword = function (payload) {
@@ -100,6 +106,22 @@ export const useUserStore = defineStore(
       axios({
         method: "post",
         url: `${BASE_URL}/logout/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          token.value = null;
+          router.push({ name: "main" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    const deleteAccount = function () {
+      axios({
+        method: "delete",
+        url: `${BASE_URL}/delete/`,
         headers: {
           Authorization: `Token ${token.value}`,
         },
@@ -226,6 +248,7 @@ export const useUserStore = defineStore(
       followings,
       followinglist,
       changepassword,
+      deleteAccount,
     };
   },
   { persist: true }
