@@ -6,7 +6,7 @@ import { useUserStore } from "./user";
 export const useMovieStore = defineStore(
   "movie",
   () => {
-    const API_URL = "http://127.0.0.1:8000";
+    const API_URL = "https://meova.pythonanywhere.com";
     const userStore = useUserStore();
     const recommend_movies = ref([]);
     const popular_movies = ref([]);
